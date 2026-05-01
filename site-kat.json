@@ -1,0 +1,170 @@
+{
+  "categories": [
+    {
+      "id": "studio",
+      "label": "Studio",
+      "published": true,
+      "type": "gallery",
+      "layout": "masonry"
+    },
+    {
+      "id": "motion",
+      "label": "Motion",
+      "published": true,
+      "type": "lightbox",
+      "layout": "masonry"
+    },
+    {
+      "id": "kids",
+      "label": "Kids",
+      "published": true,
+      "type": "gallery",
+      "layout": "masonry"
+    },
+    {
+      "id": "lifestyle",
+      "label": "Lifestyle",
+      "published": true,
+      "type": "gallery",
+      "layout": "masonry"
+    },
+    {
+      "id": "test",
+      "label": "Test Lightbox masonry",
+      "published": false,
+      "layout": "masonry",
+      "type": "lightbox"
+    },
+    {
+      "id": "333",
+      "label": "Lightbox masonry",
+      "published": false,
+      "layout": "grid",
+      "type": "lightbox"
+    },
+    {
+      "id": "test-gallery",
+      "label": "test gallery Masonry",
+      "published": false,
+      "layout": "masonry",
+      "type": "gallery"
+    },
+    {
+      "id": "231",
+      "label": "gallery grid",
+      "published": false,
+      "layout": "grid",
+      "type": "gallery"
+    },
+    {
+      "id": "sda",
+      "label": "sda",
+      "published": false,
+      "layout": "masonry",
+      "type": "lightbox"
+    }
+  ],
+  "about": {
+    "show": true,
+    "photo": "images/kr-info-headshot.jpg",
+    "photoAlt": "Katrina Rumford",
+    "photoShape": "natural",
+    "photoPlacement": "above",
+    "photoX": 50,
+    "photoY": 50,
+    "photoZoom": 1,
+    "photoScale": 1,
+    "bio": "<p><strong>Katrina Rumford</strong> is a wardrobe stylist based in Los Angeles, California. She has been working in the clothing industry for over 20 years. Getting her start in Seattle with an Apparel Design degree, Katrina successfully launched a colorful women's line in the early 2000s that opened her eyes to a love of styling, travel and working with talented people to make big ideas come to life. Since then she's worked on films, music videos, photo shoots and commercials in studio and on location in the states and internationally. She is dedicated to telling a beautiful visual story and loves the process of hunting for or custom creating just the right pieces.</p>",
+    "bio2": "",
+    "contactEmail": "kat@katrinarumford.com",
+    "showEmail": true,
+    "resume": "",
+    "social": {
+      "imdb": "",
+      "vimeo": "",
+      "instagram": "",
+      "linkedin": "",
+      "youtube": "",
+      "twitter": ""
+    },
+    "clients": [
+      "Nordstrom",
+      "Lyft",
+      "Fruit of the Loom",
+      "DreamWorks",
+      "Google",
+      "Sagmeister & Walsh",
+      "Fleet Foxes",
+      "Baskin Robbins",
+      "Jack in the Box",
+      "Redbox",
+      "Oliver Tree",
+      "Vogue Bambini",
+      "Chambord",
+      "Bloomberg Businessweek",
+      "Microsoft",
+      "Amazon",
+      "AT&T",
+      "Kit Kat",
+      "Maryville University",
+      "Blue Moon",
+      "Dairy",
+      "Fruity Pebbles",
+      "Paramount Pictures",
+      "Zen Desk",
+      "Honda & Acura",
+      "Glasses.com",
+      "Westfield",
+      "TCF Bank",
+      "Good Magazine",
+      "Urban Outfitters",
+      "Audubon Society",
+      "Civilianaire",
+      "Twelv Magazine",
+      "Prism Tats",
+      "Divine Fits",
+      "Here We Go Magic",
+      "Grandaddy"
+    ]
+  },
+  "ownerName": "Katrina Rumford",
+  "ownerTitle": "Styling / Custom Made",
+  "metaDescription": "On-set wardrobe stylist. Portfolio of styling and custom made work across film, photo, and video.",
+  "favicon": "08_hanger.svg",
+  "ogImage": "images/CHAMPIONS_ADDITIONAL_SHOTS_01_0115-8.jpg",
+  "website": "https://crummo.github.io/katrinarumford.com/",
+  "notFound": {
+    "heading": "Pulled for another shoot.",
+    "sub": "The page you're after isn't on this rack.",
+    "back": "Back to home"
+  },
+  "contact": {
+    "enabled": false,
+    "mode": "card-mobile-only",
+    "showCard": false,
+    "endpoint": "",
+    "email": "",
+    "photo": "",
+    "showEmailInDrawer": true
+  },
+  "splash": {
+    "enabled": false,
+    "video": "",
+    "duration": 10,
+    "skipReturning": false
+  },
+  "accentColor": "#c9a96e",
+  "analytics": {
+    "provider": "",
+    "id": ""
+  },
+  "navStyle": "left",
+  "allowThemeToggle": true,
+  "themeMode": "light",
+  "filmGrain": 0,
+  "thumbnailFilter": 0,
+  "viewerBg": "auto",
+  "allowIndexing": true,
+  "zoomLock": false,
+  "mobileThumbsNative": true
+}

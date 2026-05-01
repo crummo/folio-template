@@ -736,6 +736,14 @@
         max-height: calc(100svh - 120px);
         height: auto;
       }
+      /* The desktop placement-above full-width rule sets max-width/max-height: none
+         with higher specificity than the rule above, overriding the landscape
+         constraints. Re-assert them here at matching specificity. */
+      .about-layout.placement-above .about-photo-frame.shape-natural.photo-full-width .about-photo-img {
+        width: auto !important;
+        max-width: 40vw !important;
+        max-height: calc(100svh - 120px) !important;
+      }
 
       /* Viewer covers the full viewport — sits above the nav (z-index 200) */
       .gv.open {
