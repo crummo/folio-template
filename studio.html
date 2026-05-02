@@ -1039,6 +1039,7 @@
       <!-- Sub-tabs -->
       <div class="settings-tabs">
         <button class="settings-tab-btn active" onclick="switchSettingsTab('general')">General</button>
+        <button class="settings-tab-btn" onclick="switchSettingsTab('appearance')">Appearance</button>
         <button class="settings-tab-btn" onclick="switchSettingsTab('categories')">Categories</button>
         <button class="settings-tab-btn" onclick="switchSettingsTab('about')">About</button>
         <button class="settings-tab-btn" onclick="switchSettingsTab('advanced')">Advanced</button>
@@ -1064,9 +1065,12 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- ── APPEARANCE TAB ── -->
+      <div class="settings-tab-pane" id="stab-appearance">
         <div class="settings-section">
-          <div class="settings-section-title">Appearance</div>
+          <div class="settings-section-title">Color</div>
           <div class="field">
             <label>Accent Color</label>
             <div style="display:flex;align-items:center;gap:10px">
@@ -1075,13 +1079,6 @@
               <button class="btn btn-ghost btn-sm" onclick="resetAccentColor()" type="button">Reset</button>
             </div>
             <div class="field-hint" style="margin-top:4px">Used for highlights, active nav links, and client labels across the site</div>
-          </div>
-          <div class="field" style="margin-top:12px">
-            <label>Nav Position</label>
-            <select id="site-nav-style" onchange="markDirty()" style="margin-top:6px;width:100%">
-              <option value="top">Top — horizontal bar</option>
-              <option value="left">Left — vertical sidebar</option>
-            </select>
           </div>
           <div class="field" style="margin-top:12px">
             <label>Site Theme</label>
@@ -1104,7 +1101,36 @@
             </select>
             <div class="field-hint" style="margin-top:4px">Background color of the lightbox and gallery viewer. Auto follows the site theme.</div>
           </div>
-          <div class="field" style="margin-top:12px">
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Typography</div>
+          <div class="field">
+            <label>UI Font</label>
+            <select id="site-font-sans" onchange="applyFontSans(this.value);markDirty()" style="margin-top:6px;width:100%">
+              <option value="dm-sans">DM Sans — clean geometric sans</option>
+              <option value="source-code-pro">Source Code Pro — monospace</option>
+              <option value="space-grotesk">Space Grotesk — geometric modern</option>
+              <option value="inter">Inter — neutral workhorse</option>
+            </select>
+            <div class="field-hint" style="margin-top:4px">Applies to nav, labels, and all UI text across the site.</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Layout</div>
+          <div class="field">
+            <label>Nav Position</label>
+            <select id="site-nav-style" onchange="markDirty()" style="margin-top:6px;width:100%">
+              <option value="top">Top — horizontal bar</option>
+              <option value="left">Left — vertical sidebar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Texture &amp; Detail</div>
+          <div class="field">
             <label>Film Grain <span id="site-film-grain-pct" style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0;font-weight:400"></span></label>
             <input type="range" id="site-film-grain" min="0" max="100" step="1" value="28"
               style="width:100%;accent-color:var(--accent)"
@@ -1132,18 +1158,7 @@
             </label>
             <div class="field-hint" style="margin-top:4px">Each thumbnail in the mobile list keeps its original proportions instead of being cropped to 16:9. Magazine-feed style.</div>
           </div>
-          <div class="field" style="margin-top:12px">
-            <label>UI Font</label>
-            <select id="site-font-sans" onchange="applyFontSans(this.value);markDirty()" style="margin-top:6px;width:100%">
-              <option value="dm-sans">DM Sans — clean geometric sans</option>
-              <option value="source-code-pro">Source Code Pro — monospace</option>
-              <option value="space-grotesk">Space Grotesk — geometric modern</option>
-              <option value="inter">Inter — neutral workhorse</option>
-            </select>
-            <div class="field-hint" style="margin-top:4px">Applies to nav, labels, and all UI text across the site.</div>
-          </div>
         </div>
-
       </div>
 
       <!-- ── SECTIONS TAB ── -->
