@@ -5091,7 +5091,13 @@ function previewAccentColor(color) {
 }
 
 function syncAccentFromHex(val) {
-  const color = val.trim();
+  let color = val.trim();
+  // Auto-prepend # if missing
+  if (color && color[0] !== '#') color = '#' + color;
+  // Expand 3-digit shorthand → 6-digit (#abc → #aabbcc)
+  if (/^#[0-9a-fA-F]{3}$/.test(color)) {
+    color = '#' + color[1]+color[1] + color[2]+color[2] + color[3]+color[3];
+  }
   if (/^#[0-9a-fA-F]{6}$/.test(color)) {
     document.documentElement.style.setProperty('--accent', color);
     const picker = document.getElementById('site-accent-color');
