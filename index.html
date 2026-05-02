@@ -1184,6 +1184,7 @@
         drawerEl.appendChild(da);
       }
 
+      if (siteConfig.homePage?.enabled) addLink('home', 'Home');
       cats.forEach(cat => addLink(cat.id, cat.label));
       if (siteConfig.about?.show !== false) addLink('about', 'About');
       const _ctMode = siteConfig.contact?.mode;
