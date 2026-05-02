@@ -1132,6 +1132,16 @@
             </label>
             <div class="field-hint" style="margin-top:4px">Each thumbnail in the mobile list keeps its original proportions instead of being cropped to 16:9. Magazine-feed style.</div>
           </div>
+          <div class="field" style="margin-top:12px">
+            <label>UI Font</label>
+            <select id="site-font-sans" onchange="applyFontSans(this.value);markDirty()" style="margin-top:6px;width:100%">
+              <option value="dm-sans">DM Sans — clean geometric sans</option>
+              <option value="source-code-pro">Source Code Pro — monospace</option>
+              <option value="space-grotesk">Space Grotesk — geometric modern</option>
+              <option value="inter">Inter — neutral workhorse</option>
+            </select>
+            <div class="field-hint" style="margin-top:4px">Applies to nav, labels, and all UI text across the site.</div>
+          </div>
         </div>
 
       </div>
@@ -4954,6 +4964,26 @@ async function saveContactFields() {
 // ─── ACCENT COLOR + ANALYTICS ────────────────────────────────────────────────
 const DEFAULT_ACCENT = '#c9a96e';
 
+const FONT_SANS_OPTIONS = {
+  'dm-sans':         { url: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400&display=swap',         stack: "'DM Sans', sans-serif" },
+  'source-code-pro': { url: 'https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400&display=swap', stack: "'Source Code Pro', monospace" },
+  'space-grotesk':   { url: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&display=swap',   stack: "'Space Grotesk', sans-serif" },
+  'inter':           { url: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap',           stack: "'Inter', sans-serif" },
+};
+
+function applyFontSans(key) {
+  const opt = FONT_SANS_OPTIONS[key] || FONT_SANS_OPTIONS['dm-sans'];
+  let link = document.getElementById('dynamic-font-sans');
+  if (!link) {
+    link = document.createElement('link');
+    link.id  = 'dynamic-font-sans';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+  link.href = opt.url;
+  document.documentElement.style.setProperty('--font-sans', opt.stack);
+}
+
 function updateThumbFilter(val) {
   document.getElementById('site-thumb-filter-pct').textContent = '— ' + val + '%';
   const t = val / 100;
@@ -5323,6 +5353,7 @@ function flushSettingsForms() {
   siteConfig.thumbnailFilter = parseInt(document.getElementById('site-thumb-filter')?.value || 0);
   siteConfig.zoomLock       = document.getElementById('site-zoom-lock')?.checked || false;
   siteConfig.mobileThumbsNative = document.getElementById('site-mobile-thumbs-native')?.checked || false;
+  siteConfig.fontSans       = document.getElementById('site-font-sans')?.value || '';
 
   updateNavBrand();
 }
@@ -5753,6 +5784,9 @@ function populateGeneralSettings() {
   document.getElementById('site-allow-theme-toggle').checked = !!siteConfig.allowThemeToggle;
   document.getElementById('site-zoom-lock').checked = !!siteConfig.zoomLock;
   document.getElementById('site-mobile-thumbs-native').checked = !!siteConfig.mobileThumbsNative;
+  const fontSansKey = siteConfig.fontSans || 'dm-sans';
+  document.getElementById('site-font-sans').value = fontSansKey;
+  applyFontSans(fontSansKey);
   applyAdminTheme(themeMode);
   document.getElementById('site-viewer-bg').value = siteConfig.viewerBg || 'auto';
   // Version

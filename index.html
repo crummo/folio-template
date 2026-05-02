@@ -1024,6 +1024,27 @@
       }
     }
 
+    /* ── FONT SWAP ── */
+    const FONT_SANS_OPTIONS = {
+      'dm-sans':         { url: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400&display=swap',         stack: "'DM Sans', sans-serif" },
+      'source-code-pro': { url: 'https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400&display=swap', stack: "'Source Code Pro', monospace" },
+      'space-grotesk':   { url: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&display=swap',   stack: "'Space Grotesk', sans-serif" },
+      'inter':           { url: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap',           stack: "'Inter', sans-serif" },
+    };
+    function applyFontSans(key) {
+      const opt = FONT_SANS_OPTIONS[key];
+      if (!opt || key === 'dm-sans') return; // DM Sans already loaded in <head>
+      let link = document.getElementById('dynamic-font-sans');
+      if (!link) {
+        link = document.createElement('link');
+        link.id  = 'dynamic-font-sans';
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+      }
+      link.href = opt.url;
+      document.documentElement.style.setProperty('--font-sans', opt.stack);
+    }
+
     /* ── APPLY CONFIG ── */
     function applyConfig() {
       const cfg = siteConfig;
@@ -1074,6 +1095,8 @@
       if (toggleBtn) toggleBtn.classList.toggle('hidden', !cfg.allowThemeToggle);
 
       document.body.classList.toggle('nav-left', cfg.navStyle === 'left');
+
+      if (cfg.fontSans) applyFontSans(cfg.fontSans);
 
       if (cfg.viewerBg) document.documentElement.setAttribute('data-viewer-bg', cfg.viewerBg);
       if (cfg.favicon) {
