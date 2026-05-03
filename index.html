@@ -1577,7 +1577,6 @@
       resolveVimeoThumbs(grid);
 
       // Masonry layout (JS-positioned, left-to-right order)
-      const catDef = siteConfig.categories.find(c => c.id === cat);
       if (catDef?.layout !== 'grid') {
         layoutMasonry(grid);
         grid.querySelectorAll('img.grid-thumb').forEach(img => {
