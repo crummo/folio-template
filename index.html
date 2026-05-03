@@ -708,27 +708,31 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1100px; margin: 0 auto; padding: 52px 44px 120px; }
-    .ps-top { margin-bottom: 44px; }
+    .ps-wrap { max-width: 1080px; margin: 0 auto; padding: 56px 44px 120px; }
+    .ps-top { margin-bottom: 44px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .ps-back { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .ps-back:hover { color: var(--fg); }
     .ps-back::before { content: ''; display: inline-block; width: 10px; height: 10px; border-top: 1.5px solid currentColor; border-left: 1.5px solid currentColor; transform: rotate(-45deg) translate(1px,1px); flex-shrink: 0; }
-    .ps-header { margin-bottom: 48px; border-bottom: 1px solid var(--fg-dimmer); padding-bottom: 32px; }
-    .ps-client { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-    .ps-title { font-family: var(--font-serif); font-size: clamp(calc(28px * var(--font-serif-scale,1)), 4vw, calc(52px * var(--font-serif-scale,1))); font-weight: 400; font-style: italic; color: var(--fg); margin: 0; line-height: 1.15; }
-    .ps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-bottom: 80px; }
+    .ps-header { margin-bottom: 56px; }
+    .ps-client { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .ps-title { font-family: var(--font-serif); font-size: clamp(calc(32px * var(--font-serif-scale,1)), 5vw, calc(60px * var(--font-serif-scale,1))); font-weight: 400; font-style: italic; color: var(--fg); margin: 0; line-height: 1.1; }
+    /* Single-column gallery: each photograph gets full width and breathes
+       on its own, mirroring an editorial print layout. Aspect ratios are
+       preserved — no awkward empty gutters between mismatched pairs. */
+    .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 96px; }
     .ps-img { width: 100%; height: auto; display: block; }
-    .ps-nav { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--fg-dimmer); padding-top: 28px; }
-    .ps-nav-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
-    .ps-nav-btn:hover:not(:disabled) { color: var(--fg); }
-    .ps-nav-btn:disabled { opacity: 0.2; cursor: default; }
+    .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; border-top: 1px solid var(--fg-dimmer); padding-top: 32px; }
+    .ps-nav-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: flex; align-items: center; gap: 12px; }
+    .ps-nav-btn:hover { color: var(--fg); }
+    /* Disabled state is still rendered (for layout balance) but invisible
+       so the remaining button doesn't feel orphaned at the page edges. */
+    .ps-nav-btn:disabled { visibility: hidden; }
     .ps-nav-label { display: flex; flex-direction: column; }
-    .ps-nav-direction { font-size: 9px; letter-spacing: 0.16em; }
-    .ps-nav-name { font-family: var(--font-serif); font-size: 13px; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--fg); margin-top: 2px; }
-    .ps-nav-btn:disabled .ps-nav-name { color: var(--fg-dim); }
+    .ps-nav-direction { font-size: 9px; letter-spacing: 0.18em; opacity: 0.7; }
+    .ps-nav-name { font-family: var(--font-serif); font-size: 14px; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--fg); margin-top: 4px; }
     .ps-nav-prev .ps-nav-label { text-align: left; }
     .ps-nav-next .ps-nav-label { text-align: right; }
-    .ps-nav-arrow { font-size: 16px; line-height: 1; opacity: 0.5; }
+    .ps-nav-arrow { font-size: 14px; line-height: 1; opacity: 0.55; }
 
     /* ── SPLASH ── */
     #splash { position: fixed; inset: 0; z-index: 800; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--ease); }
@@ -783,6 +787,7 @@
       }
       .about-wrap, .contact-wrap, .ps-wrap { overflow-x: hidden; max-width: 100%; }
       .ps-wrap { padding: 28px 22px 80px; }
+      .ps-grid { gap: 14px; margin-bottom: 64px; }
       .ps-grid { grid-template-columns: 1fr; gap: 3px; }
       /* Stack contact photo above card on portrait mobile */
       .contact-layout { flex-direction: column; gap: 24px; }
