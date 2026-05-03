@@ -4,6 +4,7 @@
       "id": "work",
       "label": "Work",
       "type": "scroll",
+      "layout": "editorial",
       "published": true
     }
   ],
