@@ -791,8 +791,16 @@
     .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 0; }
     /* Paired portraits — two side by side. JS wraps consecutive portrait
        images in a .ps-pair so landscapes still get their own full-width row. */
+    /* Each cell of a portrait pair is locked to 2:3 (the dominant aspect
+       of the actual photographs) and the image fills it via object-fit:
+       cover. Both halves of the diptych then have identical heights, with
+       only minimal cropping for genuinely-different aspects (e.g. a square
+       loses a sliver of top + bottom). */
     .ps-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .ps-pair .ps-img { width: 100%; height: auto; display: block; }
+    .ps-pair .ps-img {
+      width: 100%; height: 100%; aspect-ratio: 2 / 3;
+      object-fit: cover; display: block;
+    }
     @media (max-width: 768px) {
       .ps-pair { grid-template-columns: 1fr; gap: 14px; }
     }
