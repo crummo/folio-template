@@ -1174,7 +1174,7 @@
 
   <!-- Nav -->
   <nav>
-    <a class="nav-brand" href="#" onclick="event.preventDefault();showFirst()">
+    <a class="nav-brand" href="#" onclick="event.preventDefault();goHome()">
       <img class="nav-brand-logo" id="nav-logo" alt="" style="display:none">
       <span class="nav-brand-name" id="nav-name"></span>
       <span class="nav-brand-rule" id="nav-rule" style="display:none"></span>
@@ -1732,6 +1732,17 @@
       if (id === 'home')  { renderHome(); resumeHomeSlideshow(); }
       else                { pauseHomeSlideshow(); }
       if (id === 'about') renderAbout();
+    }
+
+    function goHome() {
+      // Logo / brand click — always returns to home if enabled, else first
+      // published category.
+      if (siteConfig.homePage?.enabled) { showPage('home'); return; }
+      const visible = isPreview
+        ? siteConfig.categories
+        : siteConfig.categories.filter(c => c.published !== false);
+      const first = visible[0];
+      if (first) showPage(first.id);
     }
 
     function showFirst() {
