@@ -1809,11 +1809,19 @@
           </div>
         </div>`;
 
-      // Suppress transition on first slide so it appears instantly (no fade-in hitch)
+      // Fade the bg in once the first image has loaded — prevents the pop-in hitch
+      const homeBg    = pg.querySelector('.home-bg');
       const firstSlide = pg.querySelector('.home-slide.active');
-      if (firstSlide) {
-        firstSlide.style.transition = 'none';
-        requestAnimationFrame(() => requestAnimationFrame(() => { firstSlide.style.transition = ''; }));
+      if (homeBg && firstSlide) {
+        homeBg.style.opacity   = '0';
+        homeBg.style.transition = 'opacity 0.6s ease';
+        const reveal = () => { homeBg.style.opacity = '1'; };
+        if (firstSlide.complete && firstSlide.naturalWidth > 0) {
+          reveal();
+        } else {
+          firstSlide.addEventListener('load',  reveal, { once: true });
+          firstSlide.addEventListener('error', reveal, { once: true });
+        }
       }
 
       if (multiSlide) startHomeSlideshow();
