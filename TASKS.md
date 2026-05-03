@@ -2,8 +2,6 @@
 
 ## In Progress
 - [ ] Home page slideshow — auto-cycling, clickable to advance
-- [ ] Contact intro text — custom sentence above email ("To enquire about a project…")
-- [ ] Instagram link — surface @slowdust_la somewhere on the site (footer?)
 - [ ] Scroll detail page visual review — compare spacing/layout side-by-side with slowduststudio.com
 - [ ] Move images into repo — Squarespace CDN URLs will eventually break
 
@@ -13,7 +11,11 @@
 - [ ] Move splash + 404 config into Pages tab — studio.html cleanup
 
 ## Done
-- [x] overlay-label style — title only, bottom-left, no play button; auto-applied to scroll categories
+- [x] overlay-cover style — white wash clears on hover to reveal image; auto-applied to scroll categories; wired into studio
+- [x] overlay-label style — title only, bottom-left, no play button
+- [x] Contact intro text — configurable sentence above email; wired into studio
+- [x] Instagram footer link — @slowdust_la fixed to bottom-right; pulled from site.json
+- [x] Instagram icon on contact page — shown when about.social.instagram is set
 - [x] Slow Dust Studio content — site.json + projects.json configured and deployed
 - [x] Scroll view (type: 'scroll') — project detail page with 2-col image grid, prev/next nav
 - [x] Gallery Images field in project editor — textarea for scroll-type projects

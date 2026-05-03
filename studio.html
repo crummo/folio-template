@@ -1492,6 +1492,11 @@
             <div class="thumb-file-list" id="home-bg-file-list"></div>
           </div>
           <div class="field" style="margin-top:12px">
+            <label>Slideshow <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(optional — replaces single image above)</span></label>
+            <textarea id="home-slides" rows="4" placeholder="images/slide-1.jpg&#10;images/slide-2.jpg&#10;https://…" oninput="markDirty()" style="margin-top:6px;font-size:11px;font-family:monospace"></textarea>
+            <div class="field-hint" style="margin-top:4px">One image URL per line · crossfades automatically every 5 s · click the image to advance</div>
+          </div>
+          <div class="field" style="margin-top:12px">
             <label>Video <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(mp4 — plays silently, loops)</span></label>
             <input type="text" id="home-bg-video" placeholder="videos/reel.mp4 or https://…" oninput="markDirty()" style="margin-top:6px" />
             <div class="field-hint" style="margin-top:4px">If both image and video are set, the video plays over the image as a fallback.</div>
@@ -5575,6 +5580,7 @@ function flushSettingsForms() {
     body:     document.getElementById('home-body')?.value.trim()     || '',
     bg:       document.getElementById('home-bg')?.value.trim()       || '',
     bgVideo:  document.getElementById('home-bg-video')?.value.trim() || '',
+    slides:   (document.getElementById('home-slides')?.value || '').split('\n').map(s => s.trim()).filter(Boolean),
     ctas: [
       { label: document.getElementById('home-cta1-label')?.value.trim() || '', target: document.getElementById('home-cta1-target')?.value.trim() || '', style: 'primary' },
       { label: document.getElementById('home-cta2-label')?.value.trim() || '', target: document.getElementById('home-cta2-target')?.value.trim() || '', style: 'ghost'   },
@@ -6052,6 +6058,7 @@ function populateGeneralSettings() {
   document.getElementById('home-body').value          = hp.body      || '';
   document.getElementById('home-bg').value            = hp.bg        || '';
   document.getElementById('home-bg-video').value      = hp.bgVideo   || '';
+  document.getElementById('home-slides').value        = Array.isArray(hp.slides) ? hp.slides.join('\n') : '';
   updateHomeBgPreview();
   const cta1 = (hp.ctas || [])[0] || {};
   const cta2 = (hp.ctas || [])[1] || {};
