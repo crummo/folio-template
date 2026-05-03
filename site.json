@@ -36,6 +36,7 @@
     "body": "",
     "bg": "",
     "bgVideo": "",
+    "overlayOpacity": 0,
     "slides": [
       "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/a5788ebc-91cc-4a29-9fe1-f7c734345e4a/kat_anderson_-126_med.jpg",
       "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/209ae6f5-25a3-4fae-ba24-57aa6fdb3bde/3873AguilarSt-7016.jpg",

@@ -1789,7 +1789,7 @@
           ${slideUrls.map((s, i) => `<img class="home-slide${i === 0 ? ' active' : ''}" src="${x(s)}" alt="">`).join('')}
           ${h.bgVideo ? `<video class="home-bg-video" src="${x(h.bgVideo)}" autoplay muted loop playsinline></video>` : ''}
         </div>
-        <div class="home-overlay"></div>` : '<div class="home-bg"></div>';
+        <div class="home-overlay" style="opacity:${h.overlayOpacity ?? 1}"></div>` : '<div class="home-bg"></div>';
 
       const ctasHtml = (h.ctas || []).filter(c => c.label).map(c => {
         const isUrl = c.target && /^https?:\/\//.test(c.target);
