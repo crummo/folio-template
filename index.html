@@ -718,8 +718,46 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1080px; margin: 0 auto; padding: 56px 44px 120px; }
-    .ps-top { margin-bottom: 44px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .ps-wrap { max-width: 1080px; margin: 0 auto; padding: 56px 44px 120px; position: relative; }
+    /* Sticky top row: back link on the left, prev/next on the right.
+       The cream bg covers content scrolling underneath. */
+    .ps-top {
+      position: sticky; top: var(--nav-h); z-index: 40;
+      background: var(--bg); padding: 14px 0; margin: -14px 0 30px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    /* Side chevrons — visible on narrower screens where the top sticky bar
+       loses room for full text labels. Live inside the wrap's padding zone
+       (left:8px / right:8px against the wrap, which has 44px padding). */
+    .ps-side-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      z-index: 45; display: none;
+      width: 36px; height: 36px;
+      align-items: center; justify-content: center;
+      background: rgba(248, 245, 240, 0.85);
+      color: var(--fg-mid);
+      border: 1px solid var(--fg-dimmer);
+      border-radius: 2px;
+      font-family: var(--font-serif); font-size: 22px; line-height: 1;
+      text-decoration: none; cursor: pointer;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: background 0.2s, color 0.2s, opacity 0.2s;
+      padding: 0 0 3px;
+      opacity: 0.85;
+    }
+    .ps-side-nav:hover { background: var(--bg); color: var(--fg); opacity: 1; }
+    .ps-side-nav-prev { left: 12px; }
+    .ps-side-nav-next { right: 12px; }
+    @media (max-width: 879px) {
+      .ps-nav-top { display: none; }
+      .ps-side-nav { display: flex; }
+    }
+    @media (max-width: 599px) {
+      /* Padding too tight for chevrons not to overlap content — fall back
+         to the bottom nav alone. */
+      .ps-side-nav { display: none; }
+    }
     .ps-back { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; line-height: 1.6; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 4px 0; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .ps-back:hover { color: var(--fg); }
     .ps-back::before { content: ''; display: inline-block; width: 10px; height: 10px; border-top: 1.5px solid currentColor; border-left: 1.5px solid currentColor; transform: rotate(-45deg) translate(1px,1px); flex-shrink: 0; }
@@ -2500,6 +2538,12 @@
       const pg = document.createElement('section');
       pg.id = 'page-' + pageId;
       pg.className = 'page';
+      const sideChevronPrev = prevP
+        ? `<button class="ps-side-nav ps-side-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})" aria-label="Previous: ${x(prevP.title || '')}" title="Previous: ${x(prevP.title || '')}">‹</button>`
+        : '';
+      const sideChevronNext = nextP
+        ? `<button class="ps-side-nav ps-side-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})" aria-label="Next: ${x(nextP.title || '')}" title="Next: ${x(nextP.title || '')}">›</button>`
+        : '';
       pg.innerHTML = `
         <div class="ps-wrap">
           <div class="ps-top">
@@ -2509,6 +2553,8 @@
               ${nextHtml}
             </nav>
           </div>
+          ${sideChevronPrev}
+          ${sideChevronNext}
           <header class="ps-header">
             ${p.client ? `<div class="ps-client">${x(p.client)}</div>` : ''}
             <h1 class="ps-title">${x(p.title || '')}</h1>
