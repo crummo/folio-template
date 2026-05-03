@@ -314,7 +314,7 @@
     .grid-item:hover .grid-center.overlay-none { display: none; }
     .grid-item.overlay-none:hover .grid-thumb { filter: saturate(1) brightness(1) !important; }
 
-    /* label — title only, bottom-left, no play/client/award. Used for scroll-type categories. */
+    /* label — title only, bottom-left, no play/client/award. */
     .grid-center.overlay-label { align-items: flex-start; justify-content: flex-end; text-align: left; padding: 0 14px 12px; }
     .grid-center.overlay-label .grid-client,
     .grid-center.overlay-label .grid-play,
@@ -327,8 +327,19 @@
       transition: opacity 0.3s var(--ease);
     }
     .grid-item:hover .grid-center.overlay-label .grid-title { opacity: 1; font-size: 10px !important; transform: none !important; }
-    /* Bottom-fade scrim instead of radial spotlight for scroll/label items */
-    .grid-item.scroll-item .grid-scrim { background: linear-gradient(to top, rgba(19,17,16,0.52) 0%, transparent 52%) !important; }
+
+    /* cover — white wash over image, title centered, both clear on hover to reveal photo. */
+    .grid-item.overlay-cover-item .grid-scrim { background: rgba(242,239,235,0.84) !important; transition: opacity 0.4s var(--ease); }
+    .grid-item.overlay-cover-item:hover .grid-scrim { opacity: 0; }
+    .grid-center.overlay-cover { align-items: center; justify-content: center; text-align: center; padding: 16px; transition: opacity 0.4s var(--ease); }
+    .grid-center.overlay-cover .grid-client,
+    .grid-center.overlay-cover .grid-play,
+    .grid-center.overlay-cover .grid-award { display: none !important; }
+    .grid-center.overlay-cover .grid-title {
+      font-family: var(--font-serif); font-size: clamp(11px, 1.4vw, 15px); font-weight: 400; font-style: italic;
+      color: var(--fg); letter-spacing: 0.04em; transform: none !important; font-size: 13px !important;
+    }
+    .grid-item.overlay-cover-item:hover .grid-center.overlay-cover { opacity: 0; }
 
     /* ── MOBILE LIST ── */
     .mobile-list { display: none; }
@@ -490,11 +501,15 @@
 
     /* ── CONTACT ── */
     .contact-wrap { max-width: 560px; margin: 0 auto; padding: 72px 44px 100px; }
+    .contact-intro { font-size: 14px; color: var(--fg-mid); line-height: 1.8; margin-bottom: 36px; }
     .contact-card { margin-bottom: 52px; }
     .contact-card-name { font-family: var(--font-serif); font-size: 22px; font-weight: 400; color: var(--fg); margin-bottom: 10px; }
     .contact-card-email { display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; letter-spacing: 0.04em; transition: opacity 0.2s; }
     .contact-card-email:hover { opacity: 0.7; }
     .contact-card-divider { height: 1px; background: var(--fg-dimmer); margin: 32px 0; }
+    .contact-card-social { margin-top: 20px; }
+    .contact-card-social-link { display: inline-flex; color: var(--fg-dim); opacity: 0.5; transition: opacity 0.2s; text-decoration: none; }
+    .contact-card-social-link:hover { opacity: 1; }
     /* Optional photo on the contact page — side-by-side with the card on
        desktop, stacks above on mobile. */
     .contact-layout { display: flex; flex-direction: row; gap: 36px; align-items: flex-start; }
@@ -537,6 +552,13 @@
       .home-content { padding: 60px 28px; }
       .home-subhead { letter-spacing: 0.22em; }
     }
+
+    /* ── SITE FOOTER ── */
+    .site-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 36px; display: flex; align-items: center; justify-content: flex-end; padding: 0 28px; z-index: 50; pointer-events: none; }
+    .site-footer a { pointer-events: auto; font-family: var(--font-sans); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); text-decoration: none; opacity: 0.5; transition: opacity 0.2s; }
+    .site-footer a:hover { opacity: 1; }
+    body.nav-left .site-footer { left: var(--nav-w); }
+    main { padding-bottom: 36px; }
 
     /* ── SCROLL PROJECT PAGE ── */
     .ps-wrap { max-width: 1100px; margin: 0 auto; padding: 52px 44px 120px; }
@@ -948,6 +970,7 @@
   <div class="nav-drawer" id="nav-drawer"></div>
 
   <main id="main-content"></main>
+  <footer id="site-footer" class="site-footer"></footer>
 
   <!-- Gallery Viewer -->
   <div id="gallery-viewer" class="gv" onclick="if(event.target===this)closeGallery()">
@@ -1209,6 +1232,16 @@
         document.querySelector('meta[property="og:image"]')?.setAttribute('content', ogAbs);
         document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', ogAbs);
       }
+
+      // Site footer — Instagram link (and any future social)
+      const footer = document.getElementById('site-footer');
+      if (footer) {
+        const igUrl = cfg.about?.social?.instagram;
+        const igHandle = igUrl ? (igUrl.match(/instagram\.com\/([^/?#]+)/)?.[1] || null) : null;
+        footer.innerHTML = igHandle
+          ? `<a href="${x(igUrl)}" target="_blank" rel="noopener">@${x(igHandle)}</a>`
+          : '';
+      }
     }
 
     function applyTheme(mode) {
@@ -1350,9 +1383,12 @@
         const name  = siteConfig.ownerName || '';
         // Prefer contact-card override email; fall back to About page email
         const email = (siteConfig.contact?.email || siteConfig.about.contactEmail || '');
+        const igUrl = siteConfig.about?.social?.instagram || '';
+        const igSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`;
         return `<div class="contact-card">
           ${name  ? `<div class="contact-card-name">${x(name)}</div>` : ''}
           ${email ? `<a class="contact-card-email" href="mailto:${x(email)}">${x(email)}</a>` : ''}
+          ${igUrl ? `<div class="contact-card-social"><a href="${x(igUrl)}" target="_blank" rel="noopener" class="contact-card-social-link" title="Instagram">${igSvg}</a></div>` : ''}
         </div>
         ${!isCardOnly ? `<div class="contact-card-divider"></div>` : ''}`;
       })() : '';
@@ -1367,9 +1403,11 @@
             <button type="submit" id="contact-submit" class="contact-submit">Send Message</button>
             <div id="contact-result" class="contact-result"></div>
           </form>` : ''}`;
+      const introHtml = cc.intro ? `<p class="contact-intro">${x(cc.intro)}</p>` : '';
       ctc.innerHTML = `
         <div class="contact-wrap">
           <h2 class="about-eyebrow">Get in Touch</h2>
+          ${introHtml}
           ${photoHtml ? `<div class="contact-layout">${photoHtml}<div class="contact-content">${cardWithFormHtml}</div></div>` : cardWithFormHtml}
         </div>`;
       main.appendChild(ctc);
@@ -1500,7 +1538,7 @@
       const catDef = siteConfig.categories.find(c => c.id === cat);
       const isScrollCat = catDef?.type === 'scroll';
       items.forEach((p, i) => {
-        const overlayClass = isScrollCat ? 'label' : (p.overlay || (p.opacity === 0 ? 'reveal' : 'default'));
+        const overlayClass = isScrollCat ? 'cover' : (p.overlay || (p.opacity === 0 ? 'reveal' : 'default'));
         const hideBtn = isPreview
           ? `<button class="preview-hide-btn" onclick="event.stopPropagation();previewHideProject(${p._gi},'${x(cat)}')" title="Hide">×</button>`
           : '';
@@ -1518,6 +1556,7 @@
         const el = document.createElement('div');
         el.className = 'grid-item'
           + (overlayClass === 'none' ? ' overlay-none' : '')
+          + (overlayClass === 'cover' ? ' overlay-cover-item' : '')
           + (isScrollCat ? ' scroll-item' : '');
         el.onclick = catDef?.type === 'gallery' ? () => openGallery(cat, i)
                    : catDef?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)

@@ -23,7 +23,8 @@
     "enabled": true,
     "mode": "card-only",
     "showCard": true,
-    "email": "katrina@slowduststudio.com"
+    "email": "katrina@slowduststudio.com",
+    "intro": "To enquire about a project, please get in touch."
   },
   "splash": {
     "enabled": false

@@ -1539,6 +1539,11 @@
           </div>
           <div id="contact-fields" style="display:none">
             <div class="field">
+              <label>Intro Text <span style="font-weight:normal;text-transform:none;letter-spacing:0;color:var(--fg-dim);font-size:11px">(optional)</span></label>
+              <input type="text" id="contact-intro-input" placeholder="To enquire about a project, please get in touch." oninput="markDirty()" style="width:100%" />
+              <div class="field-hint" style="margin-top:4px">Sentence shown above the email on the contact page.</div>
+            </div>
+            <div class="field">
               <label>Card Email <span style="font-weight:normal;text-transform:none;letter-spacing:0;color:var(--fg-dim);font-size:11px">(optional)</span></label>
               <div class="field-clearable">
                 <input type="email" id="contact-email-input" placeholder="defaults to About page email" oninput="markDirty()" />
@@ -5084,6 +5089,7 @@ function populateContactEditor() {
   const sel = document.getElementById('contact-mode-select');
   if (sel) sel.value = mode;
   document.getElementById('contact-endpoint').value = c.endpoint || '';
+  document.getElementById('contact-intro-input').value = c.intro || '';
   document.getElementById('contact-email-input').value = c.email || '';
   document.getElementById('contact-photo-input').value = c.photo || '';
   document.getElementById('contact-show-card').checked = !!c.showCard;
@@ -5124,6 +5130,7 @@ async function saveContactFields() {
     mode:     mode === 'off' ? undefined : mode,
     showCard: mode === 'form' ? (document.getElementById('contact-show-card')?.checked || false) : false,
     endpoint: document.getElementById('contact-endpoint')?.value.trim() || '',
+    intro:    document.getElementById('contact-intro-input')?.value.trim() || '',
     email:    document.getElementById('contact-email-input')?.value.trim() || '',
     photo:    document.getElementById('contact-photo-input')?.value.trim() || '',
     showEmailInDrawer: document.getElementById('contact-show-email-in-drawer')?.checked || false,
@@ -5527,6 +5534,7 @@ function flushSettingsForms() {
     mode:     _cmode === 'off' ? undefined : _cmode,
     showCard: _cmode === 'form' ? (document.getElementById('contact-show-card')?.checked || false) : false,
     endpoint: document.getElementById('contact-endpoint')?.value.trim() || '',
+    intro:    document.getElementById('contact-intro-input')?.value.trim() || '',
     email:    document.getElementById('contact-email-input')?.value.trim() || '',
     photo:    document.getElementById('contact-photo-input')?.value.trim() || '',
     showEmailInDrawer: document.getElementById('contact-show-email-in-drawer')?.checked || false,
