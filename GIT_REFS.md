@@ -2,7 +2,7 @@
 
 ## Template Repo (upstream)
 **GitHub:** https://github.com/crummo/folio-template
-**Pages:** https://crummo.github.io/folio-template
+**Pages (dev preview):** https://crummo.github.io/folio-template
 
 ## Downstream Sites
 Each site has its own repo. The template is set as `upstream` in each one.
@@ -12,7 +12,7 @@ Each site has its own repo. The template is set as `upstream` in each one.
 | cameronrumford.com | https://github.com/crummo/cameronrumford.com | https://www.cameronrumford.com |
 | katrinarumford.com | https://github.com/crummo/katrinarumford.com | https://www.katrinarumford.com |
 | slowdustpost.com | https://github.com/crummo/slowdustpost.com | https://www.slowdustpost.com |
-| slowduststudio.com | https://github.com/crummo/folio-template (GitHub Pages preview: https://crummo.github.io/folio-template/) | https://www.slowduststudio.com |
+| slowduststudio.com | https://github.com/crummo/folio-template | https://www.slowduststudio.com |
 
 > **Note:** Repo names above may not be exact — run `git remote -v` inside each site folder to confirm.
 
