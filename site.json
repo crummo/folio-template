@@ -66,5 +66,6 @@
   "analytics": {
     "provider": "",
     "id": ""
-  }
+  },
+  "brandLogo": "images/logo.jpg"
 }
