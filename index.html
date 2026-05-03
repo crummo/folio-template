@@ -239,7 +239,7 @@
        the photograph. Best for considered, smaller portfolios. */
     .gallery-grid.layout-editorial {
       display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 12px; padding: 12px;
+      gap: 14px; padding: 28px;
       max-width: 1600px; margin: 0 auto;
     }
     .gallery-grid.layout-editorial .grid-item {
@@ -282,7 +282,7 @@
     }
     .gallery-grid.layout-editorial .grid-item:hover .grid-thumb { transform: scale(1.03); }
     @media (max-width: 768px) {
-      .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 8px; padding: 8px; }
+      .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
       .gallery-grid.layout-editorial .editorial-label-title { font-size: 18px; }
     }
 
@@ -592,11 +592,15 @@
       max-width: 360px; margin: 0 auto 36px; line-height: 1.7;
     }
     .contact-wrap.contact-centered .contact-card-email {
+      display: block; font-size: 14px; letter-spacing: 0.06em;
+    }
+    .contact-wrap.contact-centered .contact-card-ig-text {
+      display: inline-block; margin-top: 14px;
       font-size: 14px; letter-spacing: 0.06em;
+      color: var(--accent); text-decoration: none;
+      transition: opacity 0.2s;
     }
-    .contact-wrap.contact-centered .contact-card-social {
-      margin-top: 32px; display: flex; justify-content: center;
-    }
+    .contact-wrap.contact-centered .contact-card-ig-text:hover { opacity: 0.7; }
     .contact-card-social-link { display: inline-flex; color: var(--fg-dim); opacity: 0.5; transition: opacity 0.2s; text-decoration: none; }
     .contact-card-social-link:hover { opacity: 1; }
     /* Optional photo on the contact page — side-by-side with the card on
@@ -691,10 +695,7 @@
     }
 
     /* ── SITE FOOTER ── */
-    .site-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 36px; display: flex; align-items: center; justify-content: flex-end; gap: 22px; padding: 0 28px; z-index: 50; pointer-events: none; }
-    .site-footer a, .site-footer .site-footer-copyright { pointer-events: auto; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-mid); text-decoration: none; opacity: 0.85; transition: opacity 0.2s, color 0.2s; }
-    .site-footer a:hover { opacity: 1; }
-    .site-footer .site-footer-copyright { opacity: 0.35; pointer-events: none; }
+/* sticky site-footer removed — IG lives in nav, copyright in about page */
     /* Optional Instagram icon at the end of the desktop nav. Inherits color
        from nav-link styles so it picks up the same dim → accent hover treatment. */
     .nav-links .nav-link-ig { display: inline-flex; align-items: center; padding: 0; opacity: 0.7; transition: opacity 0.25s var(--ease), color 0.25s var(--ease); color: var(--fg-dim); }
@@ -704,8 +705,7 @@
        the adjacent text labels (which sit slightly above their box center
        because of font ascender/descender geometry). */
     .nav-links .nav-link-ig svg { width: 18px; height: 18px; display: block; transform: translateY(1px); }
-    body.nav-left .site-footer { left: var(--nav-w); }
-    main { padding-bottom: 36px; }
+    /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
     .ps-wrap { max-width: 1100px; margin: 0 auto; padding: 52px 44px 120px; }
@@ -1118,7 +1118,6 @@
   <div class="nav-drawer" id="nav-drawer"></div>
 
   <main id="main-content"></main>
-  <footer id="site-footer" class="site-footer"></footer>
 
   <!-- Gallery Viewer -->
   <div id="gallery-viewer" class="gv" onclick="if(event.target===this)closeGallery()">
@@ -1398,32 +1397,7 @@
         document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', ogAbs);
       }
 
-      // Site footer — Instagram link + optional copyright notice.
-      const footer = document.getElementById('site-footer');
-      if (footer) {
-        const igUrl = cfg.about?.social?.instagram;
-        const igHandle = igUrl ? (igUrl.match(/instagram\.com\/([^/?#]+)/)?.[1] || null) : null;
-        const igHtml = igHandle
-          ? `<a href="${x(igUrl)}" target="_blank" rel="noopener">@${x(igHandle)}</a>`
-          : '';
-        // Copyright: explicit override (with {year}/{name} placeholders), or
-        // default '© {year} {ownerName}'. Pass an empty string to suppress.
-        const year = new Date().getFullYear();
-        const ownerName = cfg.ownerName || '';
-        let copyright;
-        if (cfg.footer && Object.prototype.hasOwnProperty.call(cfg.footer, 'copyright')) {
-          copyright = (cfg.footer.copyright || '')
-            .replace('{year}', year).replace('{name}', ownerName);
-        } else if (ownerName) {
-          copyright = `© ${year} ${ownerName}`;
-        } else {
-          copyright = '';
-        }
-        const copyHtml = copyright
-          ? `<span class="site-footer-copyright">${x(copyright)}</span>`
-          : '';
-        footer.innerHTML = igHtml + copyHtml;
-      }
+
     }
 
     function applyTheme(mode) {
@@ -1608,12 +1582,13 @@
         const email = (siteConfig.contact?.email || siteConfig.about?.contactEmail || '');
         const igUrl = siteConfig.about?.social?.instagram || '';
         const igSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`;
+        const igHandle = igUrl ? (igUrl.match(/instagram\.com\/([^/?#]+)/)?.[1] || null) : null;
         ctc.innerHTML = `
           <div class="contact-wrap contact-centered">
             <h1 class="contact-heading">Contact</h1>
             ${introHtml}
             ${email ? `<a class="contact-card-email" href="mailto:${x(email)}">${x(email)}</a>` : ''}
-            ${igUrl ? `<div class="contact-card-social"><a href="${x(igUrl)}" target="_blank" rel="noopener" class="contact-card-social-link" title="Instagram">${igSvg}</a></div>` : ''}
+            ${igHandle ? `<a class="contact-card-ig-text" href="${x(igUrl)}" target="_blank" rel="noopener">@${x(igHandle)}</a>` : ''}
           </div>`;
       } else {
         ctc.innerHTML = `
