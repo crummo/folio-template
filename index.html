@@ -768,6 +768,13 @@
        on its own, mirroring an editorial print layout. Aspect ratios are
        preserved — no awkward empty gutters between mismatched pairs. */
     .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 96px; }
+    /* Paired portraits — two side by side. JS wraps consecutive portrait
+       images in a .ps-pair so landscapes still get their own full-width row. */
+    .ps-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .ps-pair .ps-img { width: 100%; height: auto; display: block; }
+    @media (max-width: 768px) {
+      .ps-pair { grid-template-columns: 1fr; gap: 14px; }
+    }
     .ps-img { width: 100%; height: auto; display: block; }
     .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; }
     .ps-nav-top { flex: 1; padding: 0; gap: 32px; }
@@ -2509,6 +2516,10 @@
         ? images.map(src => `<img class="ps-img" src="${x(src)}" alt="" loading="lazy">`).join('\n')
         : `<div style="padding:80px 0;text-align:center;color:var(--fg-dim);font-size:12px;letter-spacing:0.1em;grid-column:1/-1">No images</div>`;
 
+      // Defer pairing until images have decoded their natural dimensions —
+      // setTimeout 0 so it runs after the innerHTML below paints.
+      const _pairAfterMount = () => setTimeout(() => pairProjectGalleryPortraits(pageId), 0);
+
       const prevHtml = prevP
         ? `<button class="ps-nav-btn ps-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})">
              <span class="ps-nav-arrow">←</span>
@@ -2568,6 +2579,66 @@
 
       document.getElementById('main-content').appendChild(pg);
       showPage(pageId);
+      _pairAfterMount();
+    }
+
+    /* Group consecutive portrait images into 2-up pairs while leaving
+       landscape (and orphan) images as full-width single rows. Runs once
+       per project page. Re-runs idempotently if called again. */
+    function pairProjectGalleryPortraits(pageId) {
+      const grid = document.querySelector('#page-' + pageId + ' .ps-grid');
+      if (!grid) return;
+      const imgs = Array.from(grid.querySelectorAll(':scope > img.ps-img, :scope > .ps-pair > img.ps-img'));
+      if (!imgs.length) return;
+
+      // Wait for all images to know their natural dimensions, then reorder.
+      let pending = imgs.length;
+      const onReady = () => {
+        if (--pending > 0) return;
+        // All measured — now flatten back to a list and re-group.
+        const flat = Array.from(grid.querySelectorAll(':scope img.ps-img'));
+        const groups = [];
+        let portraitBuf = [];
+        const flushPortraits = () => {
+          if (portraitBuf.length === 2) {
+            groups.push({ kind: 'pair', items: portraitBuf });
+          } else if (portraitBuf.length === 1) {
+            groups.push({ kind: 'single', items: portraitBuf });
+          }
+          portraitBuf = [];
+        };
+        for (const img of flat) {
+          const isPortrait = img.naturalHeight > img.naturalWidth;
+          if (isPortrait) {
+            portraitBuf.push(img);
+            if (portraitBuf.length === 2) flushPortraits();
+          } else {
+            flushPortraits();
+            groups.push({ kind: 'single', items: [img] });
+          }
+        }
+        flushPortraits();
+
+        // Rebuild grid contents
+        grid.innerHTML = '';
+        for (const g of groups) {
+          if (g.kind === 'pair') {
+            const wrap = document.createElement('div');
+            wrap.className = 'ps-pair';
+            g.items.forEach(i => wrap.appendChild(i));
+            grid.appendChild(wrap);
+          } else {
+            grid.appendChild(g.items[0]);
+          }
+        }
+      };
+      imgs.forEach(img => {
+        if (img.complete && img.naturalWidth > 0) onReady();
+        else {
+          img.addEventListener('load',  onReady, { once: true });
+          img.addEventListener('error', onReady, { once: true });
+        }
+      });
     }
 
     /* ── EMBED URL ── */
