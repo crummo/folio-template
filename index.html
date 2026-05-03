@@ -594,8 +594,19 @@
     .contact-wrap.contact-centered .contact-card-email {
       display: block; font-size: 14px; letter-spacing: 0.06em;
     }
+    .contact-wrap.contact-centered .contact-card-social {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; margin-top: 36px;
+    }
+    .contact-wrap.contact-centered .contact-card-social-link {
+      color: var(--fg-mid); opacity: 0.85;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .contact-wrap.contact-centered .contact-card-social-link:hover {
+      opacity: 1; color: var(--accent);
+    }
     .contact-wrap.contact-centered .contact-card-ig-text {
-      display: inline-block; margin-top: 14px;
+      display: inline-block;
       font-size: 14px; letter-spacing: 0.06em;
       color: var(--accent); text-decoration: none;
       transition: opacity 0.2s;
@@ -1593,7 +1604,11 @@
             <h1 class="contact-heading">Contact</h1>
             ${introHtml}
             ${email ? `<a class="contact-card-email" href="mailto:${x(email)}">${x(email)}</a>` : ''}
-            ${igHandle ? `<a class="contact-card-ig-text" href="${x(igUrl)}" target="_blank" rel="noopener">@${x(igHandle)}</a>` : ''}
+            ${igUrl ? `
+              <div class="contact-card-social">
+                <a href="${x(igUrl)}" target="_blank" rel="noopener" class="contact-card-social-link" title="Instagram">${igSvg}</a>
+                ${igHandle ? `<a class="contact-card-ig-text" href="${x(igUrl)}" target="_blank" rel="noopener">@${x(igHandle)}</a>` : ''}
+              </div>` : ''}
           </div>`;
       } else {
         ctc.innerHTML = `
