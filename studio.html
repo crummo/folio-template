@@ -1473,6 +1473,32 @@
         </div>
 
         <div class="settings-section">
+          <div class="settings-section-title">Layout</div>
+          <div class="field">
+            <label>Text Position</label>
+            <select id="home-text-layout" onchange="markDirty()" style="margin-top:6px">
+              <option value="centered">Centered (default)</option>
+              <option value="corner-bl">Bottom-left caption</option>
+              <option value="corner-br">Bottom-right caption</option>
+              <option value="hidden">Hidden — gallery mode</option>
+            </select>
+            <div class="field-hint" style="margin-top:4px">Caption modes pin the text to a corner like a wall card. Gallery mode hides all text and CTAs so the photo speaks for itself. Caption modes fall back to centered on small screens.</div>
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label>Reveal Delay <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(seconds)</span></label>
+            <input type="number" id="home-reveal-delay" min="0" max="10" step="0.1" placeholder="0" oninput="markDirty()" style="margin-top:6px;width:120px" />
+            <div class="field-hint" style="margin-top:4px">Lets the photograph land first, then fades in the text. Try <em>1.5</em> for a slow, intentional feel. <em>0</em> = instant.</div>
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;letter-spacing:0;font-size:12px">
+              <input type="checkbox" id="home-show-ctas" onchange="markDirty()" />
+              Show CTA buttons on home
+            </label>
+            <div class="field-hint" style="margin-top:4px">Off by default in gallery mode. Turn off to keep the configured buttons but hide them on home — the nav still handles navigation.</div>
+          </div>
+        </div>
+
+        <div class="settings-section">
           <div class="settings-section-title">Background</div>
           <div class="field">
             <label>Image</label>
@@ -5574,13 +5600,16 @@ function flushSettingsForms() {
 
   // Home page
   siteConfig.homePage = {
-    enabled:  document.getElementById('home-enabled')?.checked || false,
-    headline: document.getElementById('home-headline')?.value.trim() || '',
-    subhead:  document.getElementById('home-subhead')?.value.trim()  || '',
-    body:     document.getElementById('home-body')?.value.trim()     || '',
-    bg:       document.getElementById('home-bg')?.value.trim()       || '',
-    bgVideo:  document.getElementById('home-bg-video')?.value.trim() || '',
-    slides:   (document.getElementById('home-slides')?.value || '').split('\n').map(s => s.trim()).filter(Boolean),
+    enabled:    document.getElementById('home-enabled')?.checked || false,
+    headline:   document.getElementById('home-headline')?.value.trim() || '',
+    subhead:    document.getElementById('home-subhead')?.value.trim()  || '',
+    body:       document.getElementById('home-body')?.value.trim()     || '',
+    bg:         document.getElementById('home-bg')?.value.trim()       || '',
+    bgVideo:    document.getElementById('home-bg-video')?.value.trim() || '',
+    slides:     (document.getElementById('home-slides')?.value || '').split('\n').map(s => s.trim()).filter(Boolean),
+    textLayout: document.getElementById('home-text-layout')?.value     || 'centered',
+    revealDelay: parseFloat(document.getElementById('home-reveal-delay')?.value) || 0,
+    showCtas:   document.getElementById('home-show-ctas')?.checked !== false,
     ctas: [
       { label: document.getElementById('home-cta1-label')?.value.trim() || '', target: document.getElementById('home-cta1-target')?.value.trim() || '', style: 'primary' },
       { label: document.getElementById('home-cta2-label')?.value.trim() || '', target: document.getElementById('home-cta2-target')?.value.trim() || '', style: 'ghost'   },
@@ -6077,6 +6106,9 @@ function populateGeneralSettings() {
   document.getElementById('home-bg').value            = hp.bg        || '';
   document.getElementById('home-bg-video').value      = hp.bgVideo   || '';
   document.getElementById('home-slides').value        = Array.isArray(hp.slides) ? hp.slides.join('\n') : '';
+  document.getElementById('home-text-layout').value   = hp.textLayout || 'centered';
+  document.getElementById('home-reveal-delay').value  = (hp.revealDelay ?? 0);
+  document.getElementById('home-show-ctas').checked   = hp.showCtas !== false;
   updateHomeBgPreview();
   const cta1 = (hp.ctas || [])[0] || {};
   const cta2 = (hp.ctas || [])[1] || {};
