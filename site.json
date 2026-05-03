@@ -57,6 +57,7 @@
     "sub": "",
     "back": ""
   },
+  "favicon": "favicon-slowdust.svg",
   "accentColor": "#7D6B5D",
   "themeMode": "light",
   "navStyle": "top",
