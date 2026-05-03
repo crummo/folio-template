@@ -2598,11 +2598,17 @@
       const imgs = Array.from(grid.querySelectorAll(':scope > img.ps-img, :scope > .ps-pair > img.ps-img'));
       if (!imgs.length) return;
 
-      // Wait for all images to know their natural dimensions, then reorder.
-      let pending = imgs.length;
-      const onReady = () => {
-        if (--pending > 0) return;
-        // All measured — now flatten back to a list and re-group.
+      // Wait for each image to be decoded so we can read its naturalWidth /
+      // naturalHeight reliably. Using img.decode() instead of the 'load' event
+      // avoids a cache-hit race where the image completes before listeners
+      // attach (which is exactly what happened on revisits — pairing wouldn't
+      // re-fire because the events had already passed). decode() resolves
+      // either way, even when src was already in the cache.
+      const ready = imgs.map(img =>
+        (img.decode ? img.decode() : Promise.resolve()).catch(() => {})
+      );
+      Promise.all(ready).then(() => {
+        // All measured — flatten back to a list and re-group.
         const flat = Array.from(grid.querySelectorAll(':scope img.ps-img'));
         const groups = [];
         let portraitBuf = [];
@@ -2615,7 +2621,8 @@
           portraitBuf = [];
         };
         for (const img of flat) {
-          const isPortrait = img.naturalHeight > img.naturalWidth;
+          // naturalWidth can be 0 for broken images — fall back to landscape.
+          const isPortrait = img.naturalWidth > 0 && img.naturalHeight > img.naturalWidth;
           if (isPortrait) {
             portraitBuf.push(img);
             if (portraitBuf.length === 2) flushPortraits();
@@ -2637,13 +2644,6 @@
           } else {
             grid.appendChild(g.items[0]);
           }
-        }
-      };
-      imgs.forEach(img => {
-        if (img.complete && img.naturalWidth > 0) onReady();
-        else {
-          img.addEventListener('load',  onReady, { once: true });
-          img.addEventListener('error', onReady, { once: true });
         }
       });
     }
