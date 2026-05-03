@@ -1457,7 +1457,8 @@
         : siteConfig.categories.filter(c => c.published !== false);
       if (cats.some(c => c.id === id)) { buildCat(id); reanimateMobileList(id); }
 
-      if (id === 'home')  renderHome();
+      if (id === 'home')  { renderHome(); resumeHomeSlideshow(); }
+      else                { pauseHomeSlideshow(); }
       if (id === 'about') renderAbout();
     }
 
@@ -1749,6 +1750,7 @@
     /* ── ABOUT ── */
     /* ── HOME PAGE RENDER ── */
     let _homeSlideshowTimer = null;
+    let _homeSlideshow = null; // { advance, interval } once started
 
     function startHomeSlideshow() {
       const pg = document.getElementById('page-home');
@@ -1763,18 +1765,25 @@
         slides[idx].classList.add('active');
       }
 
-      function resetTimer() {
-        clearInterval(_homeSlideshowTimer);
-        _homeSlideshowTimer = setInterval(advance, interval);
-      }
+      _homeSlideshow = { advance, interval };
 
       pg.addEventListener('click', e => {
         if (e.target.closest('.home-content, a, button')) return;
         advance();
-        resetTimer();
+        resumeHomeSlideshow();
       });
 
-      resetTimer();
+      resumeHomeSlideshow();
+    }
+
+    function pauseHomeSlideshow() {
+      if (_homeSlideshowTimer) { clearInterval(_homeSlideshowTimer); _homeSlideshowTimer = null; }
+    }
+
+    function resumeHomeSlideshow() {
+      if (!_homeSlideshow) return;
+      pauseHomeSlideshow();
+      _homeSlideshowTimer = setInterval(_homeSlideshow.advance, _homeSlideshow.interval);
     }
 
     function renderHome() {
