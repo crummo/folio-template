@@ -1086,6 +1086,13 @@
             </div>
           </div>
           <div class="field">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;letter-spacing:0;font-size:12px">
+              <input type="checkbox" id="site-nav-show-ig" onchange="markDirty()" />
+              Show Instagram icon in nav
+            </label>
+            <div class="field-hint" style="margin-top:4px">Adds a small Instagram icon to the right of the nav links. Pulls the URL from About → Instagram.</div>
+          </div>
+          <div class="field">
             <label>Brand Logo <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(optional — replaces text name in the nav)</span></label>
             <div class="field-clearable">
               <input type="text" id="site-brand-logo" placeholder="https://… or images/logo.png" oninput="updateBrandLogoPreview();markDirty()" />
@@ -5529,6 +5536,8 @@ function flushSettingsForms() {
   siteConfig.ownerName  = document.getElementById('site-name-input').value.trim();
   siteConfig.ownerTitle = document.getElementById('site-title-input').value.trim();
   siteConfig.brandLogo  = document.getElementById('site-brand-logo')?.value.trim() || '';
+  siteConfig.nav = siteConfig.nav || {};
+  siteConfig.nav.showInstagramInNav = !!document.getElementById('site-nav-show-ig')?.checked;
   siteConfig.favicon         = document.getElementById('site-favicon-input').value.trim();
   siteConfig.metaDescription = document.getElementById('site-meta-desc').value.trim() || undefined;
   siteConfig.allowIndexing = document.getElementById('site-allow-indexing').checked;
@@ -6073,6 +6082,7 @@ function populateGeneralSettings() {
   document.getElementById('site-name-input').value     = siteConfig.ownerName || '';
   document.getElementById('site-title-input').value   = siteConfig.ownerTitle || '';
   document.getElementById('site-brand-logo').value    = siteConfig.brandLogo || '';
+  document.getElementById('site-nav-show-ig').checked = !!siteConfig.nav?.showInstagramInNav;
   updateBrandLogoPreview();
   document.getElementById('site-favicon-input').value = siteConfig.favicon    || '';
   document.getElementById('site-og-input').value      = siteConfig.ogImage    || '';
@@ -6157,6 +6167,8 @@ async function saveGeneralSettings() {
   siteConfig.ownerName  = document.getElementById('site-name-input').value.trim();
   siteConfig.ownerTitle = document.getElementById('site-title-input').value.trim();
   siteConfig.brandLogo  = document.getElementById('site-brand-logo')?.value.trim() || '';
+  siteConfig.nav = siteConfig.nav || {};
+  siteConfig.nav.showInstagramInNav = !!document.getElementById('site-nav-show-ig')?.checked;
   siteConfig.favicon    = document.getElementById('site-favicon-input').value.trim();
   siteConfig.website         = document.getElementById('site-website-input').value.trim();
   siteConfig.metaDescription = document.getElementById('site-meta-desc').value.trim() || undefined;

@@ -68,5 +68,8 @@
     "provider": "",
     "id": ""
   },
-  "brandLogo": "images/logo.svg"
+  "brandLogo": "images/logo.svg",
+  "nav": {
+    "showInstagramInNav": true
+  }
 }
