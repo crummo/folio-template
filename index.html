@@ -738,14 +738,14 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 32px 28px 120px; position: relative; }
+    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 20px 28px 120px; position: relative; }
     /* Sticky top row: back link on the left, prev/next on the right.
        The cream bg covers content scrolling underneath. */
     /* Top row — just the back link. Non-sticky now; the side chevrons
        handle navigation while scrolling, the bottom prev/next handles
        end-of-page wayfinding. Eliminates a whole class of sticky-position
        artifacts (content rendering behind the nav, etc.). */
-    .ps-top { margin: 0 0 32px; }
+    .ps-top { margin: 0 0 18px; }
     /* (intermediate hide-labels rule removed — was producing tiny illegible arrows; chevron side-nav handles those widths now) */
     /* Side chevrons — visible on narrower screens where the top sticky bar
        loses room for full text labels. Live inside the wrap's padding zone
@@ -778,7 +778,7 @@
     .ps-back { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; line-height: 1.6; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 4px 0; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .ps-back:hover { color: var(--fg); }
     .ps-back::before { content: ''; display: inline-block; width: 10px; height: 10px; border-top: 1.5px solid currentColor; border-left: 1.5px solid currentColor; transform: rotate(-45deg) translate(1px,1px); flex-shrink: 0; }
-    .ps-header { margin-bottom: 56px; }
+    .ps-header { margin-bottom: 28px; }
     .ps-client { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
     .ps-title { font-family: var(--font-serif); font-size: clamp(calc(32px * var(--font-serif-scale,1)), 5vw, calc(60px * var(--font-serif-scale,1))); font-weight: 400; font-style: italic; color: var(--fg); margin: 0; line-height: 1.1; }
     /* Single-column gallery: each photograph gets full width and breathes
