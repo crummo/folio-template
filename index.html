@@ -573,7 +573,9 @@
        on the viewport, narrow column, generous spacing. */
     .contact-wrap.contact-centered {
       max-width: 460px;
-      min-height: calc(100vh - var(--nav-h) - env(safe-area-inset-top, 0px));
+      /* Subtract nav + footer (36px) + main's bottom padding so the page
+         fills exactly the viewport with no overflow scroll. */
+      min-height: calc(100vh - var(--nav-h) - 72px - env(safe-area-inset-top, 0px));
       padding: 60px 44px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -690,7 +692,7 @@
 
     /* ── SITE FOOTER ── */
     .site-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 36px; display: flex; align-items: center; justify-content: flex-end; gap: 22px; padding: 0 28px; z-index: 50; pointer-events: none; }
-    .site-footer a, .site-footer .site-footer-copyright { pointer-events: auto; font-family: var(--font-sans); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); text-decoration: none; opacity: 0.5; transition: opacity 0.2s; }
+    .site-footer a, .site-footer .site-footer-copyright { pointer-events: auto; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-mid); text-decoration: none; opacity: 0.85; transition: opacity 0.2s, color 0.2s; }
     .site-footer a:hover { opacity: 1; }
     .site-footer .site-footer-copyright { opacity: 0.35; pointer-events: none; }
     /* Optional Instagram icon at the end of the desktop nav. Inherits color
