@@ -726,14 +726,7 @@
       background: var(--bg); padding: 18px 0 22px; margin: -18px 0 36px;
       display: flex; align-items: center; justify-content: space-between; gap: 32px;
     }
-    /* On medium widths the prev/next titles can crowd the back link.
-       Hide the prev label entirely (the arrow alone reads as 'previous')
-       and let only the next title remain — gives 'Work' room to breathe. */
-    @media (max-width: 1023px) {
-      .ps-nav-top .ps-nav-prev .ps-nav-label,
-      .ps-nav-top .ps-nav-next .ps-nav-name { display: none; }
-      .ps-nav-top { gap: 18px; }
-    }
+    /* (intermediate hide-labels rule removed — was producing tiny illegible arrows; chevron side-nav handles those widths now) */
     /* Side chevrons — visible on narrower screens where the top sticky bar
        loses room for full text labels. Live inside the wrap's padding zone
        (left:8px / right:8px against the wrap, which has 44px padding). */
@@ -757,7 +750,10 @@
     .ps-side-nav:hover { background: var(--bg); color: var(--fg); opacity: 1; }
     .ps-side-nav-prev { left: 12px; }
     .ps-side-nav-next { right: 12px; }
-    @media (max-width: 767px) {
+    /* Below 1024px the inline top text-nav is replaced by chevron buttons
+       (‹ ›) fixed at the left/right viewport edges. Single rule, no
+       awkward intermediate state with tiny illegible arrows. */
+    @media (max-width: 1023px) {
       .ps-nav-top { display: none; }
       .ps-side-nav { display: flex; }
     }
