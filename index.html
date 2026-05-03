@@ -129,7 +129,8 @@
       will-change: transform;
     }
 
-    .nav-brand { display: flex; align-items: baseline; gap: 14px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
+    .nav-brand { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
+    .nav-brand-logo { display: block; height: 32px; max-height: calc(var(--nav-h) - 24px); width: auto; object-fit: contain; }
     .nav-brand-name { font-family: var(--font-serif); font-size: calc(19px * var(--font-serif-scale, 1)); font-weight: 500; letter-spacing: 0.02em; color: var(--fg); line-height: 1; }
     .nav-brand-rule { width: 1px; height: 13px; background: var(--fg-dim); }
     .nav-brand-title { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #a89e90; font-weight: 300; }
@@ -1032,6 +1033,7 @@
   <!-- Nav -->
   <nav>
     <a class="nav-brand" href="#" onclick="event.preventDefault();showFirst()">
+      <img class="nav-brand-logo" id="nav-logo" alt="" style="display:none">
       <span class="nav-brand-name" id="nav-name"></span>
       <span class="nav-brand-rule" id="nav-rule" style="display:none"></span>
       <span class="nav-brand-title" id="nav-title-el"></span>
@@ -1266,6 +1268,23 @@
       document.getElementById('nav-title-el').textContent = ownerTitle;
       const rule = document.getElementById('nav-rule');
       if (rule) rule.style.display = ownerTitle ? '' : 'none';
+
+      // Optional brand logo — when set, the image replaces the text name.
+      // Title (if configured) still shows next to the logo.
+      const navLogo = document.getElementById('nav-logo');
+      const navName = document.getElementById('nav-name');
+      if (navLogo) {
+        if (cfg.brandLogo) {
+          navLogo.src = cfg.brandLogo;
+          navLogo.alt = ownerName || '';
+          navLogo.style.display = '';
+          if (navName) navName.style.display = 'none';
+        } else {
+          navLogo.removeAttribute('src');
+          navLogo.style.display = 'none';
+          if (navName) navName.style.display = '';
+        }
+      }
 
       document.getElementById('splash-name').textContent  = ownerName;
       document.getElementById('splash-title').textContent = ownerTitle;

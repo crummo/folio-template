@@ -1085,6 +1085,15 @@
               <button class="field-clear-btn" type="button" onclick="clearField('site-title-input')" title="Clear">×</button>
             </div>
           </div>
+          <div class="field">
+            <label>Brand Logo <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(optional — replaces text name in the nav)</span></label>
+            <div class="field-clearable">
+              <input type="text" id="site-brand-logo" placeholder="https://… or images/logo.png" oninput="updateBrandLogoPreview();markDirty()" />
+              <button class="field-clear-btn" type="button" onclick="clearField('site-brand-logo');updateBrandLogoPreview()" title="Clear">×</button>
+            </div>
+            <img id="site-brand-logo-preview" alt="" style="display:none;max-height:48px;margin-top:8px;background:var(--bg2);padding:6px 10px;border-radius:2px" />
+            <div class="field-hint" style="margin-top:4px">PNG with transparency works best. Sized to ~32 px tall in the nav.</div>
+          </div>
         </div>
       </div>
 
@@ -5517,6 +5526,7 @@ function flushSettingsForms() {
   // General tab
   siteConfig.ownerName  = document.getElementById('site-name-input').value.trim();
   siteConfig.ownerTitle = document.getElementById('site-title-input').value.trim();
+  siteConfig.brandLogo  = document.getElementById('site-brand-logo')?.value.trim() || '';
   siteConfig.favicon         = document.getElementById('site-favicon-input').value.trim();
   siteConfig.metaDescription = document.getElementById('site-meta-desc').value.trim() || undefined;
   siteConfig.allowIndexing = document.getElementById('site-allow-indexing').checked;
@@ -6060,6 +6070,8 @@ function populateGeneralSettings() {
   if (navBrand && siteConfig.ownerName) navBrand.innerHTML = siteConfig.ownerName + ' <span>/ Admin</span>';
   document.getElementById('site-name-input').value     = siteConfig.ownerName || '';
   document.getElementById('site-title-input').value   = siteConfig.ownerTitle || '';
+  document.getElementById('site-brand-logo').value    = siteConfig.brandLogo || '';
+  updateBrandLogoPreview();
   document.getElementById('site-favicon-input').value = siteConfig.favicon    || '';
   document.getElementById('site-og-input').value      = siteConfig.ogImage    || '';
   document.getElementById('site-website-input').value = siteConfig.website || (siteConfig.about && siteConfig.about.website) || '';
@@ -6142,6 +6154,7 @@ function populateGeneralSettings() {
 async function saveGeneralSettings() {
   siteConfig.ownerName  = document.getElementById('site-name-input').value.trim();
   siteConfig.ownerTitle = document.getElementById('site-title-input').value.trim();
+  siteConfig.brandLogo  = document.getElementById('site-brand-logo')?.value.trim() || '';
   siteConfig.favicon    = document.getElementById('site-favicon-input').value.trim();
   siteConfig.website         = document.getElementById('site-website-input').value.trim();
   siteConfig.metaDescription = document.getElementById('site-meta-desc').value.trim() || undefined;
@@ -6253,6 +6266,14 @@ function updateHomeBgPreview() {
   const prev = document.getElementById('home-bg-preview');
   if (zone) zone.classList.toggle('has-image', !!val);
   if (prev && val) prev.src = _previewBlobUrls['home-bg'] || val;
+}
+
+function updateBrandLogoPreview() {
+  const val  = document.getElementById('site-brand-logo')?.value.trim() || '';
+  const prev = document.getElementById('site-brand-logo-preview');
+  if (!prev) return;
+  if (val) { prev.src = val; prev.style.display = ''; }
+  else     { prev.removeAttribute('src'); prev.style.display = 'none'; }
 }
 
 function toggleHomeBgList() {
