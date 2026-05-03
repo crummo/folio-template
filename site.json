@@ -42,12 +42,17 @@
     "revealDelay": 1.5,
     "showCtas": false,
     "slides": [
-      "gallery/fair-oaks-ave/01.jpg",
-      "gallery/aguilar-street/01.jpg",
-      "gallery/maiden-lane/01.jpg",
-      "gallery/loma-lada/01.jpg",
-      "gallery/topanga-bathroom/01.jpg",
-      "gallery/home-office/01.jpg"
+      "images/slides/01.jpg",
+      "images/slides/02.jpg",
+      "images/slides/03.jpg",
+      "images/slides/04.jpg",
+      "images/slides/05.jpg",
+      "images/slides/06.jpg",
+      "images/slides/07.jpg",
+      "images/slides/08.jpg",
+      "images/slides/09.jpg",
+      "images/slides/10.jpg",
+      "images/slides/11.jpg"
     ],
     "ctas": [
       {
