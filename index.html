@@ -221,9 +221,9 @@
     /* Home page is a fullscreen slideshow — skip the translateY so the bg
        image doesn't visibly shift up on entry (reads as a "punch in"). */
     #page-home.visible { animation: pageInFade 0.35s var(--ease) both; }
-    @keyframes pageIn     { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
+    @keyframes pageIn     { from { opacity: 0; }                              to { opacity: 1; } }
     @keyframes pageInFade { from { opacity: 0; }                              to { opacity: 1; } }
-    @keyframes pageOut    { from { opacity: 1; transform: translateY(0); }    to { opacity: 0; transform: translateY(-6px); } }
+    @keyframes pageOut    { from { opacity: 1; }                              to { opacity: 0; } }
     @keyframes gvIn    { from { opacity: 0; }                               to { opacity: 1; } }
 
     /* ── GRID — DESKTOP ── */
@@ -718,13 +718,21 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1080px; margin: 0 auto; padding: 56px 44px 120px; position: relative; }
+    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 56px 28px 120px; position: relative; }
     /* Sticky top row: back link on the left, prev/next on the right.
        The cream bg covers content scrolling underneath. */
     .ps-top {
       position: sticky; top: var(--nav-h); z-index: 40;
-      background: var(--bg); padding: 14px 0; margin: -14px 0 30px;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      background: var(--bg); padding: 18px 0 22px; margin: -18px 0 36px;
+      display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    }
+    /* On medium widths the prev/next titles can crowd the back link.
+       Hide the prev label entirely (the arrow alone reads as 'previous')
+       and let only the next title remain — gives 'Work' room to breathe. */
+    @media (max-width: 1023px) {
+      .ps-nav-top .ps-nav-prev .ps-nav-label,
+      .ps-nav-top .ps-nav-next .ps-nav-name { display: none; }
+      .ps-nav-top { gap: 18px; }
     }
     /* Side chevrons — visible on narrower screens where the top sticky bar
        loses room for full text labels. Live inside the wrap's padding zone
@@ -749,13 +757,12 @@
     .ps-side-nav:hover { background: var(--bg); color: var(--fg); opacity: 1; }
     .ps-side-nav-prev { left: 12px; }
     .ps-side-nav-next { right: 12px; }
-    @media (max-width: 879px) {
+    @media (max-width: 767px) {
       .ps-nav-top { display: none; }
       .ps-side-nav { display: flex; }
     }
-    @media (max-width: 599px) {
-      /* Padding too tight for chevrons not to overlap content — fall back
-         to the bottom nav alone. */
+    @media (max-width: 479px) {
+      /* Padding too tight on phones — fall back to the bottom nav alone. */
       .ps-side-nav { display: none; }
     }
     .ps-back { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; line-height: 1.6; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 4px 0; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
