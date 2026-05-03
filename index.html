@@ -215,9 +215,29 @@
 
     /* ── MAIN ── */
     main { padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); }
-    .page { display: none; }
-    .page.visible { display: block; animation: pageIn 0.35s var(--ease) both; }
-    .page.leaving  { display: block; animation: pageOut 0.2s var(--ease) both; pointer-events: none; }
+    /* Page isolation rules — !important + explicit bg to prevent any
+       previously-active page section from leaking content through behind
+       the active page (was causing 'Home Office' descenders to peek
+       below the nav even on unrelated project pages). */
+    .page { display: none !important; }
+    .page.visible {
+      display: block !important;
+      animation: pageIn 0.35s var(--ease) both;
+      position: relative;
+      z-index: 1;
+      background: var(--bg);
+    }
+    .page.leaving {
+      display: block !important;
+      animation: pageOut 0.2s var(--ease) both;
+      pointer-events: none;
+      position: relative;
+      z-index: 0;
+      background: var(--bg);
+    }
+    /* The home page is full-bleed (its own slideshow bg covers the viewport),
+       so it shouldn't get a solid cream bg overriding the imagery. */
+    #page-home.visible, #page-home.leaving { background: transparent; }
     /* Home page is a fullscreen slideshow — skip the translateY so the bg
        image doesn't visibly shift up on entry (reads as a "punch in"). */
     #page-home.visible { animation: pageInFade 0.35s var(--ease) both; }
@@ -1682,6 +1702,15 @@
       // Hide any already-leaving pages that aren't the target
       document.querySelectorAll('.page.leaving').forEach(p => { if (p === pg) p.classList.remove('leaving'); });
 
+      // Defensive: any page that's not the target AND not already mid-leave
+      // gets reset to plain .page, ensuring display:none kicks in immediately.
+      document.querySelectorAll('.page').forEach(p => {
+        if (p === pg) return;
+        if (!p.classList.contains('visible') && !p.classList.contains('leaving')) {
+          // already idle — leave alone
+          return;
+        }
+      });
       pg.classList.add('visible');
       history.replaceState(null, '', '#' + id);
       window.scrollTo(0, 0);
