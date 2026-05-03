@@ -801,8 +801,18 @@
       width: 100%; height: 100%; aspect-ratio: 2 / 3;
       object-fit: cover; display: block;
     }
+    /* Mixed pair: a landscape paired with a portrait. Asymmetric column
+       split (2.25fr / 1fr) gives both cells the same rendered height when
+       the landscape is locked to 3:2 and the portrait to 2:3. */
+    .ps-pair-mixed { display: grid; grid-template-columns: 2.25fr 1fr; gap: 24px; }
+    .ps-pair-mixed .ps-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      aspect-ratio: 2 / 3; /* fallback */
+    }
+    .ps-pair-mixed .ps-img-landscape { aspect-ratio: 3 / 2; }
+    .ps-pair-mixed .ps-img-portrait  { aspect-ratio: 2 / 3; }
     @media (max-width: 768px) {
-      .ps-pair { grid-template-columns: 1fr; gap: 14px; }
+      .ps-pair, .ps-pair-mixed { grid-template-columns: 1fr; gap: 14px; }
     }
     .ps-img { width: 100%; height: auto; display: block; }
     .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; }
@@ -2648,15 +2658,15 @@
           if (portraitBuf.length === 2) {
             groups.push({ kind: 'pair', items: portraitBuf });
           } else if (portraitBuf.length === 1) {
-            groups.push({ kind: 'single', items: portraitBuf });
+            // Mark orphan portraits so post-processing can pair them with a
+            // neighbouring landscape (mixed diptych).
+            groups.push({ kind: 'orphan-portrait', items: portraitBuf });
           }
           portraitBuf = [];
         };
         for (const img of flat) {
           // naturalWidth can be 0 for broken images — fall back to landscape.
-          // Use >= so square images qualify as 'portrait-pairable' — pairing
-          // a square with a tall portrait still reads as a diptych, whereas
-          // a square shown full-width is awkwardly enormous.
+          // Use >= so square images qualify as 'portrait-pairable'.
           const isPortrait = img.naturalWidth > 0 && img.naturalHeight >= img.naturalWidth;
           if (isPortrait) {
             portraitBuf.push(img);
@@ -2668,13 +2678,46 @@
         }
         flushPortraits();
 
+        // Post-process: merge each orphan portrait with an adjacent landscape
+        // single (preferring previous, else next) into a mixed diptych — kills
+        // the 'lone giant portrait' problem on projects like Home Office.
+        const merged = [];
+        for (let i = 0; i < groups.length; i++) {
+          const g = groups[i];
+          if (g.kind === 'orphan-portrait') {
+            const prev = merged[merged.length - 1];
+            const next = groups[i + 1];
+            if (prev && prev.kind === 'single') {
+              merged[merged.length - 1] = { kind: 'mixed', landscape: prev.items[0], portrait: g.items[0], landscapeFirst: true };
+              continue;
+            } else if (next && next.kind === 'single') {
+              merged.push({ kind: 'mixed', landscape: next.items[0], portrait: g.items[0], landscapeFirst: false });
+              i += 1; // consume next
+              continue;
+            }
+            // No landscape neighbour — render as standalone single (rare)
+            merged.push({ kind: 'single', items: g.items });
+            continue;
+          }
+          merged.push(g);
+        }
+
         // Rebuild grid contents
         grid.innerHTML = '';
-        for (const g of groups) {
+        for (const g of merged) {
           if (g.kind === 'pair') {
             const wrap = document.createElement('div');
             wrap.className = 'ps-pair';
             g.items.forEach(i => wrap.appendChild(i));
+            grid.appendChild(wrap);
+          } else if (g.kind === 'mixed') {
+            const wrap = document.createElement('div');
+            wrap.className = 'ps-pair-mixed';
+            g.landscape.classList.add('ps-img-landscape');
+            g.portrait.classList.add('ps-img-portrait');
+            // Always render landscape on the left (wider column), portrait on the right
+            wrap.appendChild(g.landscape);
+            wrap.appendChild(g.portrait);
             grid.appendChild(wrap);
           } else {
             grid.appendChild(g.items[0]);
