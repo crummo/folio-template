@@ -1781,7 +1781,7 @@
     <div class="field-row">
       <div class="field">
         <label>Category</label>
-        <select id="f-category"></select>
+        <select id="f-category" onchange="updateProjectGalleryFieldVisibility()"></select>
       </div>
       <div class="field">
         <label>Overlay Text</label>
@@ -1906,6 +1906,12 @@
       <label>Alt Text <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(optional — defaults to project title)</span></label>
       <input type="text" id="f-alt" placeholder="e.g. Amazon Web Services brand film" />
       <div class="field-hint" style="margin-top:4px">Describes the thumbnail for screen readers and search engines</div>
+    </div>
+
+    <div class="field" id="f-gallery-field" style="display:none">
+      <label>Gallery Images <span style="color:var(--fg-dim);font-size:9px;text-transform:none;letter-spacing:0">(one path per line — shown on the project detail page)</span></label>
+      <textarea id="f-gallery" rows="5" placeholder="gallery/work/project-01.jpg&#10;gallery/work/project-02.jpg&#10;…" style="font-family:var(--font-mono,monospace);font-size:12px;line-height:1.6;resize:vertical" oninput="markDirty()"></textarea>
+      <div class="field-hint" style="margin-top:4px">Used when the category type is <strong>Scroll</strong>. Upload images via Files → Gallery, then paste the paths here.</div>
     </div>
 
     <div class="field" style="margin-top:4px">
@@ -2118,6 +2124,7 @@
       <select id="cat-type" style="width:100%" onchange="updateCatHints()">
         <option value="lightbox">Lightbox</option>
         <option value="gallery">Gallery</option>
+        <option value="scroll">Scroll</option>
       </select>
       <div class="field-hint" id="cat-type-hint" style="margin-top:4px">Overlay viewer — best for video projects or single images</div>
     </div>
@@ -3399,7 +3406,7 @@ function updateMetaDescCounter() {
 }
 
 function clearModalForm() {
-  ['f-title','f-client','f-url','f-still-url','f-award','f-description','f-thumbnail','f-vignette','f-aspect','f-alt'].forEach(id => {
+  ['f-title','f-client','f-url','f-still-url','f-award','f-description','f-thumbnail','f-vignette','f-aspect','f-alt','f-gallery'].forEach(id => {
     document.getElementById(id).value = '';
   });
   ['award','description','appearance'].forEach(closeDisclosure);
@@ -3424,6 +3431,7 @@ function openAdd(cat) {
   clearModalForm();
   setProjectMediaType('video');
   populateCategoryDropdown(cat);
+  updateProjectGalleryFieldVisibility();
   document.getElementById('modal-edit').classList.remove('hidden');
   document.getElementById('f-title').focus();
 }
@@ -3444,8 +3452,10 @@ function openEdit(globalIdx) {
   updateDescCounter();
   document.getElementById('f-thumbnail').value = thumbDisplay(p.thumbnail);
   document.getElementById('f-alt').value        = p.alt || '';
+  document.getElementById('f-gallery').value   = Array.isArray(p.gallery) ? p.gallery.join('\n') : '';
   document.getElementById('f-vignette').value  = p.vignette !== undefined ? Math.round(p.vignette * 100) : '';
   document.getElementById('f-aspect').value    = p.aspect   !== undefined ? p.aspect : '';
+  updateProjectGalleryFieldVisibility();
   if (p.award)                   openDisclosure('award');
   if (p.description)             openDisclosure('description');
   if (p.vignette !== undefined || p.aspect !== undefined) openDisclosure('appearance');
@@ -3501,6 +3511,9 @@ async function saveProject() {
   if (vignetteRaw !== '') proj.vignette = parseFloat(vignetteRaw) / 100;
   const aspectRaw = document.getElementById('f-aspect').value;
   if (aspectRaw !== '')   proj.aspect   = parseFloat(aspectRaw);
+  const galleryRaw = document.getElementById('f-gallery').value;
+  const galleryLines = galleryRaw.split('\n').map(s => s.trim()).filter(Boolean);
+  if (galleryLines.length) proj.gallery = galleryLines;
 
   if (editingIdx !== null) {
     // Preserve shareKey — it's not in the form, so copy it forward if present
@@ -3606,7 +3619,7 @@ function openEditCategory(idx) {
   document.getElementById('modal-cat-title').textContent = 'Edit Category';
   document.getElementById('cat-label').value = cat.label;
   document.getElementById('cat-id').value = cat.id;
-  document.getElementById('cat-type').value   = cat.type === 'gallery' ? 'gallery' : 'lightbox';
+  document.getElementById('cat-type').value   = ['gallery','scroll'].includes(cat.type) ? cat.type : 'lightbox';
   document.getElementById('cat-layout').value = cat.layout === 'grid' ? 'grid' : 'masonry';
   document.getElementById('cat-id-field').style.display = 'none'; // ID is set on create only
   document.getElementById('cat-delete-btn').style.display = '';
@@ -3616,12 +3629,21 @@ function openEditCategory(idx) {
   document.getElementById('cat-label').focus();
 }
 
+function updateProjectGalleryFieldVisibility() {
+  const catId = document.getElementById('f-category')?.value;
+  const catDef = (siteConfig.categories || []).find(c => c.id === catId);
+  const show = catDef?.type === 'scroll';
+  const field = document.getElementById('f-gallery-field');
+  if (field) field.style.display = show ? '' : 'none';
+}
+
 function updateCatHints() {
   const type   = document.getElementById('cat-type')?.value;
   const layout = document.getElementById('cat-layout')?.value;
   const typeHints = {
     lightbox: 'Overlay viewer — best for video projects or single images',
-    gallery:  'Full-screen inline viewer with prev/next — best for photo series'
+    gallery:  'Full-screen inline viewer with prev/next — best for photo series',
+    scroll:   'Scrolling image grid — each project opens a dedicated detail page'
   };
   const layoutHints = {
     masonry: 'Natural proportions — each image displays at its own aspect ratio',

@@ -8,8 +8,12 @@
 ## Backlog
 - [ ] Home page: needs testing on slowdustpost.com
 - [ ] Landscape About: decide on portrait vs wide photo treatment (photo hide vs constrain)
+- [ ] Home page slideshow — auto-cycling, clickable to advance (for Slow Dust Studio)
+- [ ] Image logo support — replace text brand name with uploaded image
+- [ ] Scroll type: per-project gallery image uploader in project editor (currently: paste paths manually)
 
 ## Done
+- [x] Scroll view (type: 'scroll') — project detail page with 2-col image grid, prev/next project nav
 - [x] Tag and push v1.0.0
 - [x] Home page feature — full-bleed bg image + video, headline, subhead, CTAs
 - [x] Home nav link — "Home" appears first in nav when home page is enabled

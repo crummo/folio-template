@@ -522,6 +522,29 @@
       .home-subhead { letter-spacing: 0.22em; }
     }
 
+    /* ── SCROLL PROJECT PAGE ── */
+    .ps-wrap { max-width: 1100px; margin: 0 auto; padding: 52px 44px 120px; }
+    .ps-top { margin-bottom: 44px; }
+    .ps-back { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .ps-back:hover { color: var(--fg); }
+    .ps-back::before { content: ''; display: inline-block; width: 10px; height: 10px; border-top: 1.5px solid currentColor; border-left: 1.5px solid currentColor; transform: rotate(-45deg) translate(1px,1px); flex-shrink: 0; }
+    .ps-header { margin-bottom: 48px; border-bottom: 1px solid var(--fg-dimmer); padding-bottom: 32px; }
+    .ps-client { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .ps-title { font-family: var(--font-serif); font-size: clamp(calc(28px * var(--font-serif-scale,1)), 4vw, calc(52px * var(--font-serif-scale,1))); font-weight: 400; font-style: italic; color: var(--fg); margin: 0; line-height: 1.15; }
+    .ps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-bottom: 80px; }
+    .ps-img { width: 100%; height: auto; display: block; }
+    .ps-nav { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--fg-dimmer); padding-top: 28px; }
+    .ps-nav-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
+    .ps-nav-btn:hover:not(:disabled) { color: var(--fg); }
+    .ps-nav-btn:disabled { opacity: 0.2; cursor: default; }
+    .ps-nav-label { display: flex; flex-direction: column; }
+    .ps-nav-direction { font-size: 9px; letter-spacing: 0.16em; }
+    .ps-nav-name { font-family: var(--font-serif); font-size: 13px; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--fg); margin-top: 2px; }
+    .ps-nav-btn:disabled .ps-nav-name { color: var(--fg-dim); }
+    .ps-nav-prev .ps-nav-label { text-align: left; }
+    .ps-nav-next .ps-nav-label { text-align: right; }
+    .ps-nav-arrow { font-size: 16px; line-height: 1; opacity: 0.5; }
+
     /* ── SPLASH ── */
     #splash { position: fixed; inset: 0; z-index: 800; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s var(--ease); }
     #splash.fading { opacity: 0; pointer-events: none; }
@@ -573,7 +596,9 @@
         overscroll-behavior: contain;
         padding-top: calc(var(--nav-h) + var(--safe-top));
       }
-      .about-wrap, .contact-wrap { overflow-x: hidden; max-width: 100%; }
+      .about-wrap, .contact-wrap, .ps-wrap { overflow-x: hidden; max-width: 100%; }
+      .ps-wrap { padding: 28px 22px 80px; }
+      .ps-grid { grid-template-columns: 1fr; gap: 3px; }
       /* Stack contact photo above card on portrait mobile */
       .contact-layout { flex-direction: column; gap: 24px; }
       .contact-photo-frame { max-width: 100%; }
@@ -1380,6 +1405,17 @@
       if (hash === 'about')   { showPage('about');   return; }
       if (hash === 'contact') { showPage('contact'); return; }
       if (hash === 'home')    { showPage('home');    return; }
+      // Deep link to scroll project page: #ps-{catId}-{idx}
+      const psMatch = hash.match(/^ps-(.+)-(\d+)$/);
+      if (psMatch) {
+        const [, pscat, psidx] = psMatch;
+        const visible2 = isPreview ? siteConfig.categories : siteConfig.categories.filter(c => c.published !== false);
+        if (visible2.some(c => c.id === pscat)) {
+          buildCat(pscat);
+          showProjectScrollPage(pscat, parseInt(psidx, 10));
+          return;
+        }
+      }
       const visible = isPreview
         ? siteConfig.categories
         : siteConfig.categories.filter(c => c.published !== false);
@@ -1464,7 +1500,9 @@
         const el = document.createElement('div');
         el.className = 'grid-item' + (overlayClass === 'none' ? ' overlay-none' : '');
         const catDef2 = siteConfig.categories.find(c => c.id === cat);
-        el.onclick = catDef2?.type === 'gallery' ? () => openGallery(cat, i) : () => openLb(cat, i);
+        el.onclick = catDef2?.type === 'gallery' ? () => openGallery(cat, i)
+                   : catDef2?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
+                   : () => openLb(cat, i);
         // Hover preview accepts either a video file (mp4/webm) or an animated
         // image (webp/gif) — Bunny Stream's auto-generated /preview.webp is
         // typically the lightest and most compatible option.
@@ -1582,7 +1620,9 @@
         const el = document.createElement('div');
         el.className = 'mobile-item';
         const mCatDef = siteConfig.categories.find(c => c.id === cat);
-        el.onclick = mCatDef?.type === 'gallery' ? () => openGallery(cat, i) : () => openLb(cat, i);
+        el.onclick = mCatDef?.type === 'gallery' ? () => openGallery(cat, i)
+                   : mCatDef?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
+                   : () => openLb(cat, i);
         el.innerHTML = `
           <div class="mobile-thumb-wrap">
             ${mobileThumbHtml}
@@ -2049,6 +2089,84 @@
       document.getElementById('gv-next').disabled      = atEnd;
       document.getElementById('gv-ctrl-prev').disabled = atStart;
       document.getElementById('gv-ctrl-next').disabled = atEnd;
+    }
+
+    /* ── SCROLL PROJECT PAGE ── */
+    function showProjectScrollPage(catId, idx) {
+      const pageId = 'ps-' + catId + '-' + idx;
+      // Remove any stale cached version so preview changes are always reflected
+      const stale = document.getElementById('page-' + pageId);
+      if (stale) stale.remove();
+
+      const items = previewGetItems(catId);
+      const p = items[idx];
+      if (!p) return;
+
+      const catLabel = siteConfig.categories.find(c => c.id === catId)?.label || catId;
+      const prevP = items[idx - 1];
+      const nextP = items[idx + 1];
+
+      // Collect images: p.gallery array, or fall back to thumbnail / url
+      let images = [];
+      if (Array.isArray(p.gallery) && p.gallery.length) {
+        images = p.gallery;
+      } else if (p.thumbnail) {
+        images = [p.thumbnail];
+      } else if (p.url && isImageUrl(p.url)) {
+        images = [p.url];
+      }
+
+      const imagesHtml = images.length
+        ? images.map(src => `<img class="ps-img" src="${x(src)}" alt="" loading="lazy">`).join('\n')
+        : `<div style="padding:80px 0;text-align:center;color:var(--fg-dim);font-size:12px;letter-spacing:0.1em;grid-column:1/-1">No images</div>`;
+
+      const prevHtml = prevP
+        ? `<button class="ps-nav-btn ps-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})">
+             <span class="ps-nav-arrow">←</span>
+             <span class="ps-nav-label">
+               <span class="ps-nav-direction">Previous</span>
+               <span class="ps-nav-name">${x(prevP.title || '')}</span>
+             </span>
+           </button>`
+        : `<button class="ps-nav-btn ps-nav-prev" disabled>
+             <span class="ps-nav-arrow">←</span>
+             <span class="ps-nav-label"><span class="ps-nav-direction">Previous</span></span>
+           </button>`;
+
+      const nextHtml = nextP
+        ? `<button class="ps-nav-btn ps-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})">
+             <span class="ps-nav-label">
+               <span class="ps-nav-direction">Next</span>
+               <span class="ps-nav-name">${x(nextP.title || '')}</span>
+             </span>
+             <span class="ps-nav-arrow">→</span>
+           </button>`
+        : `<button class="ps-nav-btn ps-nav-next" disabled>
+             <span class="ps-nav-label"><span class="ps-nav-direction">Next</span></span>
+             <span class="ps-nav-arrow">→</span>
+           </button>`;
+
+      const pg = document.createElement('section');
+      pg.id = 'page-' + pageId;
+      pg.className = 'page';
+      pg.innerHTML = `
+        <div class="ps-wrap">
+          <div class="ps-top">
+            <button class="ps-back" onclick="showPage('${x(catId)}')">${x(catLabel)}</button>
+          </div>
+          <header class="ps-header">
+            ${p.client ? `<div class="ps-client">${x(p.client)}</div>` : ''}
+            <h1 class="ps-title">${x(p.title || '')}</h1>
+          </header>
+          <div class="ps-grid">${imagesHtml}</div>
+          <nav class="ps-nav">
+            ${prevHtml}
+            ${nextHtml}
+          </nav>
+        </div>`;
+
+      document.getElementById('main-content').appendChild(pg);
+      showPage(pageId);
     }
 
     /* ── EMBED URL ── */
