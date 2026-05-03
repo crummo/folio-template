@@ -530,7 +530,7 @@
     .contact-result { margin-top: 18px; font-size: 13px; color: var(--fg-mid); min-height: 20px; }
 
     /* ── HOME PAGE ── */
-    #page-home { padding: 0; }
+    #page-home { padding: 0; margin-bottom: -36px; }
     .home-wrap {
       position: relative; width: 100%;
       min-height: calc(100vh - var(--nav-h) - env(safe-area-inset-top, 0px));
@@ -551,6 +551,13 @@
     .home-cta:hover { border-color: rgba(237,232,224,0.8); color: #ede8e0; }
     .home-cta.home-cta-primary { border-color: var(--accent); color: var(--accent); }
     .home-cta.home-cta-primary:hover { border-color: var(--accent); color: var(--accent); opacity: 0.75; }
+    /* dark text theme — for light-background slideshows with no overlay */
+    .home-wrap.text-dark .home-headline { color: var(--fg); }
+    .home-wrap.text-dark .home-subhead  { color: var(--fg-dim); }
+    .home-wrap.text-dark .home-body     { color: var(--fg-mid); }
+    .home-wrap.text-dark .home-cta      { border-color: var(--fg-dimmer); color: var(--fg-mid); }
+    .home-wrap.text-dark .home-cta:hover { border-color: var(--fg); color: var(--fg); }
+    .home-wrap.text-dark .home-cta.home-cta-primary { border-color: var(--accent); color: var(--accent); }
     @media (max-width: 768px) {
       .home-content { padding: 60px 28px; }
       .home-subhead { letter-spacing: 0.22em; }
@@ -1799,7 +1806,7 @@
       }).join('');
 
       pg.innerHTML = `
-        <div class="home-wrap">
+        <div class="home-wrap${h.textTheme === 'dark' ? ' text-dark' : ''}">
           ${bgHtml}
           <div class="home-content">
             ${h.headline ? `<div class="home-headline">${x(h.headline)}</div>` : ''}
