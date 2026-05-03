@@ -129,7 +129,8 @@
       will-change: transform;
     }
 
-    .nav-brand { display: flex; align-items: baseline; gap: 14px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
+    .nav-brand { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
+    .nav-brand-logo { display: block; height: 32px; max-height: calc(var(--nav-h) - 24px); width: auto; object-fit: contain; }
     .nav-brand-name { font-family: var(--font-serif); font-size: calc(19px * var(--font-serif-scale, 1)); font-weight: 500; letter-spacing: 0.02em; color: var(--fg); line-height: 1; }
     .nav-brand-rule { width: 1px; height: 13px; background: var(--fg-dim); }
     .nav-brand-title { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #a89e90; font-weight: 300; }
@@ -232,6 +233,48 @@
     .gallery-grid.layout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .gallery-grid.layout-grid .grid-item { aspect-ratio: 16/9; }
     .gallery-grid.layout-grid .grid-thumb { height: 100%; object-fit: cover; }
+
+    /* editorial layout: two-column gallery with captions below — for sites
+       with a small, considered set of projects (interior design, studios). */
+    .gallery-grid.layout-editorial {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 56px 28px; padding: 44px 44px 80px;
+      max-width: 1400px; margin: 0 auto;
+    }
+    .gallery-grid.layout-editorial .grid-item {
+      position: relative; display: block; cursor: pointer;
+      animation: gridIn 0.55s var(--ease) both;
+    }
+    .gallery-grid.layout-editorial .grid-thumb-frame {
+      position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden;
+      background: var(--bg2);
+    }
+    .gallery-grid.layout-editorial .grid-thumb,
+    .gallery-grid.layout-editorial .grid-thumb-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.7s var(--ease), filter 0.7s var(--ease);
+      filter: var(--thumb-filter, none);
+    }
+    .gallery-grid.layout-editorial .grid-item:hover .grid-thumb { transform: scale(1.025); filter: none; }
+    .gallery-grid.layout-editorial .grid-caption {
+      margin-top: 16px; padding: 0 2px; text-align: left;
+    }
+    .gallery-grid.layout-editorial .grid-caption-client {
+      font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 6px; font-weight: 500;
+    }
+    .gallery-grid.layout-editorial .grid-caption-title {
+      font-family: var(--font-serif); font-style: italic; font-size: 19px;
+      font-weight: 400; color: var(--fg); line-height: 1.3;
+    }
+    .gallery-grid.layout-editorial .grid-caption-meta {
+      font-size: 11px; color: var(--fg-mid); margin-top: 4px; line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 36px; padding: 24px 20px 60px; }
+      .gallery-grid.layout-editorial .grid-caption-title { font-size: 17px; }
+    }
 
     .grid-item {
       position: absolute; overflow: hidden; cursor: pointer;
@@ -513,6 +556,35 @@
     .contact-card-email:hover { opacity: 0.7; }
     .contact-card-divider { height: 1px; background: var(--fg-dimmer); margin: 32px 0; }
     .contact-card-social { margin-top: 20px; }
+
+    /* Card-only contact page: centered "calling card" treatment.
+       Page leads with a large italic "Contact" heading; the studio name is
+       not repeated since the nav already carries it. Vertically centered
+       on the viewport, narrow column, generous spacing. */
+    .contact-wrap.contact-centered {
+      max-width: 460px;
+      min-height: calc(100vh - var(--nav-h) - env(safe-area-inset-top, 0px));
+      padding: 60px 44px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .contact-wrap.contact-centered .contact-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(40px, 6vw, 64px);
+      font-style: italic; font-weight: 400;
+      color: var(--fg); line-height: 1.05;
+      margin: 0 0 32px;
+    }
+    .contact-wrap.contact-centered .contact-intro {
+      max-width: 360px; margin: 0 auto 36px; line-height: 1.7;
+    }
+    .contact-wrap.contact-centered .contact-card-email {
+      font-size: 14px; letter-spacing: 0.06em;
+    }
+    .contact-wrap.contact-centered .contact-card-social {
+      margin-top: 32px; display: flex; justify-content: center;
+    }
     .contact-card-social-link { display: inline-flex; color: var(--fg-dim); opacity: 0.5; transition: opacity 0.2s; text-decoration: none; }
     .contact-card-social-link:hover { opacity: 1; }
     /* Optional photo on the contact page — side-by-side with the card on
@@ -1003,6 +1075,7 @@
   <!-- Nav -->
   <nav>
     <a class="nav-brand" href="#" onclick="event.preventDefault();showFirst()">
+      <img class="nav-brand-logo" id="nav-logo" alt="" style="display:none">
       <span class="nav-brand-name" id="nav-name"></span>
       <span class="nav-brand-rule" id="nav-rule" style="display:none"></span>
       <span class="nav-brand-title" id="nav-title-el"></span>
@@ -1238,6 +1311,23 @@
       const rule = document.getElementById('nav-rule');
       if (rule) rule.style.display = ownerTitle ? '' : 'none';
 
+      // Optional brand logo — when set, the image replaces the text name.
+      // Title (if configured) still shows next to the logo.
+      const navLogo = document.getElementById('nav-logo');
+      const navName = document.getElementById('nav-name');
+      if (navLogo) {
+        if (cfg.brandLogo) {
+          navLogo.src = cfg.brandLogo;
+          navLogo.alt = ownerName || '';
+          navLogo.style.display = '';
+          if (navName) navName.style.display = 'none';
+        } else {
+          navLogo.removeAttribute('src');
+          navLogo.style.display = 'none';
+          if (navName) navName.style.display = '';
+        }
+      }
+
       document.getElementById('splash-name').textContent  = ownerName;
       document.getElementById('splash-title').textContent = ownerTitle;
 
@@ -1409,7 +1499,7 @@
         sec.id = 'page-' + cat.id;
         sec.className = 'page';
         sec.innerHTML = [
-          `<div class="gallery-grid${cat.layout === 'grid' ? ' layout-grid' : ''}" id="grid-${x(cat.id)}"></div>`,
+          `<div class="gallery-grid${cat.layout === 'grid' ? ' layout-grid' : cat.layout === 'editorial' ? ' layout-editorial' : ''}" id="grid-${x(cat.id)}"></div>`,
           `<div class="mobile-list"  id="mlist-${x(cat.id)}"></div>`,
           isPreview ? `<div class="preview-tray" id="preview-tray-${x(cat.id)}" style="display:none"></div>` : ''
         ].join('');
@@ -1457,12 +1547,29 @@
             <div id="contact-result" class="contact-result"></div>
           </form>` : ''}`;
       const introHtml = cc.intro ? `<p class="contact-intro">${x(cc.intro)}</p>` : '';
-      ctc.innerHTML = `
-        <div class="contact-wrap">
-          <h2 class="about-eyebrow">Get in Touch</h2>
-          ${introHtml}
-          ${photoHtml ? `<div class="contact-layout">${photoHtml}<div class="contact-content">${cardWithFormHtml}</div></div>` : cardWithFormHtml}
-        </div>`;
+      // Card-only mode without a photo gets a dedicated centered treatment —
+      // the nav already carries the studio's name, so the page leads with a
+      // large italic "Contact" heading and skips both the eyebrow and the
+      // redundant studio name. Order: heading → intro → email → social.
+      if (isCardOnly && !photoHtml) {
+        const email = (siteConfig.contact?.email || siteConfig.about?.contactEmail || '');
+        const igUrl = siteConfig.about?.social?.instagram || '';
+        const igSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`;
+        ctc.innerHTML = `
+          <div class="contact-wrap contact-centered">
+            <h1 class="contact-heading">Contact</h1>
+            ${introHtml}
+            ${email ? `<a class="contact-card-email" href="mailto:${x(email)}">${x(email)}</a>` : ''}
+            ${igUrl ? `<div class="contact-card-social"><a href="${x(igUrl)}" target="_blank" rel="noopener" class="contact-card-social-link" title="Instagram">${igSvg}</a></div>` : ''}
+          </div>`;
+      } else {
+        ctc.innerHTML = `
+          <div class="contact-wrap">
+            <h2 class="about-eyebrow">Get in Touch</h2>
+            ${introHtml}
+            ${photoHtml ? `<div class="contact-layout">${photoHtml}<div class="contact-content">${cardWithFormHtml}</div></div>` : cardWithFormHtml}
+          </div>`;
+      }
       main.appendChild(ctc);
     }
 
@@ -1591,6 +1698,7 @@
       grid.innerHTML = '';
       const catDef = siteConfig.categories.find(c => c.id === cat);
       const isScrollCat = catDef?.type === 'scroll';
+      const isEditorial = catDef?.layout === 'editorial';
       items.forEach((p, i) => {
         const overlayClass = isScrollCat ? 'cover' : (p.overlay || (p.opacity === 0 ? 'reveal' : 'default'));
         const hideBtn = isPreview
@@ -1625,17 +1733,31 @@
               ? `<video class="grid-thumb-video" muted loop playsinline preload="none" data-hover-src="${x(p.hoverPreview)}"></video>`
               : `<img class="grid-thumb-video grid-thumb-preview-img" alt="" data-hover-src="${x(p.hoverPreview)}">`)
           : '';
-        el.innerHTML = `
-          ${hideBtn}${draftBadge}
-          ${thumbHtml}
-          ${hoverVideoHtml}
-          <div class="grid-scrim" style="background:radial-gradient(circle,rgba(19,17,16,${p.vignette ?? 0.35}) 0%,transparent 70%)"></div>
-          <div class="grid-center overlay-${x(overlayClass)}${!p.client ? ' solo' : ''}">
-            ${p.client ? `<div class="grid-client">${x(p.client)}</div>` : ''}
-            <div class="grid-title">${x(p.title)}</div>
-            <div class="grid-play"></div>
-            ${p.award ? `<div class="grid-award">${x(p.award)}</div>` : ''}
-          </div>`;
+        if (isEditorial) {
+          el.innerHTML = `
+            ${hideBtn}${draftBadge}
+            <div class="grid-thumb-frame">
+              ${thumbHtml}
+              ${hoverVideoHtml}
+            </div>
+            <div class="grid-caption">
+              ${p.client ? `<div class="grid-caption-client">${x(p.client)}</div>` : ''}
+              <div class="grid-caption-title">${x(p.title)}</div>
+              ${p.location || p.year ? `<div class="grid-caption-meta">${[p.location, p.year].filter(Boolean).map(x).join(' · ')}</div>` : ''}
+            </div>`;
+        } else {
+          el.innerHTML = `
+            ${hideBtn}${draftBadge}
+            ${thumbHtml}
+            ${hoverVideoHtml}
+            <div class="grid-scrim" style="background:radial-gradient(circle,rgba(19,17,16,${p.vignette ?? 0.35}) 0%,transparent 70%)"></div>
+            <div class="grid-center overlay-${x(overlayClass)}${!p.client ? ' solo' : ''}">
+              ${p.client ? `<div class="grid-client">${x(p.client)}</div>` : ''}
+              <div class="grid-title">${x(p.title)}</div>
+              <div class="grid-play"></div>
+              ${p.award ? `<div class="grid-award">${x(p.award)}</div>` : ''}
+            </div>`;
+        }
         // Hover-to-play handler — only on devices that actually hover (skip
         // touch). Lazy-loads the preview src on first hover so nothing is
         // fetched until needed. Handles both <video> (mp4/webm) and <img>
@@ -1669,8 +1791,9 @@
       });
       resolveVimeoThumbs(grid);
 
-      // Masonry layout (JS-positioned, left-to-right order)
-      if (catDef?.layout !== 'grid') {
+      // Masonry layout (JS-positioned, left-to-right order). Skipped for
+      // both 'grid' and 'editorial' which use CSS Grid for positioning.
+      if (catDef?.layout !== 'grid' && catDef?.layout !== 'editorial') {
         layoutMasonry(grid);
         grid.querySelectorAll('img.grid-thumb').forEach(img => {
           if (!img.complete) img.addEventListener('load', () => layoutMasonry(grid), { once: true });
@@ -1704,7 +1827,7 @@
     window.addEventListener('resize', () => {
       cancelAnimationFrame(_masonryRaf);
       _masonryRaf = requestAnimationFrame(() => {
-        document.querySelectorAll('.gallery-grid:not(.layout-grid)').forEach(layoutMasonry);
+        document.querySelectorAll('.gallery-grid:not(.layout-grid):not(.layout-editorial)').forEach(layoutMasonry);
         updateDrawerPadding();
       });
     });
