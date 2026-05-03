@@ -218,8 +218,12 @@
     .page { display: none; }
     .page.visible { display: block; animation: pageIn 0.35s var(--ease) both; }
     .page.leaving  { display: block; animation: pageOut 0.2s var(--ease) both; pointer-events: none; }
-    @keyframes pageIn  { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
-    @keyframes pageOut { from { opacity: 1; transform: translateY(0); }     to { opacity: 0; transform: translateY(-6px); } }
+    /* Home page is a fullscreen slideshow — skip the translateY so the bg
+       image doesn't visibly shift up on entry (reads as a "punch in"). */
+    #page-home.visible { animation: pageInFade 0.35s var(--ease) both; }
+    @keyframes pageIn     { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
+    @keyframes pageInFade { from { opacity: 0; }                              to { opacity: 1; } }
+    @keyframes pageOut    { from { opacity: 1; transform: translateY(0); }    to { opacity: 0; transform: translateY(-6px); } }
     @keyframes gvIn    { from { opacity: 0; }                               to { opacity: 1; } }
 
     /* ── GRID — DESKTOP ── */
@@ -1809,19 +1813,17 @@
           </div>
         </div>`;
 
-      // Fade the bg in once the first image has loaded — prevents the pop-in hitch
+      // Only fade the bg in if the first image isn't already cached/ready —
+      // otherwise the page's own pageIn animation handles the entrance and a
+      // second bg-only fade creates a visible hitch / punch-in.
       const homeBg    = pg.querySelector('.home-bg');
       const firstSlide = pg.querySelector('.home-slide.active');
-      if (homeBg && firstSlide) {
+      if (homeBg && firstSlide && !(firstSlide.complete && firstSlide.naturalWidth > 0)) {
         homeBg.style.opacity   = '0';
         homeBg.style.transition = 'opacity 0.6s ease';
         const reveal = () => { homeBg.style.opacity = '1'; };
-        if (firstSlide.complete && firstSlide.naturalWidth > 0) {
-          reveal();
-        } else {
-          firstSlide.addEventListener('load',  reveal, { once: true });
-          firstSlide.addEventListener('error', reveal, { once: true });
-        }
+        firstSlide.addEventListener('load',  reveal, { once: true });
+        firstSlide.addEventListener('error', reveal, { once: true });
       }
 
       if (multiSlide) startHomeSlideshow();
