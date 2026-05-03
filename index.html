@@ -130,7 +130,7 @@
     }
 
     .nav-brand { display: flex; align-items: center; gap: 14px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
-    .nav-brand-logo { display: block; height: 56px; max-height: calc(var(--nav-h) + 6px); width: auto; object-fit: contain; }
+    .nav-brand-logo { display: block; height: 56px; max-height: calc(var(--nav-h) + 6px); width: auto; object-fit: contain; margin: -10px 0 0 -16px; }
     .nav-brand-name { font-family: var(--font-serif); font-size: calc(19px * var(--font-serif-scale, 1)); font-weight: 500; letter-spacing: 0.02em; color: var(--fg); line-height: 1; }
     .nav-brand-rule { width: 1px; height: 13px; background: var(--fg-dim); }
     .nav-brand-title { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: #a89e90; font-weight: 300; }
@@ -695,10 +695,13 @@
     .site-footer .site-footer-copyright { opacity: 0.35; pointer-events: none; }
     /* Optional Instagram icon at the end of the desktop nav. Inherits color
        from nav-link styles so it picks up the same dim → accent hover treatment. */
-    .nav-links .nav-link-ig { display: inline-flex; align-items: center; padding: 0 0 4px; opacity: 0.7; transition: opacity 0.25s var(--ease), color 0.25s var(--ease); color: var(--fg-dim); }
+    .nav-links .nav-link-ig { display: inline-flex; align-items: center; padding: 0; opacity: 0.7; transition: opacity 0.25s var(--ease), color 0.25s var(--ease); color: var(--fg-dim); }
     .nav-links .nav-link-ig::after { display: none; }
     .nav-links .nav-link-ig:hover { opacity: 1; color: var(--accent); }
-    .nav-links .nav-link-ig svg { width: 18px; height: 18px; display: block; }
+    /* translateY optically aligns the icon's center with the cap-height of
+       the adjacent text labels (which sit slightly above their box center
+       because of font ascender/descender geometry). */
+    .nav-links .nav-link-ig svg { width: 18px; height: 18px; display: block; transform: translateY(1px); }
     body.nav-left .site-footer { left: var(--nav-w); }
     main { padding-bottom: 36px; }
 
