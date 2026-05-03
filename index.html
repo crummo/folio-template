@@ -94,7 +94,7 @@
       --gv-bg: #131110; --gv-fg: #ede8e0; --gv-fg-dim: #5a5248; --gv-fg-dimmer: #2a2623; --gv-bg2: #1c1917;
     }
 
-    html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-weight: 300; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overscroll-behavior-y: none; scrollbar-gutter: stable; }
+    html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-weight: 300; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overscroll-behavior-y: none; }
     body { min-height: 100vh; background: var(--bg); overscroll-behavior-y: none; }
 
     /* film grain */
@@ -569,11 +569,29 @@
     .home-wrap.layout-corner-br .home-ctas { justify-content: flex-end; }
     /* gallery mode: hide all text and ctas, let the photo speak */
     .home-wrap.layout-hidden .home-content { display: none; }
+    /* corner caption scrim — soft radial gradient anchored at the caption
+       corner so the text always has a subtle tonal cushion, regardless of
+       whether the photo is light or dark. No hard edges, reads as natural
+       shadow rather than as a label background. */
+    .home-wrap.layout-corner-bl::before,
+    .home-wrap.layout-corner-br::before {
+      content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    }
+    .home-wrap.layout-corner-bl::before {
+      background: radial-gradient(ellipse 55% 45% at 0% 100%,
+        rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 75%);
+    }
+    .home-wrap.layout-corner-br::before {
+      background: radial-gradient(ellipse 55% 45% at 100% 100%,
+        rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 75%);
+    }
     @media (max-width: 768px) {
       /* on small screens, caption modes drop back to centered for legibility */
       .home-wrap.layout-corner-bl, .home-wrap.layout-corner-br { align-items: center; justify-content: center; }
       .home-wrap.layout-corner-bl .home-content, .home-wrap.layout-corner-br .home-content { text-align: center; }
       .home-wrap.layout-corner-bl .home-ctas, .home-wrap.layout-corner-br .home-ctas { justify-content: center; }
+      /* scrim doesn't make sense when caption is centered */
+      .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before { display: none; }
     }
     .home-headline { font-family: var(--font-serif); font-size: clamp(calc(36px * var(--font-serif-scale, 1)), 6vw, calc(76px * var(--font-serif-scale, 1))); font-weight: 400; font-style: italic; color: #fff; line-height: 1.12; margin-bottom: 20px; text-shadow: 0 1px 16px rgba(0,0,0,0.35); }
     .home-subhead { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.88); margin-bottom: 28px; text-shadow: 0 1px 10px rgba(0,0,0,0.4); }
