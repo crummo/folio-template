@@ -1,32 +1,26 @@
 # Tasks
 
 ## In Progress
-- [ ] Fold Identity fields into Appearance tab (remove General tab)
-- [ ] Test landscape About layout with Katrina's portrait photo
-- [ ] Move splash + 404 config into Pages tab
+- [ ] Home page slideshow — auto-cycling, clickable to advance
+- [ ] Contact intro text — custom sentence above email ("To enquire about a project…")
+- [ ] Instagram link — surface @slowdust_la somewhere on the site (footer?)
+- [ ] Scroll detail page visual review — compare spacing/layout side-by-side with slowduststudio.com
+- [ ] Move images into repo — Squarespace CDN URLs will eventually break
 
 ## Backlog
-- [ ] Home page: needs testing on slowdustpost.com
-- [ ] Landscape About: decide on portrait vs wide photo treatment (photo hide vs constrain)
-- [ ] Home page slideshow — auto-cycling, clickable to advance (for Slow Dust Studio)
 - [ ] Image logo support — replace text brand name with uploaded image
-- [ ] Scroll type: per-project gallery image uploader in project editor (currently: paste paths manually)
+- [ ] Fold Identity fields into Appearance tab (remove General tab) — studio.html cleanup
+- [ ] Move splash + 404 config into Pages tab — studio.html cleanup
 
 ## Done
-- [x] Scroll view (type: 'scroll') — project detail page with 2-col image grid, prev/next project nav
-- [x] Tag and push v1.0.0
+- [x] overlay-label style — title only, bottom-left, no play button; auto-applied to scroll categories
+- [x] Slow Dust Studio content — site.json + projects.json configured and deployed
+- [x] Scroll view (type: 'scroll') — project detail page with 2-col image grid, prev/next nav
+- [x] Gallery Images field in project editor — textarea for scroll-type projects
 - [x] Home page feature — full-bleed bg image + video, headline, subhead, CTAs
-- [x] Home nav link — "Home" appears first in nav when home page is enabled
-- [x] Preview ↗ buttons on About, Home, Contact, Splash, 404 section titles
-- [x] Serif + sans font pickers with size scale sliders (80–130%)
-- [x] Home bg image drop zone / uploader in Pages tab
-- [x] Font sample preview below each picker
+- [x] Serif + sans font pickers with size scale sliders
+- [x] Home bg image drop zone / uploader
 - [x] Accent hex input — accept no-# prefix and 3-digit shorthand
-- [x] Background image CSS fix — position absolute on img for reliable full-bleed
-- [x] Landscape home page full-bleed fix (counteract main side padding)
-- [x] Fix landscape About page image sizing (specificity bug)
-- [x] Create Appearance sub-tab in admin (Color, Typography, Layout, Texture)
-- [x] Add Pages sub-tab with Home Page controls
-- [x] Sync admin version to v0.1.0 → v1.0.0
-- [x] Add site.json / projects.json to template for GitHub Pages testing
-- [x] slowdustpost.com — set up as instance of folio-template
+- [x] Preview ↗ buttons on section titles
+- [x] Home nav link when home page enabled
+- [x] Tag v1.0.0

@@ -314,6 +314,22 @@
     .grid-item:hover .grid-center.overlay-none { display: none; }
     .grid-item.overlay-none:hover .grid-thumb { filter: saturate(1) brightness(1) !important; }
 
+    /* label — title only, bottom-left, no play/client/award. Used for scroll-type categories. */
+    .grid-center.overlay-label { align-items: flex-start; justify-content: flex-end; text-align: left; padding: 0 14px 12px; }
+    .grid-center.overlay-label .grid-client,
+    .grid-center.overlay-label .grid-play,
+    .grid-center.overlay-label .grid-award { display: none !important; }
+    .grid-center.overlay-label .grid-title {
+      font-family: var(--font-sans); font-size: 10px; font-style: normal;
+      letter-spacing: 0.16em; text-transform: uppercase; color: #ede8e0;
+      opacity: 0.8; transform: none !important;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+      transition: opacity 0.3s var(--ease);
+    }
+    .grid-item:hover .grid-center.overlay-label .grid-title { opacity: 1; font-size: 10px !important; transform: none !important; }
+    /* Bottom-fade scrim instead of radial spotlight for scroll/label items */
+    .grid-item.scroll-item .grid-scrim { background: linear-gradient(to top, rgba(19,17,16,0.52) 0%, transparent 52%) !important; }
+
     /* ── MOBILE LIST ── */
     .mobile-list { display: none; }
     .mobile-item { display: flex; flex-direction: column; border-bottom: 1px solid var(--bg); cursor: pointer; transition: background 0.3s var(--ease); animation: gridIn 0.5s var(--ease) both; position: relative; }
@@ -1481,8 +1497,10 @@
       const grid = document.getElementById('grid-' + cat);
       if (!grid) return;
       grid.innerHTML = '';
+      const catDef = siteConfig.categories.find(c => c.id === cat);
+      const isScrollCat = catDef?.type === 'scroll';
       items.forEach((p, i) => {
-        const overlayClass = p.overlay || (p.opacity === 0 ? 'reveal' : 'default');
+        const overlayClass = isScrollCat ? 'label' : (p.overlay || (p.opacity === 0 ? 'reveal' : 'default'));
         const hideBtn = isPreview
           ? `<button class="preview-hide-btn" onclick="event.stopPropagation();previewHideProject(${p._gi},'${x(cat)}')" title="Hide">×</button>`
           : '';
@@ -1498,10 +1516,11 @@
               ? `<img class="grid-thumb" data-vimeo-url="${x(auto.vimeoUrl)}" style="display:none" alt="${thumbAlt}"><div class="grid-placeholder" data-vimeo-ph><div class="grid-placeholder-icon"></div></div>`
               : `<div class="grid-placeholder"><div class="grid-placeholder-icon"></div></div>`;
         const el = document.createElement('div');
-        el.className = 'grid-item' + (overlayClass === 'none' ? ' overlay-none' : '');
-        const catDef2 = siteConfig.categories.find(c => c.id === cat);
-        el.onclick = catDef2?.type === 'gallery' ? () => openGallery(cat, i)
-                   : catDef2?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
+        el.className = 'grid-item'
+          + (overlayClass === 'none' ? ' overlay-none' : '')
+          + (isScrollCat ? ' scroll-item' : '');
+        el.onclick = catDef?.type === 'gallery' ? () => openGallery(cat, i)
+                   : catDef?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
                    : () => openLb(cat, i);
         // Hover preview accepts either a video file (mp4/webm) or an animated
         // image (webp/gif) — Bunny Stream's auto-generated /preview.webp is
@@ -1607,6 +1626,7 @@
       const list = document.getElementById('mlist-' + cat);
       if (!list) return;
       list.innerHTML = '';
+      const mCatDef = siteConfig.categories.find(c => c.id === cat);
       items.forEach((p, i) => {
         const auto = getAutoThumb(p);
         const mobileThumbAlt = x(p.alt || p.title || '');
@@ -1619,7 +1639,6 @@
               : `<div class="mobile-placeholder-icon"></div>`;
         const el = document.createElement('div');
         el.className = 'mobile-item';
-        const mCatDef = siteConfig.categories.find(c => c.id === cat);
         el.onclick = mCatDef?.type === 'gallery' ? () => openGallery(cat, i)
                    : mCatDef?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
                    : () => openLb(cat, i);
