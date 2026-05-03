@@ -2545,10 +2545,10 @@
       pg.id = 'page-' + pageId;
       pg.className = 'page';
       const sideChevronPrev = prevP
-        ? `<button class="ps-side-nav ps-side-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})" aria-label="Previous: ${x(prevP.title || '')}" title="Previous: ${x(prevP.title || '')}">❮</button>`
+        ? `<button class="ps-side-nav ps-side-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})" aria-label="Previous: ${x(prevP.title || '')}">❮</button>`
         : '';
       const sideChevronNext = nextP
-        ? `<button class="ps-side-nav ps-side-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})" aria-label="Next: ${x(nextP.title || '')}" title="Next: ${x(nextP.title || '')}">❯</button>`
+        ? `<button class="ps-side-nav ps-side-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})" aria-label="Next: ${x(nextP.title || '')}">❯</button>`
         : '';
       pg.innerHTML = `
         <div class="ps-wrap">
