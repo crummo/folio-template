@@ -733,21 +733,21 @@
     .ps-side-nav {
       position: fixed; top: 50%; transform: translateY(-50%);
       z-index: 45; display: none;
-      width: 36px; height: 36px;
+      width: 44px; height: 44px;
       align-items: center; justify-content: center;
-      background: rgba(248, 245, 240, 0.85);
-      color: var(--fg-mid);
-      border: 1px solid var(--fg-dimmer);
-      border-radius: 2px;
-      font-family: var(--font-serif); font-size: 22px; line-height: 1;
+      background: rgba(35, 30, 26, 0.62);
+      color: rgba(255, 255, 255, 0.95);
+      border: none;
+      border-radius: 50%;
+      font-family: var(--font-sans); font-size: 16px; font-weight: 400; line-height: 1;
       text-decoration: none; cursor: pointer;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      transition: background 0.2s, color 0.2s, opacity 0.2s;
-      padding: 0 0 3px;
-      opacity: 0.85;
+      transition: background 0.2s, transform 0.2s, opacity 0.2s;
+      padding: 0;
+      opacity: 0.7;
     }
-    .ps-side-nav:hover { background: var(--bg); color: var(--fg); opacity: 1; }
+    .ps-side-nav:hover { background: rgba(35, 30, 26, 0.85); opacity: 1; transform: translateY(-50%) scale(1.05); }
     .ps-side-nav-prev { left: 12px; }
     .ps-side-nav-next { right: 12px; }
     /* Below 1024px the inline top text-nav is replaced by chevron buttons
@@ -2516,7 +2516,7 @@
       }
 
       const imagesHtml = images.length
-        ? images.map(src => `<img class="ps-img" src="${x(src)}" alt="" loading="lazy">`).join('\n')
+        ? images.map(src => `<img class="ps-img" src="${x(src)}" alt="">`).join('\n')
         : `<div style="padding:80px 0;text-align:center;color:var(--fg-dim);font-size:12px;letter-spacing:0.1em;grid-column:1/-1">No images</div>`;
 
       // Defer pairing until images have decoded their natural dimensions —
@@ -2553,10 +2553,10 @@
       pg.id = 'page-' + pageId;
       pg.className = 'page';
       const sideChevronPrev = prevP
-        ? `<button class="ps-side-nav ps-side-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})" aria-label="Previous: ${x(prevP.title || '')}" title="Previous: ${x(prevP.title || '')}">‹</button>`
+        ? `<button class="ps-side-nav ps-side-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})" aria-label="Previous: ${x(prevP.title || '')}" title="Previous: ${x(prevP.title || '')}">❮</button>`
         : '';
       const sideChevronNext = nextP
-        ? `<button class="ps-side-nav ps-side-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})" aria-label="Next: ${x(nextP.title || '')}" title="Next: ${x(nextP.title || '')}">›</button>`
+        ? `<button class="ps-side-nav ps-side-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})" aria-label="Next: ${x(nextP.title || '')}" title="Next: ${x(nextP.title || '')}">❯</button>`
         : '';
       pg.innerHTML = `
         <div class="ps-wrap">
