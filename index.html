@@ -731,7 +731,10 @@
        preserved — no awkward empty gutters between mismatched pairs. */
     .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 96px; }
     .ps-img { width: 100%; height: auto; display: block; }
-    .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; padding-top: 32px; }
+    .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; }
+    .ps-nav-top { flex: 1; padding: 0; gap: 32px; }
+    .ps-nav-top .ps-nav-direction { display: none; } /* keep just the title/arrow at top — back link is the back-to-Work label */
+    .ps-nav-bottom { padding-top: 32px; }
     .ps-nav-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: flex; align-items: center; gap: 12px; }
     .ps-nav-btn:hover { color: var(--fg); }
     /* Disabled state is still rendered (for layout balance) but invisible
@@ -2501,13 +2504,17 @@
         <div class="ps-wrap">
           <div class="ps-top">
             <button class="ps-back" onclick="showPage('${x(catId)}')">${x(catLabel)}</button>
+            <nav class="ps-nav ps-nav-top">
+              ${prevHtml}
+              ${nextHtml}
+            </nav>
           </div>
           <header class="ps-header">
             ${p.client ? `<div class="ps-client">${x(p.client)}</div>` : ''}
             <h1 class="ps-title">${x(p.title || '')}</h1>
           </header>
           <div class="ps-grid">${imagesHtml}</div>
-          <nav class="ps-nav">
+          <nav class="ps-nav ps-nav-bottom">
             ${prevHtml}
             ${nextHtml}
           </nav>
