@@ -2646,7 +2646,10 @@
         };
         for (const img of flat) {
           // naturalWidth can be 0 for broken images — fall back to landscape.
-          const isPortrait = img.naturalWidth > 0 && img.naturalHeight > img.naturalWidth;
+          // Use >= so square images qualify as 'portrait-pairable' — pairing
+          // a square with a tall portrait still reads as a diptych, whereas
+          // a square shown full-width is awkwardly enormous.
+          const isPortrait = img.naturalWidth > 0 && img.naturalHeight >= img.naturalWidth;
           if (isPortrait) {
             portraitBuf.push(img);
             if (portraitBuf.length === 2) flushPortraits();
