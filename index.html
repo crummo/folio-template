@@ -742,7 +742,7 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 12px 28px 120px; position: relative; }
+    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 12px 28px 40px; position: relative; }
     /* Sticky top row: back link on the left, prev/next on the right.
        The cream bg covers content scrolling underneath. */
     /* Top row — just the back link. Non-sticky now; the side chevrons
@@ -788,7 +788,7 @@
     /* Single-column gallery: each photograph gets full width and breathes
        on its own, mirroring an editorial print layout. Aspect ratios are
        preserved — no awkward empty gutters between mismatched pairs. */
-    .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 96px; }
+    .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 0; }
     /* Paired portraits — two side by side. JS wraps consecutive portrait
        images in a .ps-pair so landscapes still get their own full-width row. */
     .ps-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -863,8 +863,8 @@
         padding-top: calc(var(--nav-h) + var(--safe-top));
       }
       .about-wrap, .contact-wrap, .ps-wrap { overflow-x: hidden; max-width: 100%; }
-      .ps-wrap { padding: 28px 22px 80px; }
-      .ps-grid { gap: 14px; margin-bottom: 64px; }
+      .ps-wrap { padding: 12px 22px 32px; }
+      .ps-grid { gap: 14px; margin-bottom: 0; }
       .ps-grid { grid-template-columns: 1fr; gap: 3px; }
       /* Stack contact photo above card on portrait mobile */
       .contact-layout { flex-direction: column; gap: 24px; }
