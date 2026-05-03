@@ -718,12 +718,16 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 56px 28px 120px; position: relative; }
+    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 32px 28px 120px; position: relative; }
     /* Sticky top row: back link on the left, prev/next on the right.
        The cream bg covers content scrolling underneath. */
     .ps-top {
+      /* Sticky below the main nav. No negative top margin — when the bar
+         pins, the element's box-top sits exactly at var(--nav-h), and we
+         want content sitting BELOW the nav, not bleeding up behind it. */
       position: sticky; top: var(--nav-h); z-index: 40;
-      background: var(--bg); padding: 18px 0 22px; margin: -18px 0 36px;
+      background: var(--bg); padding: 14px 0 18px;
+      margin: 0 0 24px;
       display: flex; align-items: center; justify-content: space-between; gap: 32px;
     }
     /* (intermediate hide-labels rule removed — was producing tiny illegible arrows; chevron side-nav handles those widths now) */
