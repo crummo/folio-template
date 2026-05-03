@@ -734,7 +734,11 @@
     /* translateY optically aligns the icon's center with the cap-height of
        the adjacent text labels (which sit slightly above their box center
        because of font ascender/descender geometry). */
-    .nav-links .nav-link-ig svg { width: 18px; height: 18px; display: block; transform: translateY(1px); }
+    /* The text nav-links have padding-bottom:3px reserving space for the
+       underline-on-hover slot, which pushes their visual content above the
+       flex-center. The icon has no such padding, so translateY(-2px) brings
+       it up to the same cap-line as HOME / WORK / CONTACT. */
+    .nav-links .nav-link-ig svg { width: 18px; height: 18px; display: block; transform: translateY(-2px); }
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
