@@ -4,7 +4,6 @@
       "id": "work",
       "label": "Work",
       "type": "scroll",
-      "layout": "editorial",
       "published": true
     }
   ],
@@ -58,6 +57,7 @@
     "sub": "",
     "back": ""
   },
+  "favicon": "favicon-slowdust.svg",
   "accentColor": "#7D6B5D",
   "themeMode": "light",
   "navStyle": "top",
