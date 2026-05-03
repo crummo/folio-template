@@ -2178,6 +2178,7 @@
       <select id="cat-layout" style="width:100%" onchange="updateCatHints()">
         <option value="masonry">Masonry</option>
         <option value="grid">Grid</option>
+        <option value="editorial">Editorial (two columns, captioned)</option>
       </select>
       <div class="field-hint" id="cat-layout-hint" style="margin-top:4px">Natural proportions — each image displays at its own aspect ratio</div>
     </div>
@@ -3665,7 +3666,7 @@ function openEditCategory(idx) {
   document.getElementById('cat-label').value = cat.label;
   document.getElementById('cat-id').value = cat.id;
   document.getElementById('cat-type').value   = ['gallery','scroll'].includes(cat.type) ? cat.type : 'lightbox';
-  document.getElementById('cat-layout').value = cat.layout === 'grid' ? 'grid' : 'masonry';
+  document.getElementById('cat-layout').value = ['grid','editorial'].includes(cat.layout) ? cat.layout : 'masonry';
   document.getElementById('cat-id-field').style.display = 'none'; // ID is set on create only
   document.getElementById('cat-delete-btn').style.display = '';
   document.getElementById('cat-label').oninput = null;
@@ -3691,8 +3692,9 @@ function updateCatHints() {
     scroll:   'Scrolling image grid — each project opens a dedicated detail page'
   };
   const layoutHints = {
-    masonry: 'Natural proportions — each image displays at its own aspect ratio',
-    grid:    'Uniform 16:9 grid — consistent crops, good for mixed content'
+    masonry:   'Natural proportions — each image displays at its own aspect ratio',
+    grid:      'Uniform 16:9 grid — consistent crops, good for mixed content',
+    editorial: 'Two-column gallery with title captioned below each tile — for considered, smaller portfolios'
   };
   const th = document.getElementById('cat-type-hint');
   const lh = document.getElementById('cat-layout-hint');
