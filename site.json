@@ -30,7 +30,23 @@
     "enabled": false
   },
   "homePage": {
-    "enabled": false
+    "enabled": true,
+    "headline": "",
+    "subhead": "Interior Design · Los Angeles",
+    "body": "",
+    "bg": "",
+    "bgVideo": "",
+    "slides": [
+      "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/a5788ebc-91cc-4a29-9fe1-f7c734345e4a/kat_anderson_-126_med.jpg",
+      "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/209ae6f5-25a3-4fae-ba24-57aa6fdb3bde/3873AguilarSt-7016.jpg",
+      "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/261ed9ff-0694-463b-ae02-41ee2c5a3018/IMG_4843.jpg",
+      "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/dbed46fd-53ed-43df-a6e4-ffa870ea9871/IMG_6720.jpg",
+      "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/9ab661a4-dea0-406f-8158-393ebc236f33/IMG_6667.jpg",
+      "https://images.squarespace-cdn.com/content/v1/5f726f79a4c0a461d37177cb/3609896a-eb15-4909-9c24-2842251830c1/IMG_6683.jpg"
+    ],
+    "ctas": [
+      { "label": "View Work", "target": "work", "style": "primary" }
+    ]
   },
   "notFound": {
     "heading": "",
