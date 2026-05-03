@@ -300,7 +300,7 @@
       opacity: 0;
     }
     .gallery-grid.layout-editorial .grid-item:hover .grid-thumb { transform: scale(1.03); }
-    @media (max-width: 768px) {
+    @media (max-width: 479px) {
       .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
       .gallery-grid.layout-editorial .editorial-label-title { font-size: 18px; }
     }
@@ -784,7 +784,7 @@
     .ps-back::before { content: ''; display: inline-block; width: 10px; height: 10px; border-top: 1.5px solid currentColor; border-left: 1.5px solid currentColor; transform: rotate(-45deg) translate(1px,1px); flex-shrink: 0; }
     .ps-header { margin-bottom: 16px; }
     .ps-client { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-    .ps-title { font-family: var(--font-serif); font-size: clamp(calc(32px * var(--font-serif-scale,1)), 5vw, calc(60px * var(--font-serif-scale,1))); font-weight: 400; font-style: italic; color: var(--fg); margin: 0; line-height: 1.1; }
+    .ps-title { font-family: var(--font-serif); font-size: clamp(calc(28px * var(--font-serif-scale,1)), 5vw, calc(60px * var(--font-serif-scale,1))); font-weight: 400; font-style: italic; color: var(--fg); margin: 0; line-height: 1.1; }
     /* Single-column gallery: each photograph gets full width and breathes
        on its own, mirroring an editorial print layout. Aspect ratios are
        preserved — no awkward empty gutters between mismatched pairs. */
@@ -811,12 +811,17 @@
     }
     .ps-pair-mixed .ps-img-landscape { aspect-ratio: 3 / 2; }
     .ps-pair-mixed .ps-img-portrait  { aspect-ratio: 2 / 3; }
-    @media (max-width: 768px) {
+    @media (max-width: 479px) {
       .ps-pair, .ps-pair-mixed { grid-template-columns: 1fr; gap: 14px; }
     }
     .ps-img { width: 100%; height: auto; display: block; }
     .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; }
-    .ps-nav-bottom { padding-top: 32px; }
+    /* Bottom prev/next nav: hidden by default; only shown on phone-portrait
+       viewports where chevrons + top nav are both unavailable. */
+    .ps-nav-bottom { display: none; padding-top: 28px; }
+    @media (max-width: 479px) {
+      .ps-nav-bottom { display: flex; }
+    }
     .ps-nav-btn { background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); padding: 0; transition: color 0.2s; display: flex; align-items: center; gap: 12px; }
     .ps-nav-btn:hover { color: var(--fg); }
     /* Disabled state is still rendered (for layout balance) but invisible
@@ -2624,6 +2629,10 @@
             <h1 class="ps-title">${x(p.title || '')}</h1>
           </header>
           <div class="ps-grid">${imagesHtml}</div>
+          <nav class="ps-nav ps-nav-bottom">
+            ${prevHtml}
+            ${nextHtml}
+          </nav>
         </div>`;
 
       document.getElementById('main-content').appendChild(pg);
