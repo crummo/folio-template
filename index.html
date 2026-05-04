@@ -1376,6 +1376,26 @@
       .gallery-grid { display: block !important; }
       .mobile-list { display: none !important; }
 
+      /* Editorial layout: 3 columns instead of 2 in landscape, tighter
+         gap + reduced padding so the grid starts higher in the viewport
+         and individual tiles read smaller (more fits on a 390px-tall
+         viewport without scroll). */
+      .gallery-grid.layout-editorial {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 10px 0 24px;
+      }
+      .gallery-grid.layout-editorial .editorial-label-title {
+        font-size: clamp(13px, 1.6vw, 17px);
+      }
+      .gallery-grid.layout-editorial .editorial-label-client {
+        font-size: 8px; margin-bottom: 6px;
+      }
+      .gallery-grid.layout-editorial .editorial-label {
+        padding: 12px;
+      }
+
       /* About: cancel the desktop nav-left side-nav left-shift since
          landscape uses a top bar, not a side nav. Tighter padding to
          nudge content toward the top, matching portrait spacing. */
