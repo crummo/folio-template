@@ -33,12 +33,12 @@
   "homePage": {
     "enabled": true,
     "headline": "",
-    "subhead": "Interior Design · Los Angeles",
+    "subhead": "",
     "body": "",
     "bg": "",
     "bgVideo": "",
     "overlayOpacity": 0,
-    "textLayout": "corner-bl",
+    "textLayout": "centered",
     "revealDelay": 1.5,
     "showCtas": false,
     "slides": [
@@ -60,7 +60,8 @@
         "target": "work",
         "style": "primary"
       }
-    ]
+    ],
+    "centerLogo": "images/Slow Dust Studio Logo.svg"
   },
   "notFound": {
     "heading": "",
