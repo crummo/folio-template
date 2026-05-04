@@ -1135,6 +1135,15 @@
       body.landscape-immersive nav,
       body.landscape-immersive.nav-left nav {
         background: transparent;
+        /* Click-through on the transparent bar so taps on the drawer's
+           first link (which sits inside the bar's vertical band) reach
+           the drawer underneath. The hamburger and brand are individually
+           re-enabled below. */
+        pointer-events: none;
+      }
+      body.landscape-immersive .nav-hamburger,
+      body.landscape-immersive .nav-brand {
+        pointer-events: auto;
       }
       body.landscape-immersive .nav-brand {
         transform: translate(-28px, 6px);
