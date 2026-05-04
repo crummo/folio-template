@@ -1451,7 +1451,7 @@
         <button class="gv-nav-back" onclick="closeGallery()">← Back</button>
       </div>
       <button class="theme-toggle hidden" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
-      <button class="nav-hamburger" onclick="event.stopPropagation();toggleDrawer()"><span></span><span></span><span></span></button>
+      <button class="nav-hamburger" onpointerdown="event.stopPropagation();toggleDrawer()" onclick="event.stopPropagation()"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
