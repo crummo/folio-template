@@ -25,7 +25,8 @@
     "mode": "card-only",
     "showCard": true,
     "email": "katrina@slowduststudio.com",
-    "intro": "To enquire about a project, please get in touch."
+    "intro": "To enquire about a project, please get in touch.",
+    "showEmailInDrawer": true
   },
   "splash": {
     "enabled": false
