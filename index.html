@@ -1100,6 +1100,23 @@
         overscroll-behavior: contain;
       }
 
+      /* Tuck the bottom-left caption a bit lower so it sits closer to
+         the corner (was 44px on desktop). And tighten the scrim so the
+         dark cushion stays anchored to the new text position in this
+         compact landscape height. */
+      .home-wrap.layout-corner-bl .home-content,
+      .home-wrap.layout-corner-br .home-content {
+        padding: 20px 36px 24px;
+      }
+      .home-wrap.layout-corner-bl::before {
+        background: radial-gradient(ellipse 65% 70% at 0% 100%,
+          rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.32) 30%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0) 80%);
+      }
+      .home-wrap.layout-corner-br::before {
+        background: radial-gradient(ellipse 65% 70% at 100% 100%,
+          rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.32) 30%, rgba(0,0,0,0.12) 55%, rgba(0,0,0,0) 80%);
+      }
+
       /* Force top-bar layout for both default and left-nav configs */
       nav, body.nav-left nav {
         top: 0; left: 0; right: 0; bottom: auto;
