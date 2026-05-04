@@ -1143,7 +1143,7 @@
          landscape padding so the button sits flush against the drawer
          right edge — both are on the right side of the screen). */
       body:has(#page-home.visible) nav {
-        padding: 0 16px 0 6%;
+        padding: 0 0 0 6%;
       }
       body:has(#page-home.visible) .nav-right {
         margin-left: auto;
@@ -1156,10 +1156,18 @@
       body:has(#page-home.visible) .nav-hamburger {
         position: relative;
         z-index: 230;
+        padding: 24px 24px;
+        gap: 6px;
       }
       body:has(#page-home.visible) .nav-hamburger span {
         background: #fff;
         box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        width: 30px;
+        height: 2px;
+      }
+      /* Larger ::after on home — tap zone reaches the very corner */
+      body:has(#page-home.visible) .nav-hamburger::after {
+        inset: -20px;
       }
 
       /* ── DRAWER (default option B): folds down from top edge ──
