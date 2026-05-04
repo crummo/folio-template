@@ -33,12 +33,12 @@
   "homePage": {
     "enabled": true,
     "headline": "",
-    "subhead": "",
+    "subhead": "Interior Design · Los Angeles",
     "body": "",
     "bg": "",
     "bgVideo": "",
     "overlayOpacity": 0,
-    "textLayout": "centered",
+    "textLayout": "corner-bl",
     "revealDelay": 1.5,
     "showCtas": false,
     "slides": [
