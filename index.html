@@ -1395,6 +1395,19 @@
       .gallery-grid.layout-editorial .editorial-label {
         padding: 12px;
       }
+      /* Drop the cream scrim in landscape so the photos read clean
+         (no hover affordance to fade it out anyway). Labels go white
+         with a soft shadow so titles stay legible against any photo. */
+      .gallery-grid.layout-editorial .editorial-scrim {
+        opacity: 0;
+      }
+      .gallery-grid.layout-editorial .editorial-label-title {
+        color: #fff;
+        text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 0 16px rgba(0,0,0,0.35);
+      }
+      .gallery-grid.layout-editorial .editorial-label-client {
+        text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+      }
 
       /* About: cancel the desktop nav-left side-nav left-shift since
          landscape uses a top bar, not a side nav. Tighter padding to
