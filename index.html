@@ -937,7 +937,9 @@
         border-bottom: none;
       }
       .nav-brand-name { font-size: 17px; }
-      .nav-brand-rule, .nav-brand-title { display: none; }
+      /* Brand title visible on mobile — small tagline beside logo */
+      .nav-brand-title { font-size: 8px; letter-spacing: 0.16em; }
+      .nav-brand-rule { display: none; /* drop the divider on mobile, gap between logo + tagline does the separating */ }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
       .gallery-grid { display: none !important; }
