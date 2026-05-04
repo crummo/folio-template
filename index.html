@@ -1121,6 +1121,36 @@
           rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0) 100%);
       }
 
+      /* ── HOME PAGE: full-frame, floating nav ──
+         When the home page is the active page, dissolve the top bar so the
+         slideshow fills the viewport. Brand logo + hamburger float over the
+         photo with drop-shadows for legibility against bright slides. */
+      body:has(#page-home.visible) nav,
+      body.nav-left:has(#page-home.visible) nav {
+        background: transparent;
+        pointer-events: none;
+      }
+      body:has(#page-home.visible) nav > * {
+        pointer-events: auto;
+      }
+      body:has(#page-home.visible) .nav-brand-name,
+      body:has(#page-home.visible) .nav-brand-rule,
+      body:has(#page-home.visible) .nav-brand-title {
+        color: #fff;
+        text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      }
+      body:has(#page-home.visible) .nav-brand-logo {
+        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.55));
+      }
+      body:has(#page-home.visible) .nav-hamburger span {
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      }
+      body:has(#page-home.visible) .nav-right svg {
+        color: #fff;
+        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.55));
+      }
+
       /* Force top-bar layout for both default and left-nav configs */
       nav, body.nav-left nav {
         top: 0; left: 0; right: 0; bottom: auto;
