@@ -1139,6 +1139,11 @@
       body.nav-left:has(#page-home.visible) .nav-hamburger {
         display: flex !important;
       }
+      /* With nav-brand hidden, nav-right is the only flex child and
+         space-between sends it to the left edge. Force it to the right. */
+      body:has(#page-home.visible) .nav-right {
+        margin-left: auto;
+      }
       /* Hamburger floats on top of the drawer (z-index above drawer's
          190). White spans + soft shadow for legibility on bright slides. */
       body:has(#page-home.visible) nav {
