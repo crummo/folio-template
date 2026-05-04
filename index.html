@@ -1963,7 +1963,7 @@
       if (!grid) return;
       grid.innerHTML = '';
       const catDef = siteConfig.categories.find(c => c.id === cat);
-      const isScrollCat = catDef?.type === 'scroll';
+      const isScrollCat = catDef?.type === 'scroll' || catDef?.type === 'gallery';
       const isEditorial = catDef?.layout === 'editorial';
       items.forEach((p, i) => {
         const overlayClass = isScrollCat ? 'cover' : (p.overlay || (p.opacity === 0 ? 'reveal' : 'default'));
@@ -1986,8 +1986,8 @@
           + (overlayClass === 'none' ? ' overlay-none' : '')
           + (overlayClass === 'cover' ? ' overlay-cover-item' : '')
           + (isScrollCat ? ' scroll-item' : '');
-        el.onclick = catDef?.type === 'gallery' ? () => openGallery(cat, i)
-                   : catDef?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
+        el.onclick = catDef?.type === 'carousel' ? () => openGallery(cat, i)
+                   : (catDef?.type === 'gallery' || catDef?.type === 'scroll') ? () => showProjectScrollPage(cat, i)
                    : () => openLb(cat, i);
         // Hover preview accepts either a video file (mp4/webm) or an animated
         // image (webp/gif) — Bunny Stream's auto-generated /preview.webp is
@@ -2122,8 +2122,8 @@
               : `<div class="mobile-placeholder-icon"></div>`;
         const el = document.createElement('div');
         el.className = 'mobile-item';
-        el.onclick = mCatDef?.type === 'gallery' ? () => openGallery(cat, i)
-                   : mCatDef?.type === 'scroll'  ? () => showProjectScrollPage(cat, i)
+        el.onclick = mCatDef?.type === 'carousel' ? () => openGallery(cat, i)
+                   : (mCatDef?.type === 'gallery' || mCatDef?.type === 'scroll') ? () => showProjectScrollPage(cat, i)
                    : () => openLb(cat, i);
         el.innerHTML = `
           <div class="mobile-thumb-wrap">
