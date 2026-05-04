@@ -708,16 +708,19 @@
       .home-wrap.layout-corner-bl, .home-wrap.layout-corner-br { align-items: center; justify-content: center; }
       .home-wrap.layout-corner-bl .home-content, .home-wrap.layout-corner-br .home-content { text-align: center; }
       .home-wrap.layout-corner-bl .home-ctas, .home-wrap.layout-corner-br .home-ctas { justify-content: center; }
-      /* Centered scrim for visibility on busy / light photographs. Replaces
-         the corner scrim which doesn't apply here. position:absolute so the
-         scrim centers within .home-wrap (where the text actually sits)
-         rather than the full viewport. Now wider/flatter (90%/22%) so it
-         reads as a soft horizontal band behind the text, not a dark dot.
-         Fades in via the same homeContentReveal as the text. */
+      /* Frosted horizontal band behind the centered caption text. Sits
+         at text-height inside .home-wrap, full-width, with backdrop-blur
+         + a faint dark tint. Soft fade at left/right edges so it doesn't
+         hard-cut against the photograph. Fades in with the text. */
       .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before {
-        position: absolute;
-        background: radial-gradient(ellipse 90% 22% at 50% 50%,
-          rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.22) 40%, rgba(0,0,0,0) 75%);
+        position: absolute; inset: auto 0;
+        top: 50%; transform: translateY(-50%);
+        height: clamp(80px, 16vh, 150px);
+        background: rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(18px) saturate(0.85);
+        -webkit-backdrop-filter: blur(18px) saturate(0.85);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
         animation: homeContentReveal 0.7s var(--ease) both;
         animation-delay: var(--home-reveal-delay, 0s);
       }
