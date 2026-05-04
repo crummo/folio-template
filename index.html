@@ -1159,6 +1159,46 @@
         transform: translate(-28px, 6px);
       }
 
+      /* ── DRAWER: frosted-bar materialization on home ──
+         When the hamburger opens the drawer, fade in a frosted backdrop
+         behind the previously-transparent nav bar so the bar reappears
+         and the drawer reads as an extension of it (not orphaned mid-
+         photo). Drawer itself narrows to a panel hugging the right edge
+         (under the hamburger) instead of spanning the viewport. */
+      body:has(#page-home.visible) nav,
+      body.nav-left:has(#page-home.visible) nav {
+        transition: background 0.3s var(--ease), backdrop-filter 0.3s var(--ease);
+      }
+      body:has(#page-home.visible):has(.nav-drawer.open) nav,
+      body.nav-left:has(#page-home.visible):has(.nav-drawer.open) nav {
+        background: rgba(0, 0, 0, 0.42);
+        backdrop-filter: blur(18px) saturate(180%);
+        -webkit-backdrop-filter: blur(18px) saturate(180%);
+      }
+      body:has(#page-home.visible) .nav-drawer,
+      body.nav-left:has(#page-home.visible) .nav-drawer {
+        left: auto;
+        right: 4%;
+        width: 220px;
+        max-width: 220px;
+        background: rgba(0, 0, 0, 0.42);
+        backdrop-filter: blur(18px) saturate(180%);
+        -webkit-backdrop-filter: blur(18px) saturate(180%);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      body:has(#page-home.visible) .nav-drawer.open,
+      body.nav-left:has(#page-home.visible) .nav-drawer.open {
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      body:has(#page-home.visible) .nav-drawer a,
+      body.nav-left:has(#page-home.visible) .nav-drawer a {
+        color: rgba(255,255,255,0.88);
+        border-bottom-color: rgba(255,255,255,0.08);
+      }
+      body:has(#page-home.visible) .nav-drawer a.active {
+        color: var(--accent);
+      }
+
       /* Force top-bar layout for both default and left-nav configs */
       nav, body.nav-left nav {
         top: 0; left: 0; right: 0; bottom: auto;
