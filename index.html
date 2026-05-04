@@ -1130,7 +1130,6 @@
       body.nav-left:has(#page-home.visible) nav {
         background: transparent;
       }
-      body:has(#page-home.visible) .nav-brand,
       body:has(#page-home.visible) .nav-links,
       body:has(#page-home.visible) .nav-right > a {
         display: none !important;
@@ -1138,6 +1137,12 @@
       body:has(#page-home.visible) .nav-hamburger,
       body.nav-left:has(#page-home.visible) .nav-hamburger {
         display: flex !important;
+      }
+      /* Brand logo floats top-left over the photo (no bar). Pulled
+         further left/down so it nestles into the corner. No drop-shadow
+         per earlier preference. */
+      body:has(#page-home.visible) .nav-brand {
+        transform: translate(-28px, 6px);
       }
       /* Hamburger to the right edge of the viewport (kill the nav 10%
          landscape padding so the button sits flush against the drawer
