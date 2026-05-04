@@ -1150,6 +1150,20 @@
         color: #fff;
         filter: drop-shadow(0 1px 3px rgba(0,0,0,0.55));
       }
+      /* Hide the inline nav links on home — minimalist immersive page.
+         Force the hamburger to show as the only navigation, in both
+         default top-nav and nav-left configurations. Drawer opens with
+         category links (Work, About, Contact, etc.). */
+      body:has(#page-home.visible) .nav-links { display: none !important; }
+      body:has(#page-home.visible) .nav-hamburger,
+      body.nav-left:has(#page-home.visible) .nav-hamburger {
+        display: flex !important;
+      }
+      /* Scoot the brand logo down + left so it nestles into the corner
+         rather than sitting on the existing nav padding line. */
+      body:has(#page-home.visible) .nav-brand {
+        transform: translate(-10px, 6px);
+      }
 
       /* Force top-bar layout for both default and left-nav configs */
       nav, body.nav-left nav {
