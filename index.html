@@ -708,8 +708,17 @@
       .home-wrap.layout-corner-bl, .home-wrap.layout-corner-br { align-items: center; justify-content: center; }
       .home-wrap.layout-corner-bl .home-content, .home-wrap.layout-corner-br .home-content { text-align: center; }
       .home-wrap.layout-corner-bl .home-ctas, .home-wrap.layout-corner-br .home-ctas { justify-content: center; }
-      /* scrim doesn't make sense when caption is centered */
-      .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before { display: none; }
+      /* Centered scrim for visibility on busy / light photographs. Replaces
+         the corner scrim which doesn't apply here. */
+      .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before {
+        background: radial-gradient(ellipse 60% 30% at 50% 50%,
+          rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.2) 35%, rgba(0,0,0,0) 70%);
+      }
+      /* Beefed-up text shadow as a second line of defense */
+      .home-headline, .home-subhead, .home-body {
+        text-shadow: 0 1px 18px rgba(0,0,0,0.55), 0 0 6px rgba(0,0,0,0.4);
+      }
+      .home-subhead { font-size: 12px; }
     }
     .home-headline { font-family: var(--font-serif); font-size: clamp(calc(36px * var(--font-serif-scale, 1)), 6vw, calc(76px * var(--font-serif-scale, 1))); font-weight: 400; font-style: italic; color: #fff; line-height: 1.12; margin-bottom: 20px; text-shadow: 0 1px 16px rgba(0,0,0,0.35); }
     .home-subhead { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.88); margin-bottom: 28px; text-shadow: 0 1px 10px rgba(0,0,0,0.4); }
@@ -722,6 +731,14 @@
     @media (max-width: 768px) {
       .home-content { padding: 60px 28px; }
       .home-subhead { letter-spacing: 0.22em; }
+    }
+    /* Tablet — distinct from phone but not yet desktop. Bigger title and
+       wrap padding so project pages feel substantial; corner caption +
+       chevrons + paired diptychs are inherited from the >=480 rules. */
+    @media (min-width: 769px) and (max-width: 1023px) {
+      .ps-wrap { padding: 24px 36px 80px; }
+      .ps-title { font-size: clamp(36px, 4.5vw, 52px); }
+      .ps-grid { gap: 18px; }
     }
 
     /* ── SITE FOOTER ── */
@@ -813,6 +830,8 @@
     .ps-pair-mixed .ps-img-portrait  { aspect-ratio: 2 / 3; }
     @media (max-width: 479px) {
       .ps-pair, .ps-pair-mixed { grid-template-columns: 1fr; gap: 14px; }
+      /* More breathing room between the fixed nav and the back link */
+      .ps-wrap { padding-top: 28px; }
     }
     .ps-img { width: 100%; height: auto; display: block; }
     .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; }
