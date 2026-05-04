@@ -61,7 +61,7 @@
         "style": "primary"
       }
     ],
-    "centerLogo": "images/Slow Dust Studio Logo.filled.svg"
+    "centerLogo": "images/logo_filled.svg"
   },
   "notFound": {
     "heading": "",
@@ -78,7 +78,7 @@
     "provider": "",
     "id": ""
   },
-  "brandLogo": "images/logo.filled.svg",
+  "brandLogo": "images/logo_filled.svg",
   "nav": {
     "showInstagramInNav": true
   }
