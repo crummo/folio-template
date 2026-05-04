@@ -789,7 +789,16 @@
        (like a 2-photo diptych) that benefit from more horizontal space,
        or projects that should feel more intimate. Mobile is unchanged
        — the @media rules below clamp wrap width to 100% anyway. */
-    .ps-wrap.ps-page-wide { max-width: 1600px; padding-bottom: 16px; }
+    .ps-wrap.ps-page-wide {
+      max-width: 1600px; padding-bottom: 16px;
+      /* Make the wide wrap a flex column at full viewport height so the
+         photo grid can vertically-center itself between the title and the
+         bottom of the page (good for short projects where the photos
+         would otherwise top-anchor with a sea of cream below). */
+      display: flex; flex-direction: column;
+      min-height: calc(100vh - var(--nav-h) - env(safe-area-inset-top, 0px));
+    }
+    .ps-wrap.ps-page-wide .ps-grid { margin: auto 0; }
     .ps-wrap.ps-page-narrow { max-width: 980px; }
     /* Sticky top row: back link on the left, prev/next on the right.
        The cream bg covers content scrolling underneath. */
