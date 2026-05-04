@@ -81,6 +81,7 @@
   },
   "brandLogo": "images/logo.filled.svg",
   "nav": {
-    "showInstagramInNav": true
+    "showInstagramInNav": true,
+    "landscapeDrawerStyle": "top"
   }
 }
