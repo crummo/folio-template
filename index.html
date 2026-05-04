@@ -700,6 +700,8 @@
     .home-wrap.layout-corner-bl::before,
     .home-wrap.layout-corner-br::before {
       content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      animation: homeContentReveal 0.7s var(--ease) both;
+      animation-delay: var(--home-reveal-delay, 0s);
     }
     .home-wrap.layout-corner-bl::before {
       background: radial-gradient(ellipse 55% 45% at 0% 100%,
