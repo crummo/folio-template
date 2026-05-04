@@ -1230,7 +1230,20 @@
       .nav-hamburger span { width: 25px; }
       /* Bigger tap zone so the hamburger is reliably hittable on mobile.
          Visible bars unchanged — padding extends the click target. */
-      .nav-hamburger { padding: 18px 16px; }
+      .nav-hamburger {
+        padding: 22px 20px;
+        touch-action: manipulation;
+        position: relative;
+      }
+      /* Invisible hit-extension pad: tap zone extends 10px beyond the
+         button on every side, but the button itself stays visually the
+         same. Captures near-misses that would otherwise fall through to
+         the slideshow's click-to-advance handler. */
+      .nav-hamburger::after {
+        content: '';
+        position: absolute;
+        inset: -10px;
+      }
       /* Drawer inset to match gallery width */
       .nav-drawer { left: 10%; right: 10%; }
       .nav-drawer.open { padding: 6px 16px 10px; max-height: calc(100dvh - var(--nav-h) - 16px); overflow-y: auto; }
@@ -1410,7 +1423,7 @@
         <button class="gv-nav-back" onclick="closeGallery()">← Back</button>
       </div>
       <button class="theme-toggle hidden" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
-      <button class="nav-hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
+      <button class="nav-hamburger" onclick="event.stopPropagation();toggleDrawer()"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
