@@ -830,6 +830,15 @@
        on its own, mirroring an editorial print layout. Aspect ratios are
        preserved — no awkward empty gutters between mismatched pairs. */
     .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 0; }
+    /* Cap a single image's height so a tall landscape doesn't dominate
+       the viewport on wide screens. Diptychs (.ps-pair / .ps-pair-mixed)
+       are already bounded by their aspect-ratio cells, so they're not
+       affected by this rule. */
+    .ps-grid > .ps-img {
+      width: auto; max-width: 100%;
+      height: auto; max-height: 85vh;
+      margin: 0 auto;
+    }
     /* Paired portraits — two side by side. JS wraps consecutive portrait
        images in a .ps-pair so landscapes still get their own full-width row. */
     /* Each cell of a portrait pair is locked to 2:3 (the dominant aspect
