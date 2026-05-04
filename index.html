@@ -752,19 +752,6 @@
     .home-cta:hover { border-color: #fff; background: rgba(255,255,255,0.12); }
     .home-cta.home-cta-primary { border-color: var(--accent); color: var(--accent); }
     .home-cta.home-cta-primary:hover { border-color: var(--accent); color: var(--accent); opacity: 0.75; }
-    /* Center-logo treatment for the home page — only visible on mobile,
-       where the corner caption falls back to centered. Desktop keeps the
-       lower-left text caption; mobile shows the wordmark instead. */
-    .home-center-logo { display: none; }
-    @media (max-width: 768px) {
-      .home-center-logo {
-        display: block; width: 78vw; height: auto; margin: 0 auto;
-        filter: drop-shadow(0 4px 24px rgba(0,0,0,0.35));
-      }
-      /* Subhead text replaced by the logo on mobile */
-      .home-wrap.layout-corner-bl .home-content .home-subhead,
-      .home-wrap.layout-corner-br .home-content .home-subhead { display: none; }
-    }
     @media (max-width: 768px) {
       .home-content { padding: 60px 28px; }
       .home-subhead { letter-spacing: 0.22em; }
@@ -2208,7 +2195,6 @@
         <div class="home-wrap${h.textTheme === 'dark' ? ' text-dark' : ''}${layoutCls}"${wrapStyle}>
           ${bgHtml}
           <div class="home-content">
-            ${h.centerLogo ? `<img class="home-center-logo" src="${x(h.centerLogo)}" alt="${x(siteConfig.ownerName || '')}">` : ''}
             ${h.headline ? `<div class="home-headline">${x(h.headline)}</div>` : ''}
             ${h.subhead  ? `<div class="home-subhead">${x(h.subhead)}</div>`   : ''}
             ${h.body     ? `<div class="home-body">${h.body}</div>`            : ''}
