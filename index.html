@@ -783,7 +783,14 @@
     /* main no longer needs bottom padding for a fixed footer */
 
     /* ── SCROLL PROJECT PAGE ── */
-    .ps-wrap { max-width: 1600px; margin: 0 auto; padding: 12px 24px 16px; position: relative; }
+    .ps-wrap { max-width: 1240px; margin: 0 auto; padding: 12px 28px 40px; position: relative; }
+    /* Per-project width overrides — set on a project via projects.json's
+       displayWidth field ('wide' | 'narrow'). Useful for short projects
+       (like a 2-photo diptych) that benefit from more horizontal space,
+       or projects that should feel more intimate. Mobile is unchanged
+       — the @media rules below clamp wrap width to 100% anyway. */
+    .ps-wrap.ps-page-wide { max-width: 1600px; padding-bottom: 16px; }
+    .ps-wrap.ps-page-narrow { max-width: 980px; }
     /* Sticky top row: back link on the left, prev/next on the right.
        The cream bg covers content scrolling underneath. */
     /* Top row — just the back link. Non-sticky now; the side chevrons
@@ -830,15 +837,6 @@
        on its own, mirroring an editorial print layout. Aspect ratios are
        preserved — no awkward empty gutters between mismatched pairs. */
     .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 0; }
-    /* Cap a single image's height so a tall landscape doesn't dominate
-       the viewport on wide screens. Diptychs (.ps-pair / .ps-pair-mixed)
-       are already bounded by their aspect-ratio cells, so they're not
-       affected by this rule. */
-    .ps-grid > .ps-img {
-      width: auto; max-width: 100%;
-      height: auto; max-height: 85vh;
-      margin: 0 auto;
-    }
     /* Paired portraits — two side by side. JS wraps consecutive portrait
        images in a .ps-pair so landscapes still get their own full-width row. */
     /* Each cell of a portrait pair is locked to 2:3 (the dominant aspect
@@ -2669,8 +2667,11 @@
       const sideChevronNext = nextP
         ? `<button class="ps-side-nav ps-side-nav-next" onclick="showProjectScrollPage('${x(catId)}',${idx+1})" aria-label="Next: ${x(nextP.title || '')}">❯</button>`
         : '';
+      const _widthCls = p.displayWidth === 'wide' ? ' ps-page-wide'
+                       : p.displayWidth === 'narrow' ? ' ps-page-narrow'
+                       : '';
       pg.innerHTML = `
-        <div class="ps-wrap">
+        <div class="ps-wrap${_widthCls}">
           <div class="ps-top">
             <button class="ps-back" onclick="showPage('${x(catId)}')">${x(catLabel)}</button>
           </div>

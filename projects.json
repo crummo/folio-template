@@ -32,7 +32,8 @@
       "gallery/home-office/01.jpg",
       "gallery/home-office/02.jpg"
     ],
-    "published": true
+    "published": true,
+    "displayWidth": "wide"
   },
   {
     "id": 3,
