@@ -1140,9 +1140,21 @@
         display: flex !important;
       }
       /* With nav-brand hidden, nav-right is the only flex child and
-         space-between sends it to the left edge. Force it to the right. */
+         space-between sends it to the left edge. Force it to the right
+         AND size + position it to align the hamburger with the drawer's
+         "Home" text on the left of the drawer panel. The math: drawer is
+         240px wide anchored right:0, with padding-left:20px → text starts
+         at viewport_right − 220. Nav-right matches that geometry: full
+         right-edge anchor (kill nav 10% padding), width 240, padding-left
+         8 (so the hamburger's own 12px padding-left adds up to 20). */
+      body:has(#page-home.visible) nav {
+        padding: 0;
+      }
       body:has(#page-home.visible) .nav-right {
         margin-left: auto;
+        width: 240px;
+        justify-content: flex-start;
+        padding-left: 8px;
       }
       /* Hamburger floats on top of the drawer (z-index above drawer's
          190). White spans + soft shadow for legibility on bright slides. */
