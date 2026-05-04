@@ -1281,6 +1281,42 @@
       body.nav-left .nav-drawer { display: block !important; max-height: 0; overflow: hidden; left: 10%; right: 10%; }
       body.nav-left .nav-drawer.open { max-height: calc(100dvh - var(--nav-h) - 16px); padding: 6px 16px 10px; overflow-y: auto; }
 
+      /* ── CONTACT PAGE in landscape ──
+         Drop the inline nav links in favor of the hamburger (more space
+         for content). Keep the brand visible. Center the card and tune
+         sizes so everything fits in the short viewport without scrolling. */
+      body:has(#page-contact.visible) .nav-links {
+        display: none !important;
+      }
+      body:has(#page-contact.visible) .nav-hamburger {
+        display: flex !important;
+      }
+      .contact-wrap.contact-centered {
+        min-height: calc(100dvh - var(--nav-h));
+        padding: 8px 24px 16px;
+        justify-content: center;
+      }
+      .contact-wrap.contact-centered .contact-heading {
+        font-size: clamp(28px, 4vw, 40px);
+        margin: 0 0 14px;
+      }
+      .contact-wrap.contact-centered .contact-intro {
+        margin: 0 auto 16px;
+        font-size: 13px;
+        line-height: 1.55;
+        max-width: 380px;
+      }
+      .contact-wrap.contact-centered .contact-card-email {
+        font-size: 13px;
+      }
+      .contact-wrap.contact-centered .contact-card-social {
+        margin-top: 16px;
+        gap: 6px;
+      }
+      .contact-wrap.contact-centered .contact-card-ig-text {
+        font-size: 13px;
+      }
+
       /* Grid: show masonry instead of the full-width mobile list */
       .gallery-grid { display: block !important; }
       .mobile-list { display: none !important; }
