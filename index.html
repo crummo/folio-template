@@ -709,8 +709,12 @@
       .home-wrap.layout-corner-bl .home-content, .home-wrap.layout-corner-br .home-content { text-align: center; }
       .home-wrap.layout-corner-bl .home-ctas, .home-wrap.layout-corner-br .home-ctas { justify-content: center; }
       /* Centered scrim for visibility on busy / light photographs. Replaces
-         the corner scrim which doesn't apply here. */
+         the corner scrim which doesn't apply here. position:absolute so the
+         scrim centers within .home-wrap (where the text actually sits)
+         rather than the full viewport — the home-wrap starts below the nav,
+         so a viewport-centered scrim ends up above the text. */
       .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before {
+        position: absolute;
         background: radial-gradient(ellipse 60% 30% at 50% 50%,
           rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.2) 35%, rgba(0,0,0,0) 70%);
       }
@@ -830,8 +834,9 @@
     .ps-pair-mixed .ps-img-portrait  { aspect-ratio: 2 / 3; }
     @media (max-width: 479px) {
       .ps-pair, .ps-pair-mixed { grid-template-columns: 1fr; gap: 14px; }
-      /* More breathing room between the fixed nav and the back link */
-      .ps-wrap { padding-top: 28px; }
+      /* More breathing room between the fixed nav and the back link.
+         !important defeats the parent <=768 rule's `padding:` shorthand. */
+      .ps-wrap { padding-top: 36px !important; }
     }
     .ps-img { width: 100%; height: auto; display: block; }
     .ps-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 24px; }
