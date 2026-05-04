@@ -181,14 +181,20 @@
        the email to copy it. */
     .nav-drawer .nav-drawer-contact { display: flex; flex-direction: column; gap: 3px; padding-top: 14px; padding-bottom: 14px; }
     .nav-drawer .nav-drawer-contact .nav-drawer-contact-email { font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--accent); font-weight: 400; }
-    /* Drawer email line that follows a regular Contact link — small, indented,
-       lowercase. Reads as a sub-item beneath CONTACT. */
+    /* Drawer email line that follows a regular Contact link — small,
+       lowercase. Reads as a sub-item tucked under CONTACT. No border —
+       so the drawer ends naturally (matches behavior when there's no
+       email line at all). */
     .nav-drawer a.nav-drawer-contact-email-line {
       font-size: 12px; letter-spacing: 0; text-transform: none;
-      color: var(--accent); padding-top: 4px; padding-bottom: 14px;
-      border-bottom: 1px solid var(--fg-dimmer); border-left-width: 0;
-      margin-top: -10px;
+      color: var(--accent); padding-top: 0; padding-bottom: 14px;
+      border-bottom: none; border-left-width: 0;
+      margin-top: -6px;
     }
+    /* Hide the Contact link's border-bottom when it's directly followed
+       by the email-line — otherwise it'd render between the two and
+       break the visual grouping. */
+    .nav-drawer a:has(+ .nav-drawer-contact-email-line) { border-bottom: none; }
 
     /* ── LEFT NAV ── */
     body.nav-left nav {
