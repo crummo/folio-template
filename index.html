@@ -1156,7 +1156,7 @@
       body:has(#page-home.visible) .nav-hamburger {
         position: relative;
         z-index: 230;
-        padding: 24px 24px;
+        padding: 14px 12px;
         gap: 5px;
       }
       body:has(#page-home.visible) .nav-hamburger span {
@@ -1165,9 +1165,10 @@
         width: 22px;
         height: 1.5px;
       }
-      /* Larger ::after on home — tap zone reaches the very corner */
+      /* Modest ::after extension — pointerdown handler is reliable now,
+         so we don't need a comically oversized hit zone. */
       body:has(#page-home.visible) .nav-hamburger::after {
-        inset: -20px;
+        inset: -8px;
       }
 
       /* ── DRAWER (default option B): folds down from top edge ──
