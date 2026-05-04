@@ -851,7 +851,14 @@
     /* Single-column gallery: each photograph gets full width and breathes
        on its own, mirroring an editorial print layout. Aspect ratios are
        preserved — no awkward empty gutters between mismatched pairs. */
-    .ps-grid { display: flex; flex-direction: column; gap: 24px; margin-bottom: 0; }
+    .ps-grid {
+      display: flex; flex-direction: column; gap: 24px; margin-bottom: 0;
+      /* Hidden until the portrait-pairing pass has finished rebuilding the
+         layout — prevents a flash of single-column before snapping into
+         pair/diptych layout when navigating between projects. */
+      opacity: 0; transition: opacity 0.25s ease;
+    }
+    .ps-grid.ps-grid-ready { opacity: 1; }
     /* Paired portraits — two side by side. JS wraps consecutive portrait
        images in a .ps-pair so landscapes still get their own full-width row. */
     /* Each cell of a portrait pair is locked to 2:3 (the dominant aspect
@@ -2644,8 +2651,15 @@
         : `<div style="padding:80px 0;text-align:center;color:var(--fg-dim);font-size:12px;letter-spacing:0.1em;grid-column:1/-1">No images</div>`;
 
       // Defer pairing until images have decoded their natural dimensions —
-      // setTimeout 0 so it runs after the innerHTML below paints.
-      const _pairAfterMount = () => setTimeout(() => pairProjectGalleryPortraits(pageId), 0);
+      // setTimeout 0 so it runs after the innerHTML below paints. Safety:
+      // force-reveal the grid after 1.5s in case decode hangs for any reason.
+      const _pairAfterMount = () => {
+        setTimeout(() => pairProjectGalleryPortraits(pageId), 0);
+        setTimeout(() => {
+          const g = document.querySelector('#page-' + pageId + ' .ps-grid');
+          if (g) g.classList.add('ps-grid-ready');
+        }, 1500);
+      };
 
       const prevHtml = prevP
         ? `<button class="ps-nav-btn ps-nav-prev" onclick="showProjectScrollPage('${x(catId)}',${idx-1})">
@@ -2779,8 +2793,11 @@
           merged.push(g);
         }
 
-        // Rebuild grid contents
+        // Rebuild grid contents (then mark ready so the grid fades in)
         grid.innerHTML = '';
+        // Defer adding ready class to next frame so the rebuilt layout has
+        // a chance to compute before the fade kicks in.
+        requestAnimationFrame(() => grid.classList.add('ps-grid-ready'));
         for (const g of merged) {
           if (g.kind === 'pair') {
             const wrap = document.createElement('div');
