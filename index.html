@@ -1082,6 +1082,24 @@
       /* ── LANDSCAPE: compact top nav regardless of nav-style setting ── */
       :root { --nav-h: 40px; }
 
+      /* Trap horizontal pan inside main (mirrors the portrait Path B setup).
+         iPhone landscape is wider than 768px so the (max-width: 768px) block
+         doesn't fire — without this, html/body can rubber-band sideways. */
+      html { overflow: hidden; }
+      body {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        overflow: hidden;
+      }
+      main, body.nav-left main {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+
       /* Force top-bar layout for both default and left-nav configs */
       nav, body.nav-left nav {
         top: 0; left: 0; right: 0; bottom: auto;
