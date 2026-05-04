@@ -708,26 +708,35 @@
       .home-wrap.layout-corner-bl, .home-wrap.layout-corner-br { align-items: center; justify-content: center; }
       .home-wrap.layout-corner-bl .home-content, .home-wrap.layout-corner-br .home-content { text-align: center; }
       .home-wrap.layout-corner-bl .home-ctas, .home-wrap.layout-corner-br .home-ctas { justify-content: center; }
-      /* Frosted pill applied directly to .home-content. Tightened vertical
-         padding + zeroed-out trailing margins on children so the pill
-         hugs the text line instead of inheriting big inter-element gaps. */
-      .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before { display: none; }
+      /* Footer-style caption: pinned to the bottom of the home slideshow
+         with a soft black-to-transparent gradient rising from the bottom
+         edge for legibility. Reads like a magazine masthead/footer rather
+         than a label hovering on the photo. */
+      .home-wrap.layout-corner-bl, .home-wrap.layout-corner-br {
+        align-items: flex-end !important;
+      }
       .home-wrap.layout-corner-bl .home-content,
       .home-wrap.layout-corner-br .home-content {
-        max-width: max-content;
-        padding: 10px 22px;
-        background: rgba(0, 0, 0, 0.22);
-        backdrop-filter: blur(14px) saturate(0.85);
-        -webkit-backdrop-filter: blur(14px) saturate(0.85);
-        border-radius: 3px;
+        max-width: none;
+        padding: 0 28px 30px;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-radius: 0;
       }
       .home-wrap.layout-corner-bl .home-content > *:last-child,
       .home-wrap.layout-corner-br .home-content > *:last-child {
         margin-bottom: 0;
       }
-      .home-wrap.layout-corner-bl .home-content .home-subhead,
-      .home-wrap.layout-corner-br .home-content .home-subhead {
-        margin-bottom: 0;
+      /* Bottom-fade gradient providing legibility for the footer caption. */
+      .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before {
+        display: block;
+        position: fixed; inset: auto 0 0 0;
+        height: 26vh;
+        background: linear-gradient(to top,
+          rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 40%, rgba(0,0,0,0) 100%);
+        animation: homeContentReveal 0.7s var(--ease) both;
+        animation-delay: var(--home-reveal-delay, 0s);
       }
       /* Beefed-up text shadow as a second line of defense */
       .home-headline, .home-subhead, .home-body {
@@ -937,9 +946,7 @@
         border-bottom: none;
       }
       .nav-brand-name { font-size: 17px; }
-      /* Brand title visible on mobile — small tagline beside logo */
-      .nav-brand-title { font-size: 8px; letter-spacing: 0.16em; }
-      .nav-brand-rule { display: none; /* drop the divider on mobile, gap between logo + tagline does the separating */ }
+      .nav-brand-rule, .nav-brand-title { display: none; }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
       .gallery-grid { display: none !important; }

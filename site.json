@@ -17,7 +17,7 @@
     }
   },
   "ownerName": "Slow Dust Studio",
-  "ownerTitle": "Interior Design · Los Angeles",
+  "ownerTitle": "",
   "metaDescription": "Slow Dust Studio — interior design, Los Angeles.",
   "website": "https://slowduststudio.com",
   "contact": {
@@ -33,7 +33,7 @@
   "homePage": {
     "enabled": true,
     "headline": "",
-    "subhead": "",
+    "subhead": "Interior Design · Los Angeles",
     "body": "",
     "bg": "",
     "bgVideo": "",
