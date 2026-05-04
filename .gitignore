@@ -7,7 +7,7 @@ site.json.bak
 _internal/
 
 # Media — managed per site
-images/
+# images/  ← un-ignored: SDS site uses force-tracked logos / slides anyway
 gallery/
 thumbs/
 downloads/
