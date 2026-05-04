@@ -708,18 +708,26 @@
       .home-wrap.layout-corner-bl, .home-wrap.layout-corner-br { align-items: center; justify-content: center; }
       .home-wrap.layout-corner-bl .home-content, .home-wrap.layout-corner-br .home-content { text-align: center; }
       .home-wrap.layout-corner-bl .home-ctas, .home-wrap.layout-corner-br .home-ctas { justify-content: center; }
-      /* Frosted pill applied directly to .home-content — sized to the
-         text it contains (no positioning math) and centered automatically
-         by the home-wrap flex-centering. */
+      /* Frosted pill applied directly to .home-content. Tightened vertical
+         padding + zeroed-out trailing margins on children so the pill
+         hugs the text line instead of inheriting big inter-element gaps. */
       .home-wrap.layout-corner-bl::before, .home-wrap.layout-corner-br::before { display: none; }
       .home-wrap.layout-corner-bl .home-content,
       .home-wrap.layout-corner-br .home-content {
         max-width: max-content;
-        padding: 18px 28px;
+        padding: 10px 22px;
         background: rgba(0, 0, 0, 0.22);
         backdrop-filter: blur(14px) saturate(0.85);
         -webkit-backdrop-filter: blur(14px) saturate(0.85);
         border-radius: 3px;
+      }
+      .home-wrap.layout-corner-bl .home-content > *:last-child,
+      .home-wrap.layout-corner-br .home-content > *:last-child {
+        margin-bottom: 0;
+      }
+      .home-wrap.layout-corner-bl .home-content .home-subhead,
+      .home-wrap.layout-corner-br .home-content .home-subhead {
+        margin-bottom: 0;
       }
       /* Beefed-up text shadow as a second line of defense */
       .home-headline, .home-subhead, .home-body {
