@@ -1102,6 +1102,12 @@
         overscroll-behavior: contain;
       }
 
+      /* Use the hamburger site-wide in landscape (home, work/category,
+         project, contact, about). Top inline links eat too much horizontal
+         space in 844x390 — drawer keeps the bar clean across all pages. */
+      .nav-links { display: none !important; }
+      .nav-hamburger { display: flex !important; }
+
       /* Tuck the bottom-left caption a bit lower so it sits closer to
          the corner (was 44px on desktop). And tighten the scrim so the
          dark cushion stays anchored to the new text position in this
