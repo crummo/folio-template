@@ -1121,76 +1121,62 @@
           rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0) 100%);
       }
 
-      /* ── HOME PAGE: full-frame, floating nav ──
-         When the home page is the active page, dissolve the top bar so the
-         slideshow fills the viewport. Brand logo + hamburger float over the
-         photo with drop-shadows for legibility against bright slides. */
+      /* ── HOME PAGE: full-immersion, no top bar ──
+         Bar dissolved entirely. Brand logo hidden (caption in bottom-left
+         already establishes identity). Drawer folds down from the very
+         top edge of the viewport with empty padding-top so the hamburger
+         sits on top of the drawer rather than above an empty bar. */
       body:has(#page-home.visible) nav,
       body.nav-left:has(#page-home.visible) nav {
         background: transparent;
       }
-      body:has(#page-home.visible) .nav-brand-name,
-      body:has(#page-home.visible) .nav-brand-rule,
-      body:has(#page-home.visible) .nav-brand-title {
-        color: #fff;
-        text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+      body:has(#page-home.visible) .nav-brand,
+      body:has(#page-home.visible) .nav-links,
+      body:has(#page-home.visible) .nav-right > a {
+        display: none !important;
       }
-
-      body:has(#page-home.visible) .nav-hamburger span {
-        background: #fff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-      }
-      body:has(#page-home.visible) .nav-right svg {
-        color: #fff;
-        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.55));
-      }
-      /* Hide the inline nav links on home — minimalist immersive page.
-         Force the hamburger to show as the only navigation, in both
-         default top-nav and nav-left configurations. Drawer opens with
-         category links (Work, About, Contact, etc.). */
-      body:has(#page-home.visible) .nav-links { display: none !important; }
       body:has(#page-home.visible) .nav-hamburger,
       body.nav-left:has(#page-home.visible) .nav-hamburger {
         display: flex !important;
       }
-      /* Scoot the brand logo down + left so it nestles into the corner
-         rather than sitting on the existing nav padding line. */
-      body:has(#page-home.visible) .nav-brand {
-        transform: translate(-28px, 6px);
+      /* Hamburger floats on top of the drawer (z-index above drawer's
+         190). White spans + soft shadow for legibility on bright slides. */
+      body:has(#page-home.visible) nav {
+        z-index: 220;
+      }
+      body:has(#page-home.visible) .nav-hamburger {
+        position: relative;
+        z-index: 230;
+      }
+      body:has(#page-home.visible) .nav-hamburger span {
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
       }
 
-      /* ── DRAWER: frosted-bar materialization on home ──
-         When the hamburger opens the drawer, fade in a frosted backdrop
-         behind the previously-transparent nav bar so the bar reappears
-         and the drawer reads as an extension of it (not orphaned mid-
-         photo). Drawer itself narrows to a panel hugging the right edge
-         (under the hamburger) instead of spanning the viewport. */
-      body:has(#page-home.visible) nav,
-      body.nav-left:has(#page-home.visible) nav {
-        transition: background 0.3s var(--ease), backdrop-filter 0.3s var(--ease);
-      }
-      body:has(#page-home.visible):has(.nav-drawer.open) nav,
-      body.nav-left:has(#page-home.visible):has(.nav-drawer.open) nav {
-        background: rgba(0, 0, 0, 0.42);
-        backdrop-filter: blur(18px) saturate(180%);
-        -webkit-backdrop-filter: blur(18px) saturate(180%);
-      }
+      /* ── DRAWER folds down from very top edge of viewport ──
+         Empty padding-top reserves space so the hamburger remains visible
+         on top of the (frosted) drawer surface. Closed drawer is invisible
+         — no border, max-height 0. */
       body:has(#page-home.visible) .nav-drawer,
       body.nav-left:has(#page-home.visible) .nav-drawer {
+        top: 0;
         left: auto;
-        right: 4%;
-        width: 220px;
-        max-width: 220px;
-        background: rgba(0, 0, 0, 0.42);
+        right: 0;
+        width: 240px;
+        max-width: 240px;
+        background: rgba(0, 0, 0, 0.45);
         backdrop-filter: blur(18px) saturate(180%);
         -webkit-backdrop-filter: blur(18px) saturate(180%);
-        /* No border when closed — was making a hairline visible across
-           the photo. Border returns only on .open. */
         border-bottom: none;
+        padding: 0 20px;
       }
       body:has(#page-home.visible) .nav-drawer.open,
       body.nav-left:has(#page-home.visible) .nav-drawer.open {
-        border-bottom: 1px solid rgba(255,255,255,0.08);
+        /* Several blank lines reserved at the top so the hamburger sits
+           on top of the drawer rather than displacing content. */
+        padding: 64px 20px 16px;
+        max-height: calc(100dvh - 16px);
+        border-bottom: none;
       }
       body:has(#page-home.visible) .nav-drawer a,
       body.nav-left:has(#page-home.visible) .nav-drawer a {
@@ -1200,9 +1186,6 @@
       body:has(#page-home.visible) .nav-drawer a.active {
         color: #fff !important;
       }
-      /* Bar grows to 56px on home in landscape so the logo is fully
-         encompassed by the frosted backdrop instead of poking above. */
-      body:has(#page-home.visible) { --nav-h: 56px; }
 
       /* Force top-bar layout for both default and left-nav configs */
       nav, body.nav-left nav {
