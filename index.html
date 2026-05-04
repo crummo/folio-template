@@ -1139,9 +1139,7 @@
         color: #fff;
         text-shadow: 0 1px 6px rgba(0,0,0,0.6);
       }
-      body:has(#page-home.visible) .nav-brand-logo {
-        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.55));
-      }
+
       body:has(#page-home.visible) .nav-hamburger span {
         background: #fff;
         box-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -1162,7 +1160,7 @@
       /* Scoot the brand logo down + left so it nestles into the corner
          rather than sitting on the existing nav padding line. */
       body:has(#page-home.visible) .nav-brand {
-        transform: translate(-10px, 6px);
+        transform: translate(-28px, 6px);
       }
 
       /* Force top-bar layout for both default and left-nav configs */
@@ -1192,6 +1190,9 @@
 
       .nav-brand-name { font-size: 17px; }
       .nav-hamburger span { width: 25px; }
+      /* Bigger tap zone so the hamburger is reliably hittable on mobile.
+         Visible bars unchanged — padding extends the click target. */
+      .nav-hamburger { padding: 14px 12px; margin: -10px -8px; }
       /* Drawer inset to match gallery width */
       .nav-drawer { left: 10%; right: 10%; }
       .nav-drawer.open { padding: 6px 16px 10px; max-height: calc(100dvh - var(--nav-h) - 16px); overflow-y: auto; }
