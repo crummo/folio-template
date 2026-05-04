@@ -1128,10 +1128,6 @@
       body:has(#page-home.visible) nav,
       body.nav-left:has(#page-home.visible) nav {
         background: transparent;
-        pointer-events: none;
-      }
-      body:has(#page-home.visible) nav > * {
-        pointer-events: auto;
       }
       body:has(#page-home.visible) .nav-brand-name,
       body:has(#page-home.visible) .nav-brand-rule,
@@ -1192,7 +1188,7 @@
       .nav-hamburger span { width: 25px; }
       /* Bigger tap zone so the hamburger is reliably hittable on mobile.
          Visible bars unchanged — padding extends the click target. */
-      .nav-hamburger { padding: 14px 12px; margin: -10px -8px; }
+      .nav-hamburger { padding: 14px 12px; }
       /* Drawer inset to match gallery width */
       .nav-drawer { left: 10%; right: 10%; }
       .nav-drawer.open { padding: 6px 16px 10px; max-height: calc(100dvh - var(--nav-h) - 16px); overflow-y: auto; }
