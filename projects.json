@@ -20,7 +20,9 @@
       "gallery/maiden-lane/12.jpg",
       "gallery/maiden-lane/13.jpg"
     ],
-    "published": true
+    "published": true,
+    "client": "",
+    "description": "Featured on aszdfas"
   },
   {
     "id": 2,
