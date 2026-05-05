@@ -10,26 +10,47 @@
   ],
   "about": {
     "show": false,
+    "photo": "",
+    "photoShape": "natural",
+    "photoPlacement": "above",
+    "photoX": 50,
+    "photoY": 50,
+    "photoZoom": 1,
+    "photoScale": 1,
     "bio": "Slow Dust Studio is a Los Angeles–based interior design studio.",
+    "bio2": "",
     "contactEmail": "katrina@slowduststudio.com",
+    "showEmail": true,
+    "resume": "",
     "social": {
-      "instagram": "https://www.instagram.com/slowdust_la/"
-    }
+      "imdb": "",
+      "vimeo": "",
+      "instagram": "https://www.instagram.com/slowdust_la/",
+      "linkedin": "",
+      "youtube": "",
+      "twitter": ""
+    },
+    "clients": []
   },
   "ownerName": "Slow Dust Studio",
   "ownerTitle": "",
   "metaDescription": "Slow Dust Studio — interior design, Los Angeles.",
   "website": "https://slowduststudio.com",
   "contact": {
-    "enabled": true,
+    "enabled": false,
     "mode": "card-only",
-    "showCard": true,
-    "email": "katrina@slowduststudio.com",
+    "showCard": false,
+    "endpoint": "",
     "intro": "To enquire about a project, please get in touch.",
+    "email": "katrina@slowduststudio.com",
+    "photo": "",
     "showEmailInDrawer": true
   },
   "splash": {
-    "enabled": false
+    "enabled": false,
+    "video": "",
+    "duration": 6,
+    "skipReturning": true
   },
   "homePage": {
     "enabled": true,
@@ -38,10 +59,6 @@
     "body": "",
     "bg": "",
     "bgVideo": "",
-    "overlayOpacity": 0,
-    "textLayout": "corner-bl",
-    "revealDelay": 1.5,
-    "showCtas": false,
     "slides": [
       "images/slides/01.jpg",
       "images/slides/02.jpg",
@@ -55,14 +72,16 @@
       "images/slides/10.jpg",
       "images/slides/11.jpg"
     ],
+    "textLayout": "corner-bl",
+    "revealDelay": 1.5,
+    "showCtas": false,
     "ctas": [
       {
         "label": "View Work",
         "target": "work",
         "style": "primary"
       }
-    ],
-    "centerLogo": "images/logo.filled.svg"
+    ]
   },
   "notFound": {
     "heading": "",
@@ -70,7 +89,7 @@
     "back": ""
   },
   "favicon": "favicon-slowdust.svg",
-  "accentColor": "#7D6B5D",
+  "accentColor": "#7d6b5d",
   "themeMode": "light",
   "navStyle": "top",
   "allowThemeToggle": false,
@@ -83,5 +102,15 @@
   "nav": {
     "showInstagramInNav": true,
     "landscapeDrawerStyle": "top"
-  }
+  },
+  "allowIndexing": true,
+  "ogImage": "",
+  "viewerBg": "auto",
+  "thumbnailFilter": 0,
+  "zoomLock": false,
+  "mobileThumbsNative": false,
+  "fontSerif": "playfair",
+  "fontSerifScale": 1,
+  "fontSans": "dm-sans",
+  "fontSansScale": 1
 }
