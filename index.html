@@ -321,6 +321,11 @@
       .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-scrim,
       .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-label {
         animation: editorialScrimCycle 24s ease-in-out infinite;
+        animation-fill-mode: both;
+        /* Kill the 0.55s opacity transition on animated scrims so the
+           initial keyframe (opacity 0) applies immediately on load
+           rather than smoothly fading from the default opacity-1. */
+        transition: none;
       }
       .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim,
       .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-label { animation-delay: 0s; }
