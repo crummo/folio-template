@@ -1132,6 +1132,20 @@
         background: linear-gradient(to top,
           rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0) 100%);
       }
+      /* Mirror that scrim in the top-right corner so the white hamburger
+         button has a soft dark cushion on bright slides. Subtle radial
+         that fades to transparent inside ~30% of the viewport. */
+      .home-wrap::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: radial-gradient(ellipse 28% 45% at 100% 0%,
+          rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.22) 35%, rgba(0,0,0,0.08) 65%, rgba(0,0,0,0) 90%);
+        animation: homeContentReveal 0.7s var(--ease) both;
+        animation-delay: var(--home-reveal-delay, 0s);
+      }
 
       /* ── IMMERSIVE LANDSCAPE PAGES (home, work, contact) ──
          Bar dissolves to transparent, brand floats with the same
@@ -1325,6 +1339,12 @@
         background: var(--fg-mid);
         width: 22px;
         height: 1.5px;
+      }
+      /* On home in landscape, hamburger is white to match the bottom-
+         left caption text. The top-right scrim added below cushions
+         it for legibility on bright slides. */
+      body.landscape-immersive:has(#page-home.visible) .nav-hamburger span {
+        background: #fff;
       }
       /* Modest ::after extension — pointerdown handler is reliable now,
          so we don't need a comically oversized hit zone. */
