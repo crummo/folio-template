@@ -1194,6 +1194,12 @@
       body.landscape-immersive:has(#page-home.visible) .home-wrap {
         min-height: 100svh;
       }
+      /* Same fix for contact: span full viewport so justify-content:
+         center anchors the card at the actual screen midpoint, not
+         40px above it. */
+      body.landscape-immersive:has(#page-contact.visible) .contact-wrap.contact-centered {
+        min-height: 100dvh;
+      }
 
       /* Project page in landscape: sticky <- work button in the lower
          left, project title floated to the right of the image scroll.
