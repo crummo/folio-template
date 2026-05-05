@@ -2102,19 +2102,23 @@
     }
 
     /* ── SHOW PAGE ── */
-    // Measure native scrollbar width once at load and expose as
-    // --scrollbar-width on documentElement. Used by the home-bg/overlay
-    // width calc so the slideshow extends into the reserved gutter
-    // (scrollbar-gutter: stable on html prevents button jumps but
-    // leaves the gutter empty when no scrollbar is needed).
-    (function () {
-      const div = document.createElement('div');
-      div.style.cssText = 'overflow:scroll;width:50px;height:50px;position:absolute;top:-9999px;visibility:hidden';
-      document.documentElement.appendChild(div);
-      const w = div.offsetWidth - div.clientWidth;
-      div.remove();
-      document.documentElement.style.setProperty('--scrollbar-width', w + 'px');
-    })();
+    // Measure the reserved scrollbar-gutter once at load and expose
+    // as --scrollbar-width on documentElement. The home-bg / home-overlay
+    // use this to extend their right edge into the reserved gutter so
+    // the empty gutter doesn't show as a strip on the home page.
+    //
+    // window.innerWidth - documentElement.clientWidth is the gold
+    // standard here: it gives the actual reserved gutter width even on
+    // macOS overlay-scrollbar systems where a div-based measurement
+    // would return 0 but scrollbar-gutter: stable still reserves space.
+    function measureScrollbarGutter() {
+      try {
+        const w = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.setProperty('--scrollbar-width', Math.max(0, w) + 'px');
+      } catch (e) { /* noop */ }
+    }
+    measureScrollbarGutter();
+    window.addEventListener('resize', measureScrollbarGutter);
 
     function showPage(id) {
       closeGallery();
