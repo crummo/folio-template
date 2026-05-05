@@ -1416,7 +1416,7 @@
          nth-child keyframe approach so the active tile follows scroll. */
       .gallery-grid.layout-editorial .editorial-scrim,
       .gallery-grid.layout-editorial .editorial-label {
-        transition: opacity 0.5s ease-in-out;
+        transition: opacity 0.3s ease-in-out;
       }
       .gallery-grid.layout-editorial .grid-item.is-exposed .editorial-scrim,
       .gallery-grid.layout-editorial .grid-item.is-exposed .editorial-label {
@@ -2230,6 +2230,14 @@
       buildDesktopGrid(catId, items);
       buildMobileList(catId, items);
       if (isPreview) renderPreviewTray(catId);
+      // Synchronously expose the upper-left tile BEFORE first paint
+      // (no fade-in flash) — only on mobile landscape with editorial.
+      if (matchMedia('(max-height: 600px) and (orientation: landscape)').matches) {
+        const _grid = document.getElementById('grid-' + catId);
+        if (_grid?.classList.contains('layout-editorial')) {
+          _grid.querySelector('.grid-item')?.classList.add('is-exposed');
+        }
+      }
       requestAnimationFrame(() => setupEditorialCycle(catId));
     }
 
@@ -2251,14 +2259,15 @@
       editorialCycleState.idx = 0;
       tiles[0].classList.add('is-exposed');
       const advance = () => {
-        const cur = tiles[editorialCycleState.idx];
-        cur?.classList.remove('is-exposed');
         let next = -1;
         for (let i = 1; i <= tiles.length; i++) {
           const idx = (editorialCycleState.idx + i) % tiles.length;
           if ((editorialCycleState.vis.get(tiles[idx]) || 0) >= 0.5) { next = idx; break; }
         }
         if (next < 0) next = (editorialCycleState.idx + 1) % tiles.length;
+        // Defensive: clear .is-exposed from ALL tiles before adding to next,
+        // so we never end up with two exposed simultaneously.
+        tiles.forEach(t => t.classList.remove('is-exposed'));
         editorialCycleState.idx = next;
         tiles[next].classList.add('is-exposed');
       };
