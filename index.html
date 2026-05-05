@@ -114,9 +114,13 @@
     }
 
     /* ── NAV ── */
-    /* Lock nav right edge across pages by reserving the missing scrollbar
-       width on pages where the page doesn't scroll (home). Set via JS. */
-    body.no-page-scrollbar nav { right: var(--scrollbar-width, 0px); }
+    /* Lock nav-right items across pages by reserving the missing
+       scrollbar width on the home page. Nav itself stays at right: 0
+       (covers the full viewport — no strip of slideshow showing through
+       on the right). Only the nav-right column shifts inward. */
+    body:has(#page-home.visible) .nav-right {
+      margin-right: var(--scrollbar-width, 0px);
+    }
 
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
@@ -2116,12 +2120,6 @@
       document.documentElement.style.setProperty('--scrollbar-width', w + 'px');
     })();
 
-    function updateNoScrollbarFlag() {
-      const hasScrollbar =
-        document.documentElement.scrollHeight > document.documentElement.clientHeight;
-      document.body.classList.toggle('no-page-scrollbar', !hasScrollbar);
-    }
-
     function showPage(id) {
       closeGallery();
       const pg = document.getElementById('page-' + id);
@@ -2177,7 +2175,6 @@
       if (id === 'home')  { renderHome(); resumeHomeSlideshow(); }
       else                { pauseHomeSlideshow(); }
       if (id === 'about') renderAbout();
-      requestAnimationFrame(updateNoScrollbarFlag);
     }
 
     function goHome() {
@@ -3248,7 +3245,6 @@
     }
     window.addEventListener('orientationchange', closeDrawerInstant);
     window.addEventListener('resize', closeDrawerInstant);
-    window.addEventListener('resize', updateNoScrollbarFlag);
 
     // Pinch-zoom lock — only active when siteConfig.zoomLock is true
     if (siteConfig.zoomLock) {
