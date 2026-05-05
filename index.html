@@ -1344,6 +1344,14 @@
       body.landscape-immersive:has(#page-home.visible) .nav-hamburger span {
         background: #fff;
       }
+      /* Whenever the drawer is open in landscape, flip hamburger to
+         white so it stays visible against the dark frosted drawer
+         backdrop. (Home is already white; this catches the dark-
+         hamburger pages: category, project, contact.) */
+      body.landscape-immersive:has(.nav-drawer.open) .nav-hamburger span {
+        background: #fff;
+        transition: background 0.25s var(--ease);
+      }
       /* Modest ::after extension — pointerdown handler is reliable now,
          so we don't need a comically oversized hit zone. */
       body.landscape-immersive .nav-hamburger::after {
