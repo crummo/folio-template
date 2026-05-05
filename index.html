@@ -1262,11 +1262,11 @@
       body.landscape-immersive.nav-left .nav-hamburger {
         display: flex !important;
       }
-      /* Hamburger to the right edge of the viewport (kill the nav 10%
-         landscape padding so the button sits flush against the drawer
-         right edge — both are on the right side of the screen). */
+      /* Nav padding in landscape immersive: 6% on the left for the brand,
+         and 14px on the right so the hamburger isn't kissing the screen
+         bezel. */
       body.landscape-immersive nav {
-        padding: 0 0 0 6%;
+        padding: 0 14px 0 6%;
       }
       body.landscape-immersive .nav-right {
         margin-left: auto;
@@ -3355,15 +3355,22 @@
     }
     window.addEventListener('orientationchange', closeDrawerInstant);
     window.addEventListener('resize', closeDrawerInstant);
-    // Re-trigger the editorial matte cycle on rotate, so a desktop->landscape
-    // rotation kicks off the 1.5s delayed reveal.
-    window.addEventListener('orientationchange', () => {
-      const v = document.querySelector('.page.visible');
-      if (!v) return;
-      const id = v.id.replace('page-', '');
-      const _cats = isPreview ? siteConfig.categories : siteConfig.categories.filter(c => c.published !== false);
-      if (_cats.some(c => c.id === id)) setupEditorialCycle(id);
-    });
+    // Re-trigger the editorial matte cycle when the landscape media query
+    // actually flips. orientationchange fires too early — before the
+    // matchMedia state has flipped — so the cycle was bailing out on its
+    // matchMedia check.
+    (function () {
+      const _mq = matchMedia('(max-height: 600px) and (orientation: landscape)');
+      const refire = () => {
+        const v = document.querySelector('.page.visible');
+        if (!v) return;
+        const id = v.id.replace('page-', '');
+        const _cats = isPreview ? siteConfig.categories : siteConfig.categories.filter(c => c.published !== false);
+        if (_cats.some(c => c.id === id)) setupEditorialCycle(id);
+      };
+      if (_mq.addEventListener) _mq.addEventListener('change', refire);
+      else if (_mq.addListener) _mq.addListener(refire);
+    })();
 
     // Pinch-zoom lock — only active when siteConfig.zoomLock is true
     if (siteConfig.zoomLock) {
