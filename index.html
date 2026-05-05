@@ -2359,13 +2359,13 @@
     function getAutoThumb(p) {
       if (p.thumbnail || !p.url) return null;
       const yt = p.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-      if (yt) return { type: 'url', url: `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg` };
+      if (yt) return { type: 'url', url: `https://img.youtube.com/vi/${yt[1]}/hqdefault.webp` };
       if (/vimeo\.com\/\d+/.test(p.url)) return { type: 'vimeo', vimeoUrl: p.url };
-      // Cloudflare Stream — thumbnail available at /thumbnails/thumbnail.jpg
+      // Cloudflare Stream — thumbnail available at /thumbnails/thumbnail.webp
       const cfCustomer = p.url.match(/(https?:\/\/[a-z0-9-]+\.cloudflarestream\.com\/[a-zA-Z0-9]+)/);
-      if (cfCustomer) return { type: 'url', url: cfCustomer[1] + '/thumbnails/thumbnail.jpg' };
+      if (cfCustomer) return { type: 'url', url: cfCustomer[1] + '/thumbnails/thumbnail.webp' };
       const cfWatch = p.url.match(/(?:watch|iframe)\.cloudflarestream\.com\/([a-zA-Z0-9]+)/);
-      if (cfWatch) return { type: 'url', url: `https://cloudflarestream.com/${cfWatch[1]}/thumbnails/thumbnail.jpg` };
+      if (cfWatch) return { type: 'url', url: `https://cloudflarestream.com/${cfWatch[1]}/thumbnails/thumbnail.webp` };
       // Bunny.net — no reliable public thumbnail URL without pull zone; use placeholder
       return null;
     }
