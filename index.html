@@ -1153,6 +1153,15 @@
       body.landscape-immersive .nav-drawer {
         top: 0 !important;
       }
+      /* Pull main content up to start at viewport top — grid first row
+         then sits aligned with the hamburger top. Hamburger floats over
+         empty right-side space because the grid is narrowed (max-width
+         600px, centered). Home slideshow doesn't depend on this padding;
+         contact-wrap centers itself within available space regardless. */
+      body.landscape-immersive main,
+      body.landscape-immersive.nav-left main {
+        padding-top: 4px;
+      }
 
       /* Home additionally hides the brand entirely — boss's call. */
       body:has(#page-home.visible) .nav-brand,
@@ -1384,32 +1393,43 @@
         display: grid !important;
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-        padding: 8px 0 28px;
+        padding: 0 0 28px;
+        max-width: 600px;
+        margin: 0 auto;
       }
       .gallery-grid.layout-editorial .grid-item {
         aspect-ratio: 16 / 9;
       }
       .gallery-grid.layout-editorial .editorial-label-title {
-        font-size: clamp(15px, 2vw, 19px);
+        font-size: clamp(14px, 1.8vw, 17px);
       }
       .gallery-grid.layout-editorial .editorial-label-client {
-        font-size: 9px; margin-bottom: 6px;
+        font-size: 8px; margin-bottom: 4px;
       }
       .gallery-grid.layout-editorial .editorial-label {
-        padding: 14px;
+        padding: 12px;
       }
-      /* Drop the cream scrim in landscape so the photos read clean
-         (no hover affordance to fade it out anyway). Labels go white
-         with a soft shadow so titles stay legible against any photo. */
+      /* Cycling reveal: scrim is normally on (cream overlay), but each
+         tile briefly fades its scrim to 0 in sequence so the photo peeks
+         through one tile at a time. 18s cycle, ~1.4s reveal per tile. */
+      @keyframes editorialScrimCycle {
+        0%, 6%, 16%, 100% { opacity: 1; }
+        9%, 13% { opacity: 0; }
+      }
       .gallery-grid.layout-editorial .editorial-scrim {
+        opacity: 1;
+        animation: editorialScrimCycle 18s ease-in-out infinite;
+      }
+      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim { animation-delay: 0s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-scrim { animation-delay: -3s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-scrim { animation-delay: -6s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-scrim { animation-delay: -9s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(5) .editorial-scrim { animation-delay: -12s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(6) .editorial-scrim { animation-delay: -15s; }
+      /* Hover/active still fades scrim out fully (overrides animation) */
+      .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim {
+        animation: none;
         opacity: 0;
-      }
-      .gallery-grid.layout-editorial .editorial-label-title {
-        color: #fff;
-        text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 0 16px rgba(0,0,0,0.35);
-      }
-      .gallery-grid.layout-editorial .editorial-label-client {
-        text-shadow: 0 1px 6px rgba(0,0,0,0.5);
       }
 
       /* About: cancel the desktop nav-left side-nav left-shift since
