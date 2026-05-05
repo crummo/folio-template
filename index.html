@@ -1183,6 +1183,52 @@
         min-height: 100svh;
       }
 
+      /* Project page in landscape: sticky <- work button in the lower
+         left, project title floated to the right of the image scroll.
+         Both stay visible while the image stack scrolls. */
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-top {
+        position: fixed;
+        left: calc(12px + env(safe-area-inset-left, 0px));
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        z-index: 100;
+        padding: 0;
+      }
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-back {
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        color: rgba(255,255,255,0.85);
+        text-shadow: 0 1px 4px rgba(0,0,0,0.55);
+      }
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-back::before {
+        border-color: rgba(255,255,255,0.85);
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.55));
+      }
+      /* Project title: lift out of the document flow and float to the
+         right side, vertically centered. Light text + shadow so it
+         reads against any image. */
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-header {
+        position: fixed;
+        top: 50%;
+        right: calc(12px + env(safe-area-inset-right, 0px));
+        transform: translateY(-50%);
+        z-index: 100;
+        margin: 0;
+        text-align: right;
+        max-width: 28%;
+        pointer-events: none;
+      }
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-title {
+        font-size: clamp(16px, 2.4vw, 22px);
+        color: rgba(255,255,255,0.95);
+        text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 0 16px rgba(0,0,0,0.35);
+      }
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-client {
+        font-size: 8px;
+        color: rgba(255,255,255,0.85);
+        text-shadow: 0 1px 4px rgba(0,0,0,0.55);
+        margin-bottom: 6px;
+      }
+
 
       /* Side nav chevrons: vertically centered, tucked against the
          safe-area edges so they live inside the camera-cutout band on
