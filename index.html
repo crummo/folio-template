@@ -1167,16 +1167,12 @@
       body.landscape-immersive main,
       body.landscape-immersive.nav-left main {
         padding-top: 0;
-        padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
       }
-      /* Home and contact don't need bottom padding — home is a fixed
-         slideshow that doesn't scroll, contact centers itself within
-         the viewport. Adding bottom padding shrinks main's content
-         area, which makes home-wrap's min-height calc overflow and
-         pushes the bottom-left subhead off-screen. */
-      body.landscape-immersive:has(#page-home.visible) main,
-      body.landscape-immersive:has(#page-contact.visible) main {
-        padding-bottom: 0;
+      /* Bottom padding only on project pages (long image scroll). Home
+         is fixed/non-scrolling, contact centers itself, category page's
+         grid has its own internal padding-bottom. */
+      body.landscape-immersive:has([id^="page-ps-"].visible) main {
+        padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
       }
 
 
