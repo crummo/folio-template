@@ -301,11 +301,16 @@
       font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase;
       color: var(--accent); margin-bottom: 10px; font-weight: 500;
     }
-    .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim,
-    .gallery-grid.layout-editorial .grid-item:hover .editorial-label {
-      opacity: 0;
+    /* Hover effects only on real pointer devices — touch screens fire
+       :hover on tap (and on touch-to-scroll), which was killing the
+       matte every time the user touched a tile to scroll. */
+    @media (hover: hover) {
+      .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:hover .editorial-label {
+        opacity: 0;
+      }
+      .gallery-grid.layout-editorial .grid-item:hover .grid-thumb { transform: scale(1.03); }
     }
-    .gallery-grid.layout-editorial .grid-item:hover .grid-thumb { transform: scale(1.03); }
 
     @media (max-width: 479px) {
       .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
