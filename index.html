@@ -1177,7 +1177,7 @@
       body.landscape-immersive .ps-top {
         position: fixed;
         top: 48px;
-        left: calc(6% - 4px);
+        left: calc(6% - 4px + env(safe-area-inset-left, 0px));
         z-index: 100;
         padding: 0;
       }
