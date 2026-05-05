@@ -1174,6 +1174,14 @@
       body.landscape-immersive:has([id^="page-ps-"].visible) main {
         padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
       }
+      /* On home in immersive landscape (no top bar), home-wrap should
+         span the full viewport — not subtract var(--nav-h) — so the
+         bottom-left caption sits at the actual bottom edge of the
+         screen. Otherwise the corner-bl text floats 40px above where
+         it used to be (back when main had padding-top: var(--nav-h)). */
+      body.landscape-immersive:has(#page-home.visible) .home-wrap {
+        min-height: 100svh;
+      }
 
 
       /* Side nav chevrons: vertically centered, tucked against the
