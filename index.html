@@ -1278,12 +1278,23 @@
         align-items: center;
       }
 
-      /* Hide the brand entirely on all landscape-immersive pages —
-         landscape mode is fully immersive, photos lead, no logo over
-         the photos anywhere. */
-      body.landscape-immersive .nav-brand,
+      /* Hide inline nav links + right-side anchors on every landscape
+         immersive page (drawer is the only nav surface). */
       body.landscape-immersive .nav-links,
       body.landscape-immersive .nav-right > a {
+        display: none !important;
+      }
+      /* Brand hidden only on photo-led pages (home, work category,
+         project pages) — those have full-bleed imagery the logo would
+         compete with. Contact and about are text-led with a flat
+         background, so the brand belongs there for identity. */
+      body.landscape-immersive:has(#page-home.visible) .nav-brand,
+      body.landscape-immersive:has([id^="page-ps-"].visible) .nav-brand {
+        display: none !important;
+      }
+      /* Hide brand on category pages (work etc.) — covers any category
+         id by checking for body class set in showPage. */
+      body.landscape-immersive.is-category-page .nav-brand {
         display: none !important;
       }
       body.landscape-immersive .nav-hamburger,
@@ -2257,6 +2268,7 @@
       // the brand + drawer over the content. About and project pages
       // keep the conventional solid bar.
       const isImmersive = id === 'home' || id === 'contact' || cats.some(c => c.id === id) || id.startsWith('ps-');
+      document.body.classList.toggle('is-category-page', cats.some(c => c.id === id));
       document.body.classList.toggle('landscape-immersive', isImmersive);
 
       if (id === 'home')  { renderHome(); resumeHomeSlideshow(); }
