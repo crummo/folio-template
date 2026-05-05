@@ -307,16 +307,6 @@
     }
     .gallery-grid.layout-editorial .grid-item:hover .grid-thumb { transform: scale(1.03); }
 
-    /* Desktop cycling reveal: top 4 tiles take turns showing their photo
-       for ~5s each. 24s total cycle, exactly one tile exposed at a time
-       (with a ~1s breath between handoffs). Mobile/landscape skip this
-       — desktop only via min-width gate below. Label fades in lockstep
-       with the scrim so the title doesn't float alone over the photo. */
-    @keyframes editorialScrimCycle {
-      0%, 18%   { opacity: 0; }   /* fully exposed (cycle starts here) */
-      21%, 96%  { opacity: 1; }   /* scrim on */
-      100%      { opacity: 0; }   /* fade out, loops back to opacity 0 cleanly */
-    }
     @media (max-width: 479px) {
       .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
       .gallery-grid.layout-editorial .editorial-label-title { font-size: 18px; }
@@ -1404,7 +1394,7 @@
         display: grid !important;
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-        padding: 0 0 28px;
+        padding: 0 0 56px;
         max-width: 600px;
         margin: 0 auto;
       }
@@ -1420,23 +1410,17 @@
       .gallery-grid.layout-editorial .editorial-label {
         padding: 12px;
       }
-      /* Cycling reveal — top 4 tiles take turns showing their photo for
-         ~5s each on a 24s loop. Tile 1 is exposed at load (delay 0).
-         Mobile landscape only — desktop keeps hover-to-reveal. */
-      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-label {
-        animation: editorialScrimCycle 24s ease-in-out infinite;
-        animation-fill-mode: both;
-        transition: none;
+      /* Class-based cycling reveal — JS toggles .is-exposed on one tile
+         at a time, prefers in-frame tiles. Replaces the previous
+         nth-child keyframe approach so the active tile follows scroll. */
+      .gallery-grid.layout-editorial .editorial-scrim,
+      .gallery-grid.layout-editorial .editorial-label {
+        transition: opacity 0.5s ease-in-out;
       }
-      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-label { animation-delay: 0s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-label { animation-delay: -18s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-label { animation-delay: -12s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-label { animation-delay: -6s; }
+      .gallery-grid.layout-editorial .grid-item.is-exposed .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item.is-exposed .editorial-label {
+        opacity: 0;
+      }
 
 
       /* About: cancel the desktop nav-left side-nav left-shift since
@@ -2245,6 +2229,53 @@
       buildDesktopGrid(catId, items);
       buildMobileList(catId, items);
       if (isPreview) renderPreviewTray(catId);
+      requestAnimationFrame(() => setupEditorialCycle(catId));
+    }
+
+    // ── Editorial cycling reveal (mobile landscape only) ──
+    // One tile at a time has .is-exposed (no scrim). Cycles every ~5s.
+    // Prefers tiles that are currently in the viewport (>= 50% visible),
+    // and immediately advances if the active tile drops below 25%.
+    const editorialCycleState = { observer: null, timer: null, idx: 0, vis: new Map() };
+    function setupEditorialCycle(catId) {
+      if (editorialCycleState.observer) { editorialCycleState.observer.disconnect(); editorialCycleState.observer = null; }
+      if (editorialCycleState.timer) { clearInterval(editorialCycleState.timer); editorialCycleState.timer = null; }
+      editorialCycleState.vis.clear();
+      if (!matchMedia('(max-height: 600px) and (orientation: landscape)').matches) return;
+      const grid = document.getElementById('grid-' + catId);
+      if (!grid || !grid.classList.contains('layout-editorial')) return;
+      const tiles = Array.from(grid.querySelectorAll('.grid-item'));
+      if (!tiles.length) return;
+      tiles.forEach(t => t.classList.remove('is-exposed'));
+      editorialCycleState.idx = 0;
+      tiles[0].classList.add('is-exposed');
+      const advance = () => {
+        const cur = tiles[editorialCycleState.idx];
+        cur?.classList.remove('is-exposed');
+        let next = -1;
+        for (let i = 1; i <= tiles.length; i++) {
+          const idx = (editorialCycleState.idx + i) % tiles.length;
+          if ((editorialCycleState.vis.get(tiles[idx]) || 0) >= 0.5) { next = idx; break; }
+        }
+        if (next < 0) next = (editorialCycleState.idx + 1) % tiles.length;
+        editorialCycleState.idx = next;
+        tiles[next].classList.add('is-exposed');
+      };
+      editorialCycleState.observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          editorialCycleState.vis.set(entry.target, entry.intersectionRatio);
+        }
+        const cur = tiles[editorialCycleState.idx];
+        if ((editorialCycleState.vis.get(cur) || 0) < 0.25) {
+          const hasVisible = tiles.some((t, i) =>
+            i !== editorialCycleState.idx &&
+            (editorialCycleState.vis.get(t) || 0) >= 0.5
+          );
+          if (hasVisible) advance();
+        }
+      }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+      tiles.forEach(t => editorialCycleState.observer.observe(t));
+      editorialCycleState.timer = setInterval(advance, 5000);
     }
 
     function buildDesktopGrid(cat, items) {
