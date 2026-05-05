@@ -1170,6 +1170,28 @@
         padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
       }
 
+      /* Project page in landscape: float the back button below the
+         brand logo (top-left, stacked with the brand). Position fixed
+         so it doesn't scroll away with the image stack and doesn't
+         take up flow space — image scroll starts at the very top. */
+      body.landscape-immersive .ps-top {
+        position: fixed;
+        top: 48px;
+        left: calc(6% - 4px);
+        z-index: 100;
+        padding: 0;
+      }
+      body.landscape-immersive .ps-back {
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        color: rgba(255,255,255,0.85);
+        text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      }
+      body.landscape-immersive .ps-back::before {
+        border-color: rgba(255,255,255,0.85);
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+      }
+
       /* Home additionally hides the brand entirely — boss's call. */
       body:has(#page-home.visible) .nav-brand,
       body:has(#page-home.visible) .nav-links,
