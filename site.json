@@ -81,7 +81,8 @@
         "target": "work",
         "style": "primary"
       }
-    ]
+    ],
+    "overlayOpacity": 0
   },
   "notFound": {
     "heading": "",
