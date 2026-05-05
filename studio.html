@@ -2909,19 +2909,28 @@ async function bulkDeleteSelected(catId) {
   if (!n) return;
   if (!confirm(`Delete ${n} image${n !== 1 ? 's' : ''}? This cannot be undone.`)) return;
 
-  const toDelete  = projects.filter(p => selectedGaiItems.has(p.id));
-  const filePaths = toDelete.map(p => p.url || p.thumbnail || '').filter(f => f.startsWith('gallery/'));
+  // Snapshot the deletion set up front. We do NOT mutate the in-memory `projects`
+  // array until after the GitHub commit succeeds, so a failed commit can't leave
+  // the local state out of sync with projects.json on disk.
+  const idsToDelete       = new Set(selectedGaiItems);
+  const toDelete          = projects.filter(p => idsToDelete.has(p.id));
+  const filePaths         = toDelete.map(p => p.url || p.thumbnail || '').filter(f => f.startsWith('gallery/'));
+  const projectedProjects = projects.filter(p => !idsToDelete.has(p.id));
 
-  toDelete.forEach(p => { const i = projects.indexOf(p); if (i !== -1) projects.splice(i, 1); });
-  selectedGaiItems.clear(); selectedGaiCat = null;
-  markDirty(); renderAll(); updateGaiBulkBar(catId);
-
-  // Commit deletion — update projects.json + delete image files atomically
+  // Commit deletion — update projects.json + delete image files atomically.
   try {
     const o = localStorage.getItem(K_OWNER), r = localStorage.getItem(K_REPO), b = localStorage.getItem(K_BRANCH);
-    if (!o || !r || !b) { await saveToGitHub(); return; }
+    if (!o || !r || !b) {
+      // Missing config — fall back to the standard save path. Mutate locally
+      // and let saveToGitHub() handle persistence (file deletion will be skipped).
+      projects.length = 0; projects.push(...projectedProjects);
+      selectedGaiItems.clear(); selectedGaiCat = null;
+      markDirty(); renderAll(); updateGaiBulkBar(catId);
+      await saveToGitHub();
+      return;
+    }
 
-    const projectsContent = JSON.stringify(projects, null, 2);
+    const projectsContent = JSON.stringify(projectedProjects, null, 2);
     for (let attempt = 1; attempt <= 3; attempt++) {
       if (attempt > 1) await new Promise(res => setTimeout(res, 1500 * attempt));
       const refRes = await fetch(`https://api.github.com/repos/${o}/${r}/git/ref/heads/${b}?t=${Date.now()}`, { headers: ghHeaders() });
@@ -2952,7 +2961,15 @@ async function bulkDeleteSelected(catId) {
         method: 'PATCH', headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ sha: newCommitSha })
       });
-      if (updateRes.ok) { clearDirty(); pollDeployStatus(); showToast(`${n} image${n !== 1 ? 's' : ''} deleted.`, 'success'); return; }
+      if (updateRes.ok) {
+        // Commit succeeded — now safe to mutate local state.
+        projects.length = 0; projects.push(...projectedProjects);
+        selectedGaiItems.clear(); selectedGaiCat = null;
+        clearDirty(); renderAll(); updateGaiBulkBar(catId);
+        pollDeployStatus();
+        showToast(`${n} image${n !== 1 ? 's' : ''} deleted.`, 'success');
+        return;
+      }
       if (attempt === 3) throw new Error('Could not update branch ref after 3 attempts');
     }
   } catch(e) {
@@ -3085,28 +3102,79 @@ async function deleteGalleryImage() {
       : `Remove "${label}" from the list?\n\nThe file won't be deleted (not a gallery upload).`;
   if (!confirm(msg)) return;
 
-  projects.splice(editingGalleryIdx, 1);
-  markDirty();
-  renderAll();
-  closeGalleryEdit();
-  await saveToGitHub();
+  // Snapshot the deletion. Don't mutate the in-memory `projects` array until
+  // after the commit succeeds — that keeps local state and the repo in sync
+  // even if the network drops mid-delete.
+  const deletedIdx        = editingGalleryIdx;
+  const projectedProjects = projects.filter((_, i) => i !== deletedIdx);
 
-  if (isGalleryFile) {
-    try {
-      const o = localStorage.getItem(K_OWNER);
-      const r = localStorage.getItem(K_REPO);
-      const b = localStorage.getItem(K_BRANCH);
-      const metaRes = await fetch(`https://api.github.com/repos/${o}/${r}/contents/${filePath}?ref=${b}`, { headers: ghHeaders() });
-      if (metaRes.ok) {
-        const { sha } = await metaRes.json();
-        await fetch(`https://api.github.com/repos/${o}/${r}/contents/${filePath}`, {
-          method: 'DELETE', headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: `Delete gallery image ${filePath}`, sha, branch: b })
-        });
-      }
-    } catch(e) {
-      showToast('Entry removed, but file delete failed: ' + e.message, 'error');
+  closeGalleryEdit();
+
+  if (!isGalleryFile) {
+    // No repo file to remove (video or external URL) — just update projects.json.
+    projects.splice(deletedIdx, 1);
+    markDirty();
+    renderAll();
+    await saveToGitHub();
+    return;
+  }
+
+  // Atomic commit: write projects.json AND delete the file in a single git tree.
+  try {
+    const o = localStorage.getItem(K_OWNER), r = localStorage.getItem(K_REPO), b = localStorage.getItem(K_BRANCH);
+    if (!o || !r || !b) {
+      // Missing config — fall back to standard save path (file won't be deleted).
+      projects.splice(deletedIdx, 1);
+      markDirty();
+      renderAll();
+      await saveToGitHub();
+      return;
     }
+
+    const projectsContent = JSON.stringify(projectedProjects, null, 2);
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      if (attempt > 1) await new Promise(res => setTimeout(res, 1500 * attempt));
+      const refRes = await fetch(`https://api.github.com/repos/${o}/${r}/git/ref/heads/${b}?t=${Date.now()}`, { headers: ghHeaders() });
+      if (!refRes.ok) throw new Error('Could not get branch ref');
+      const { object: { sha: headSha } } = await refRes.json();
+      const commitRes = await fetch(`https://api.github.com/repos/${o}/${r}/git/commits/${headSha}`, { headers: ghHeaders() });
+      if (!commitRes.ok) throw new Error('Could not get commit');
+      const { tree: { sha: treeSha } } = await commitRes.json();
+
+      const treeEntries = [
+        { path: 'projects.json', mode: '100644', type: 'blob', content: projectsContent },
+        { path: filePath,        mode: '100644', type: 'blob', sha: null }
+      ];
+      const treeRes = await fetch(`https://api.github.com/repos/${o}/${r}/git/trees`, {
+        method: 'POST', headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base_tree: treeSha, tree: treeEntries })
+      });
+      if (!treeRes.ok) throw new Error('Could not create tree');
+      const { sha: newTreeSha } = await treeRes.json();
+      const newCommitRes = await fetch(`https://api.github.com/repos/${o}/${r}/git/commits`, {
+        method: 'POST', headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `Delete gallery image ${filePath}`, tree: newTreeSha, parents: [headSha] })
+      });
+      if (!newCommitRes.ok) throw new Error('Could not create commit');
+      const { sha: newCommitSha } = await newCommitRes.json();
+      const updateRes = await fetch(`https://api.github.com/repos/${o}/${r}/git/refs/heads/${b}`, {
+        method: 'PATCH', headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sha: newCommitSha })
+      });
+      if (updateRes.ok) {
+        // Commit succeeded — now safe to mutate local state.
+        projects.splice(deletedIdx, 1);
+        clearDirty();
+        renderAll();
+        pollDeployStatus();
+        showToast(`"${label}" deleted.`, 'success');
+        return;
+      }
+      if (attempt === 3) throw new Error('Could not update branch ref after 3 attempts');
+    }
+  } catch(e) {
+    showToast('Delete failed: ' + e.message, 'error');
+    console.error(e);
   }
 }
 
@@ -6087,7 +6155,12 @@ async function fetchVimeoAdminPoster(vimeoUrl, imgEl, labelEl) {
 // ─── GENERAL SETTINGS ────────────────────────────────────────────────────────
 function populateGeneralSettings() {
   const navBrand = document.getElementById('nav-brand-name');
-  if (navBrand && siteConfig.ownerName) navBrand.innerHTML = siteConfig.ownerName + ' <span>/ Admin</span>';
+  if (navBrand && siteConfig.ownerName) {
+    navBrand.textContent = siteConfig.ownerName + ' ';
+    const adminSpan = document.createElement('span');
+    adminSpan.textContent = '/ Admin';
+    navBrand.appendChild(adminSpan);
+  }
   document.getElementById('site-name-input').value     = siteConfig.ownerName || '';
   document.getElementById('site-title-input').value   = siteConfig.ownerTitle || '';
   document.getElementById('site-brand-logo').value    = siteConfig.brandLogo || '';
