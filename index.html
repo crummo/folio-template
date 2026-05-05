@@ -1176,31 +1176,31 @@
       body:has(#page-home.visible) .nav-right > a {
         display: none !important;
       }
-      body:has(#page-home.visible) .nav-hamburger,
-      body.nav-left:has(#page-home.visible) .nav-hamburger {
+      body.landscape-immersive .nav-hamburger,
+      body.landscape-immersive.nav-left .nav-hamburger {
         display: flex !important;
       }
       /* Hamburger to the right edge of the viewport (kill the nav 10%
          landscape padding so the button sits flush against the drawer
          right edge — both are on the right side of the screen). */
-      body:has(#page-home.visible) nav {
+      body.landscape-immersive nav {
         padding: 0 0 0 6%;
       }
-      body:has(#page-home.visible) .nav-right {
+      body.landscape-immersive .nav-right {
         margin-left: auto;
       }
       /* Hamburger floats on top of the drawer (z-index above drawer's
          190). White spans + soft shadow for legibility on bright slides. */
-      body:has(#page-home.visible) nav {
+      body.landscape-immersive nav {
         z-index: 220;
       }
-      body:has(#page-home.visible) .nav-hamburger {
+      body.landscape-immersive .nav-hamburger {
         position: relative;
         z-index: 230;
         padding: 14px 12px;
         gap: 5px;
       }
-      body:has(#page-home.visible) .nav-hamburger span {
+      body.landscape-immersive .nav-hamburger span {
         background: #fff;
         box-shadow: 0 1px 3px rgba(0,0,0,0.5);
         width: 22px;
@@ -1208,7 +1208,7 @@
       }
       /* Modest ::after extension — pointerdown handler is reliable now,
          so we don't need a comically oversized hit zone. */
-      body:has(#page-home.visible) .nav-hamburger::after {
+      body.landscape-immersive .nav-hamburger::after {
         inset: -8px;
       }
 
