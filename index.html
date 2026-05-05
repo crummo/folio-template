@@ -1194,39 +1194,20 @@
         padding: 0;
       }
       body.landscape-immersive:has([id^="page-ps-"].visible) .ps-back {
-        font-size: 9px;
+        font-size: 10px;
         letter-spacing: 0.2em;
-        color: rgba(255,255,255,0.85);
-        text-shadow: 0 1px 4px rgba(0,0,0,0.55);
+        color: var(--fg);
+        text-shadow: 0 0 10px rgba(255,255,255,0.85), 0 0 4px rgba(255,255,255,0.7);
       }
       body.landscape-immersive:has([id^="page-ps-"].visible) .ps-back::before {
-        border-color: rgba(255,255,255,0.85);
-        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.55));
+        border-color: var(--fg);
+        filter: drop-shadow(0 0 4px rgba(255,255,255,0.85));
       }
-      /* Project title: lift out of the document flow and float to the
-         right side, vertically centered. Light text + shadow so it
-         reads against any image. */
+      /* Hide project title on landscape mobile — user just came from a
+         tile that showed the project name, no need to repeat it. Lets
+         the photos lead. */
       body.landscape-immersive:has([id^="page-ps-"].visible) .ps-header {
-        position: fixed;
-        top: 50%;
-        right: calc(12px + env(safe-area-inset-right, 0px));
-        transform: translateY(-50%);
-        z-index: 100;
-        margin: 0;
-        text-align: right;
-        max-width: 28%;
-        pointer-events: none;
-      }
-      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-title {
-        font-size: clamp(16px, 2.4vw, 22px);
-        color: rgba(255,255,255,0.95);
-        text-shadow: 0 1px 8px rgba(0,0,0,0.55), 0 0 16px rgba(0,0,0,0.35);
-      }
-      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-client {
-        font-size: 8px;
-        color: rgba(255,255,255,0.85);
-        text-shadow: 0 1px 4px rgba(0,0,0,0.55);
-        margin-bottom: 6px;
+        display: none;
       }
 
 
@@ -1235,9 +1216,9 @@
          landscape iPhones (just past the notch on each side). */
       body.landscape-immersive .ps-side-nav {
         display: flex;
-        width: 36px; height: 36px;
-        font-size: 14px;
-        opacity: 0.85;
+        width: 28px; height: 28px;
+        font-size: 11px;
+        opacity: 0.5;
       }
       body.landscape-immersive .ps-side-nav-prev {
         left: calc(4px + env(safe-area-inset-left, 0px));
@@ -1252,13 +1233,13 @@
       body.landscape-immersive .ps-img,
       body.landscape-immersive .ps-pair .ps-img {
         max-width: 100%;
-        max-height: calc(100dvh - 16px);
+        max-height: 85dvh;
         width: auto;
         height: auto;
         margin: 0 auto;
       }
       body.landscape-immersive .ps-pair {
-        max-height: calc(100dvh - 16px);
+        max-height: 85dvh;
         align-items: center;
       }
       /* Center each image horizontally inside the column scroll. */
