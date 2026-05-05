@@ -94,7 +94,7 @@
       --gv-bg: #131110; --gv-fg: #ede8e0; --gv-fg-dim: #5a5248; --gv-fg-dimmer: #2a2623; --gv-bg2: #1c1917;
     }
 
-    html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-weight: 300; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overscroll-behavior-y: none; touch-action: pan-y pinch-zoom; }
+    html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-weight: 300; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overscroll-behavior-y: none; touch-action: pan-y pinch-zoom; overflow-y: scroll; }
     body { min-height: 100vh; background: var(--bg); overscroll-behavior-y: none; touch-action: pan-y pinch-zoom; }
 
     /* film grain */
@@ -114,14 +114,6 @@
     }
 
     /* ── NAV ── */
-    /* Lock nav-right items across pages by reserving the missing
-       scrollbar width on the home page. Nav itself stays at right: 0
-       (covers the full viewport — no strip of slideshow showing through
-       on the right). Only the nav-right column shifts inward. */
-    body:has(#page-home.visible) .nav-right {
-      margin-right: var(--scrollbar-width, 0px);
-    }
-
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       /* env(safe-area-inset-top) = status-bar height with viewport-fit=cover; 0 elsewhere */
@@ -2110,16 +2102,6 @@
     }
 
     /* ── SHOW PAGE ── */
-    // Measure native scrollbar width once and store as a CSS var.
-    (function () {
-      const div = document.createElement('div');
-      div.style.cssText = 'overflow:scroll;width:50px;height:50px;position:absolute;top:-9999px;visibility:hidden';
-      document.documentElement.appendChild(div);
-      const w = div.offsetWidth - div.clientWidth;
-      div.remove();
-      document.documentElement.style.setProperty('--scrollbar-width', w + 'px');
-    })();
-
     function showPage(id) {
       closeGallery();
       const pg = document.getElementById('page-' + id);
