@@ -1409,26 +1409,36 @@
       .gallery-grid.layout-editorial .editorial-label {
         padding: 12px;
       }
-      /* Cycling reveal: scrim is normally on (cream overlay), but each
-         tile briefly fades its scrim to 0 in sequence so the photo peeks
-         through one tile at a time. 18s cycle, ~1.4s reveal per tile. */
+      /* Cycling reveal: scrim normally on, but each tile fades its scrim
+         to 0 in sequence (one at a time) so the photo peeks through.
+         48s total cycle, only the top 4 tiles cycle (tiles 5+ stay
+         static). Label fades with the scrim so the title doesn't float
+         alone over the bare photo during the reveal. */
       @keyframes editorialScrimCycle {
-        0%, 6%, 16%, 100% { opacity: 1; }
-        9%, 13% { opacity: 0; }
+        0%, 2%, 8%, 100% { opacity: 1; }
+        4%, 6% { opacity: 0; }
       }
       .gallery-grid.layout-editorial .editorial-scrim {
         opacity: 1;
-        animation: editorialScrimCycle 18s ease-in-out infinite;
       }
-      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim { animation-delay: 0s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-scrim { animation-delay: -3s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-scrim { animation-delay: -6s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-scrim { animation-delay: -9s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(5) .editorial-scrim { animation-delay: -12s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(6) .editorial-scrim { animation-delay: -15s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-label {
+        animation: editorialScrimCycle 48s ease-in-out infinite;
+      }
+      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-label { animation-delay: 0s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-label { animation-delay: -36s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-label { animation-delay: -24s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-label { animation-delay: -12s; }
       /* Hover/active still fades scrim out fully (overrides animation) */
-      .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim {
+      .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:hover .editorial-label {
         animation: none;
+      }
+      .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim {
         opacity: 0;
       }
 
