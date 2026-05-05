@@ -1191,6 +1191,25 @@
         border-color: rgba(255,255,255,0.85);
         filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
       }
+      /* Cap each image to the viewport so a single photo fits the
+         screen — landscape mobile is short, so portrait photos at
+         100% width would scroll past the screen height. */
+      body.landscape-immersive .ps-img,
+      body.landscape-immersive .ps-pair .ps-img {
+        max-width: 100%;
+        max-height: calc(100dvh - 16px);
+        width: auto;
+        height: auto;
+        margin: 0 auto;
+      }
+      body.landscape-immersive .ps-pair {
+        max-height: calc(100dvh - 16px);
+        align-items: center;
+      }
+      /* Center each image horizontally inside the column scroll. */
+      body.landscape-immersive .ps-grid {
+        align-items: center;
+      }
 
       /* Home additionally hides the brand entirely — boss's call. */
       body:has(#page-home.visible) .nav-brand,
