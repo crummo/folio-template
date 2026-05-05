@@ -1235,17 +1235,33 @@
       /* Cap each image to the viewport so a single photo fits the
          screen — landscape mobile is short, so portrait photos at
          100% width would scroll past the screen height. */
-      body.landscape-immersive .ps-img,
-      body.landscape-immersive .ps-pair .ps-img {
+      /* Single image: capped to 85dvh, width auto so the photo's natural
+         aspect drives the displayed width. */
+      body.landscape-immersive .ps-img {
         max-width: 100%;
         max-height: 85dvh;
         width: auto;
         height: auto;
         margin: 0 auto;
       }
+      /* Portrait pair: cap pair max-width to match a 16:9 landscape image
+         at 85dvh (= 85dvh * 16/9 wide). Each portrait fills its column
+         at aspect 2:3. The pair therefore reads as the same visual width
+         as a single landscape photo above/below it. Pair will overflow
+         the viewport vertically a bit — user scrolls naturally. */
       body.landscape-immersive .ps-pair {
-        max-height: 85dvh;
-        align-items: center;
+        max-width: calc(85dvh * 16 / 9);
+        margin: 0 auto;
+        align-items: stretch;
+      }
+      body.landscape-immersive .ps-pair .ps-img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        max-height: none;
+        margin: 0;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
       }
       /* Center each image horizontally inside the column scroll. */
       body.landscape-immersive .ps-grid {
