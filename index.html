@@ -94,7 +94,7 @@
       --gv-bg: #131110; --gv-fg: #ede8e0; --gv-fg-dim: #5a5248; --gv-fg-dimmer: #2a2623; --gv-bg2: #1c1917;
     }
 
-    html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-weight: 300; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overscroll-behavior-y: none; touch-action: pan-y pinch-zoom; scrollbar-gutter: stable; }
+    html { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-weight: 300; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overscroll-behavior-y: none; touch-action: pan-y pinch-zoom; }
     body { min-height: 100vh; background: var(--bg); overscroll-behavior-y: none; touch-action: pan-y pinch-zoom; }
 
     /* film grain */
@@ -114,6 +114,10 @@
     }
 
     /* ── NAV ── */
+    /* Lock nav right edge across pages by reserving the missing scrollbar
+       width on pages where the page doesn't scroll (home). Set via JS. */
+    body.no-page-scrollbar nav { right: var(--scrollbar-width, 0px); }
+
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       /* env(safe-area-inset-top) = status-bar height with viewport-fit=cover; 0 elsewhere */
@@ -2102,6 +2106,22 @@
     }
 
     /* ── SHOW PAGE ── */
+    // Measure native scrollbar width once and store as a CSS var.
+    (function () {
+      const div = document.createElement('div');
+      div.style.cssText = 'overflow:scroll;width:50px;height:50px;position:absolute;top:-9999px;visibility:hidden';
+      document.documentElement.appendChild(div);
+      const w = div.offsetWidth - div.clientWidth;
+      div.remove();
+      document.documentElement.style.setProperty('--scrollbar-width', w + 'px');
+    })();
+
+    function updateNoScrollbarFlag() {
+      const hasScrollbar =
+        document.documentElement.scrollHeight > document.documentElement.clientHeight;
+      document.body.classList.toggle('no-page-scrollbar', !hasScrollbar);
+    }
+
     function showPage(id) {
       closeGallery();
       const pg = document.getElementById('page-' + id);
@@ -2157,6 +2177,7 @@
       if (id === 'home')  { renderHome(); resumeHomeSlideshow(); }
       else                { pauseHomeSlideshow(); }
       if (id === 'about') renderAbout();
+      requestAnimationFrame(updateNoScrollbarFlag);
     }
 
     function goHome() {
@@ -3227,6 +3248,7 @@
     }
     window.addEventListener('orientationchange', closeDrawerInstant);
     window.addEventListener('resize', closeDrawerInstant);
+    window.addEventListener('resize', updateNoScrollbarFlag);
 
     // Pinch-zoom lock — only active when siteConfig.zoomLock is true
     if (siteConfig.zoomLock) {
