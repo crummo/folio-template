@@ -1289,6 +1289,16 @@
         aspect-ratio: 2 / 3;
         object-fit: cover;
       }
+      /* Mixed pair (landscape + portrait): the desktop CSS uses a
+         2.25fr/1fr grid that produces matching heights when the images
+         render at their natural aspects. The .ps-img max-width override
+         above was capping landscape images BELOW their column width,
+         breaking that math and shrinking the landscape side. Exempt
+         mixed-pair images so they fill their columns. */
+      body.landscape-immersive .ps-pair-mixed .ps-img {
+        max-width: 100%;
+        max-height: none;
+      }
       /* Center each image horizontally inside the column scroll. */
       body.landscape-immersive .ps-grid {
         align-items: center;
