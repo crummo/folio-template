@@ -1152,7 +1152,7 @@
         pointer-events: auto;
       }
       body.landscape-immersive .nav-brand {
-        transform: translate(-64px, -2px);
+        transform: translate(-44px, 6px);
       }
       /* Drawer extends to viewport top (rather than below the now-absent
          bar). Hamburger stays in its corner; the first link aligns to it. */
@@ -1170,27 +1170,23 @@
         padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
       }
 
-      /* Project page in landscape: float the back button below the
-         brand logo (top-left, stacked with the brand). Position fixed
-         so it doesn't scroll away with the image stack and doesn't
-         take up flow space — image scroll starts at the very top. */
-      body.landscape-immersive .ps-top {
-        position: fixed;
-        top: 48px;
-        left: calc(6% - 4px + env(safe-area-inset-left, 0px));
-        z-index: 100;
-        padding: 0;
+
+      /* Side nav chevrons: vertically centered, tucked against the
+         safe-area edges so they live inside the camera-cutout band on
+         landscape iPhones (just past the notch on each side). */
+      body.landscape-immersive .ps-side-nav {
+        display: flex;
+        width: 36px; height: 36px;
+        font-size: 14px;
+        opacity: 0.85;
       }
-      body.landscape-immersive .ps-back {
-        font-size: 9px;
-        letter-spacing: 0.2em;
-        color: rgba(255,255,255,0.85);
-        text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      body.landscape-immersive .ps-side-nav-prev {
+        left: calc(4px + env(safe-area-inset-left, 0px));
       }
-      body.landscape-immersive .ps-back::before {
-        border-color: rgba(255,255,255,0.85);
-        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+      body.landscape-immersive .ps-side-nav-next {
+        right: calc(4px + env(safe-area-inset-right, 0px));
       }
+
       /* Cap each image to the viewport so a single photo fits the
          screen — landscape mobile is short, so portrait photos at
          100% width would scroll past the screen height. */
