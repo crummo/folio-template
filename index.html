@@ -1267,12 +1267,15 @@
         height: auto;
         margin: 0 auto;
       }
-      /* Portrait pair: cap pair max-width to match a 3:2 landscape
-         image at 85dvh (= 85dvh * 3/2 wide). 3:2 is the typical photo
-         aspect, so pair and landscape images read as similar widths.
-         Each portrait fills its column at aspect 2:3. */
+      /* Portrait pair: cap pair max-width so its rendered HEIGHT lands
+         at 85dvh — matches the height ceiling of single images so the
+         pair leaves the same 15dvh peek of the next image at the
+         bottom of the viewport. Math: each portrait is 85dvh tall at
+         aspect 2:3, so width per column = 85dvh / 1.5 = 85dvh * 2/3.
+         Pair width = 2 columns * (85dvh * 2/3) + 24px gap
+                    = 85dvh * 4/3 + 24px. */
       body.landscape-immersive .ps-pair {
-        max-width: calc(85dvh * 3 / 2);
+        max-width: calc(85dvh * 4 / 3 + 24px);
         margin: 0 auto;
         align-items: stretch;
       }
