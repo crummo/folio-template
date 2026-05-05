@@ -85,9 +85,9 @@
     "overlayOpacity": 0
   },
   "notFound": {
-    "heading": "",
-    "sub": "",
-    "back": ""
+    "heading": "Off the floor plan.",
+    "sub": "We can't find the page you were looking for.",
+    "back": "Back to home"
   },
   "favicon": "favicon-slowdust.svg",
   "accentColor": "#7d6b5d",
