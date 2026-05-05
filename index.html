@@ -1175,9 +1175,16 @@
         padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
       }
       /* Narrow wide-mode project pages on landscape so the photos don't
-         crowd the lower-left back button. */
+         crowd the lower-left back button. Also undo the desktop
+         flex-vertical-centering that was producing big empty space at
+         the top — content should top-align like the narrow variants. */
       body.landscape-immersive:has([id^="page-ps-"].visible) .ps-wrap.ps-page-wide {
         max-width: 92%;
+        min-height: 0;
+        display: block;
+      }
+      body.landscape-immersive:has([id^="page-ps-"].visible) .ps-wrap.ps-page-wide .ps-grid {
+        margin: 0;
       }
       /* On home in immersive landscape (no top bar), home-wrap should
          span the full viewport — not subtract var(--nav-h) — so the
