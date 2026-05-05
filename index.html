@@ -1258,10 +1258,11 @@
       /* Cap each image to the viewport so a single photo fits the
          screen — landscape mobile is short, so portrait photos at
          100% width would scroll past the screen height. */
-      /* Single image: capped to 85dvh, width auto so the photo's natural
-         aspect drives the displayed width. */
+      /* Single image: capped to 85dvh tall, AND to the same width as a
+         portrait pair so wide-aspect singles don't dwarf adjacent
+         pairs. Pair width = 85dvh * 4/3 + 24px gap, so use the same. */
       body.landscape-immersive .ps-img {
-        max-width: 100%;
+        max-width: calc(85dvh * 4 / 3 + 24px);
         max-height: 85dvh;
         width: auto;
         height: auto;
