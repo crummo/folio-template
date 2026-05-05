@@ -317,30 +317,6 @@
       21%, 96%  { opacity: 1; }   /* scrim on */
       100%      { opacity: 0; }   /* fade out, loops back to opacity 0 cleanly */
     }
-    @media (min-width: 1024px) {
-      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-label {
-        animation: editorialScrimCycle 24s ease-in-out infinite;
-        animation-fill-mode: both;
-        /* Kill the 0.55s opacity transition on animated scrims so the
-           initial keyframe (opacity 0) applies immediately on load
-           rather than smoothly fading from the default opacity-1. */
-        transition: none;
-      }
-      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-label { animation-delay: 0s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-label { animation-delay: -18s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-label { animation-delay: -12s; }
-      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-label { animation-delay: -6s; }
-      /* Hover wins: stop the animation and fully reveal the photo */
-      .gallery-grid.layout-editorial .grid-item:hover .editorial-scrim,
-      .gallery-grid.layout-editorial .grid-item:hover .editorial-label {
-        animation: none;
-      }
-    }
     @media (max-width: 479px) {
       .gallery-grid.layout-editorial { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
       .gallery-grid.layout-editorial .editorial-label-title { font-size: 18px; }
@@ -1444,6 +1420,23 @@
       .gallery-grid.layout-editorial .editorial-label {
         padding: 12px;
       }
+      /* Cycling reveal — top 4 tiles take turns showing their photo for
+         ~5s each on a 24s loop. Tile 1 is exposed at load (delay 0).
+         Mobile landscape only — desktop keeps hover-to-reveal. */
+      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(-n+4) .editorial-label {
+        animation: editorialScrimCycle 24s ease-in-out infinite;
+        animation-fill-mode: both;
+        transition: none;
+      }
+      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(1) .editorial-label { animation-delay: 0s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(2) .editorial-label { animation-delay: -18s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(3) .editorial-label { animation-delay: -12s; }
+      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-scrim,
+      .gallery-grid.layout-editorial .grid-item:nth-child(4) .editorial-label { animation-delay: -6s; }
 
 
       /* About: cancel the desktop nav-left side-nav left-shift since
