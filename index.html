@@ -2141,7 +2141,7 @@
       // like Work) so the landscape CSS can drop the top bar and float
       // the brand + drawer over the content. About and project pages
       // keep the conventional solid bar.
-      const isImmersive = id === 'home' || id === 'contact' || cats.some(c => c.id === id);
+      const isImmersive = id === 'home' || id === 'contact' || cats.some(c => c.id === id) || id.startsWith('ps-');
       document.body.classList.toggle('landscape-immersive', isImmersive);
 
       if (id === 'home')  { renderHome(); resumeHomeSlideshow(); }
