@@ -8,9 +8,6 @@ _internal/
 
 # Media — managed per site
 # images/  ← un-ignored: SDS site uses force-tracked logos / slides anyway
-gallery/
-thumbs/
-downloads/
 
 # Memory / AI context
 CLAUDE.md
